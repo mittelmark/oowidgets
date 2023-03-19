@@ -131,6 +131,7 @@ set le2 [flash::lentry .le2 -relief ridge -borderwidth 5]
 $le2 label configure -text "LEntry Example" -width 20
 $le2 entry configure -show *
 $le2 entry insert 0 "password"
+puts "le2: [$le2 entry get]"
 pack $le2 -side bottom -fill x -expand false
 
 $fb flash
