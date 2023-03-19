@@ -90,11 +90,36 @@ oowidgets::widget ::flash::LabEntry {
         $ent {*}$args
     }
 }
+# simpler approach using only delegation
+
+oowidgets::widget ::flash::LEntry {
+    variable ent
+    variable lab
+    constructor {path args} {
+        # the main widget is the frame
+        # add an additional label
+        my install ttk::frame $path 
+        set lab [ttk::label $path.lab]
+        set ent [ttk::entry $path.ent]
+        pack $lab -side left -padx 5 -pady 5
+        pack $ent -side left -padx 5 -pady 5
+        my configure {*}$args
+    }
+    # expose the internal widgets using subcommands
+    method label {args} {
+        $lab {*}$args
+    }
+    method entry {args} {
+        $ent {*}$args
+    }
+}
+
 set fb [flash::button .fb -text "Exit" -flashtime 100 -command exit]
 pack $fb -side top -pady 10 -pady 10 -fill both -expand true
 set fl [flash::label .fl -text "FlashLabel" -flashtime 50 -anchor center]
 pack $fl -side top -padx 10 -pady 10 -fill both -expand true
 set le [flash::labentry .le -relief ridge -borderwidth 5 -labeltext "Label 2:"]
+
 #$le label configure -text " Label 1:"
 $le entry insert end "Entryvalue"
 $le delete 0 5
@@ -102,6 +127,12 @@ pack $le -side bottom -fill x -expand false
 puts "label value: [$le cget -labeltext]"
 $le configure -labeltext "Hello"
 puts [$le configure]
+set le2 [flash::lentry .le2 -relief ridge -borderwidth 5]
+$le2 label configure -text "LEntry Example" -width 20
+$le2 entry configure -show *
+$le2 entry insert 0 "password"
+pack $le2 -side bottom -fill x -expand false
+
 $fb flash
 puts "done 1"
 .fb flash

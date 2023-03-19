@@ -105,9 +105,13 @@ oo::class create ::oowidgets::BaseWidget {
               }
       } 
       # delegate all other methods to the widget
-      method unknown {args} {
-           my variable widget
-           $widget {*}$args
+      method unknown {method args} {
+          my variable widget
+          if {[catch {$widget $method {*}$args} result]} {
+              return -code error $result
+          } else {
+              return $result
+          }
       }
 }
                         
