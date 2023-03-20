@@ -5,6 +5,42 @@ package provide oowidgets 0.2
 #' title: package oowidgets - create megawidgets using TclOO
 #' author: Detlef Groth, University of Potsdam, Germany
 #' date: 2023-03-20
+#' header-includes: 
+#' - | 
+#'     ```{=html}
+#'     <style>
+#'     html {
+#'       line-height: 1.2;
+#'       font-family: Georgia, serif;
+#'       font-size: 16px;
+#'       color: #1a1a1a;
+#'       background-color: #fdfdfd;
+#'     }
+#'
+#'     body { 
+#'       margin: 0 auto;
+#'       padding-left: 50px;
+#'       padding-right: 50px;
+#'       padding-top: 50px;
+#'       padding-bottom: 50px;
+#'       hyphens: auto;
+#'       max-width: 1000px; 
+#'     }
+#'     pre { background: rgb(250,229,211); padding: 8px; }
+#'     pre.sourceCode, pre.tcl { 
+#'         background: #eeeeee; 
+#'         padding: 8px;
+#'         font-size: 95%;
+#'     }
+#'     #TOC li {
+#'         list-style: square;
+#'     }
+#'     .code-title {
+#'       background: #dddddd;
+#'       padding: 8px;
+#'     } 
+#'     </style>
+#'     ```
 #' ---
 #' 
 #'
