@@ -43,7 +43,12 @@ oo::class create ::oowidgets::BaseWidget {
           }
           array set nopts $args
           foreach opt [array names nopts] {
-              set widgetOptions($opt) $nopts($opt)
+              if {[info exists parentOptions($opt)]} {
+                  set parentOptions($opt) $nopts($opt)
+                  $path configure $opt $nopts($opt)
+              } else {
+                  set widgetOptions($opt) $nopts($opt)
+              }
           }
           # set widget ${path}_
           rename $path $widget
@@ -61,49 +66,53 @@ oo::class create ::oowidgets::BaseWidget {
               } 
               return -code error "# unknown option"
       }
-      
+      method tkclass {} {
+          return [winfo class [string range [self] 2 end]]
+      }
+      unexport tkclass
       method configure { args } {
-              my variable widget
-              my variable widgetOptions
-              my variable parentOptions
-              
-              if {[llength $args] == 0}  {
-                      return [lsort [list [array get parentOptions] {*}[array get widgetOptions]]]
-              } elseif {[llength $args] == 1}  {
-                   # return configuration value for this option
-                   set opt $args
-                   if { [info exists widgetOptions($opt) ] } {
-                           return $widgetOptions($opt)
-                   } elseif {[info exists parentOptions($opt)]} {
-                         return $parentOptions($opt)
-                   } else {
-                       return -code error "# unkown option"
-                   }
+          my variable widget
+          my variable widgetOptions
+          my variable parentOptions
+          
+          if {[llength $args] == 0}  {
+              return [lsort [list [array get parentOptions] {*}[array get widgetOptions]]]
+          } elseif {[llength $args] == 1}  {
+              # return configuration value for this option
+              set opt $args
+              if { [info exists widgetOptions($opt) ] } {
+                  return $widgetOptions($opt)
+              } elseif {[info exists parentOptions($opt)]} {
+                  return $parentOptions($opt)
+              } else {
+                  return -code error "# unkown option"
               }
+          }
+          
+          # error checking
+          if {[expr {[llength $args]%2}] == 1}  {
+              return -code error "value for \"[lindex $args end]\" missing"
+          }
+          
+          # process the new configuration options...
+          array set opts $args
+          
+          foreach opt [array names opts] {
+              set val $opts($opt)
               
-              # error checking
-              if {[expr {[llength $args]%2}] == 1}  {
-                      return -code error "value for \"[lindex $args end]\" missing"
+              # overwrite with new value
+              if { [info exists widgetOptions($opt)] } {
+                  set widgetOptions($opt) $val
+              } elseif {[info exists parentOptions($opt)]} {
+                  set parentOptions($opt) $val
+                  $widget configure $opt $val 
+              } else {
+                  return -code error "unknown configuration option: \"$opt\" specified"
+                  
               }
-              
-              # process the new configuration options...
-              array set opts $args
-              
-              foreach opt [array names opts] {
-                      set val $opts($opt)
-                      
-                      # overwrite with new value
-                      if { [info exists widgetOptions($opt)] } {
-                              set widgetOptions($opt) $val
-                      } elseif {[info exists parentOptions($opt)]} {
-                            set parentOptions($opt) $val
-                            $widget configure $opt $val 
-                      } else {
-                           return -code error "unknown configuration option: \"$opt\" specified"
-                          
-                      }
-              }
+          }
       } 
+      
       # delegate all other methods to the widget
       method unknown {method args} {
           my variable widget
@@ -113,10 +122,13 @@ oo::class create ::oowidgets::BaseWidget {
               return $result
           }
       }
+      unexport unkown install
 }
                         
 proc oowidgets::widget {name body} {
     oowidgets::new $name
-    oo::class create $name $body 
-    oo::define $name { superclass oowidgets::BaseWidget }
+    oo::class create $name $body
+    if {[lindex $body 0] ne "superclass"} {
+        oo::define $name { superclass oowidgets::BaseWidget }
+    }
 }
