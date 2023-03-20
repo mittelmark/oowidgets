@@ -126,12 +126,12 @@
 <p><code>oowidgets</code> - package to create megawidgets using TclOO</p>
 <h2 id="synopsis">SYNOPSIS</h2>
 <pre><code>package require oowidgets
-oowidgets::widget _class_ _code_</code></pre>
+oowidgets::widget CLASSNAME CODE</code></pre>
 <h2 id="methods">METHODS</h2>
 <p>There is only one method currently:</p>
-<p><strong>oowidgets::widget</strong> <em>name</em> <em>body</em></p>
+<p><strong>oowidgets::widget</strong> <em>classname</em> <em>code</em></p>
 <blockquote>
-<p>Creates a class and a widget name using the given <em>name</em> and code in the <em>body</em> argument. The widget name is the same name as the class name but consisting only of lowercase letters. To avoid name collisions, the given classname must have at least one uppercase letter.</p>
+<p>Creates a class with the given <em>classname</em> and a widget command using the given <em>classname</em> and <em>code</em> The widget command has the same name as the class name but consisting only of lowercase letters. To avoid name collisions, the given <em>classname</em> must have at least one uppercase letter.</p>
 </blockquote>
 <blockquote>
 <p>Example:</p>
@@ -148,13 +148,15 @@ oowidgets::widget _class_ _code_</code></pre>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>           <span class="kw">puts</span> <span class="kw">[</span>my <span class="ot">cget -message</span><span class="kw">]</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>       <span class="kw">}</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   <span class="kw">}</span>  </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   <span class="kw">set</span> btn <span class="kw">[</span>::test::<span class="kw">button</span> .btn<span class="ot"> -command</span> <span class="kw">exit</span><span class="ot"> -text</span> Exit<span class="kw">]</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   <span class="kw">pack</span> <span class="dt">$btn</span><span class="ot"> -side</span> top<span class="ot"> -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipadx</span> <span class="dv">10</span><span class="ot"> -ipady</span> <span class="dv">10</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>   <span class="dt">$btn</span> test</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>   <span class="dt">$btn</span> <span class="ot">configure -message</span> newmessage</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>   <span class="dt">$btn</span> test</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   <span class="kw">after</span> <span class="dv">3000</span> <span class="kw">[list</span> <span class="dt">$btn</span> <span class="ot">invoke</span><span class="kw">]</span></span></code></pre></div>
-<pre class="tclout" data-eval="true"><code>testmessage
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   <span class="kw">puts</span> <span class="st">&quot;available commands: [info commands ::test::*]&quot;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   <span class="kw">set</span> btn <span class="kw">[</span>::test::<span class="kw">button</span> .btn<span class="ot"> -command</span> <span class="kw">exit</span><span class="ot"> -text</span> Exit<span class="kw">]</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>   <span class="kw">pack</span> <span class="dt">$btn</span><span class="ot"> -side</span> top<span class="ot"> -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipadx</span> <span class="dv">10</span><span class="ot"> -ipady</span> <span class="dv">10</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>   <span class="dt">$btn</span> test</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>   <span class="dt">$btn</span> <span class="ot">configure -message</span> newmessage</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   <span class="dt">$btn</span> test</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>   <span class="kw">after</span> <span class="dv">3000</span> <span class="kw">[list</span> <span class="dt">$btn</span> <span class="ot">invoke</span><span class="kw">]</span></span></code></pre></div>
+<pre class="tclout" data-eval="true"><code>available commands: ::test::Button ::test::button
+testmessage
 newmessage
 after#0</code></pre>
 <h2 id="see-also">SEE ALSO</h2>

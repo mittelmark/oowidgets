@@ -52,7 +52,7 @@ package provide oowidgets 0.2
 #' 
 #' ```
 #' package require oowidgets
-#' oowidgets::widget _class_ _code_
+#' oowidgets::widget CLASSNAME CODE
 #' ```
 #' 
 #' ## METHODS
@@ -64,6 +64,7 @@ namespace eval ::oowidgets { }
 
 # this is a tk-like wrapper around the class,
 # so that object creation works like other Tk widgets
+# is considered a private function for now
 proc oowidgets::new name { 
     eval "
     proc [string tolower $name] {path args}  { 
@@ -185,12 +186,13 @@ oo::class create ::oowidgets::BaseWidget {
       unexport unkown install
 }
 
-#' **oowidgets::widget** _name_ _body_ 
+#' **oowidgets::widget** _classname_ _code_ 
 #' 
-#' > Creates a class and a widget name using the given _name_ and code 
-#' in the _body_ argument. The widget name is the same name as the class 
+#' > Creates a class with the given _classname_ and a widget command
+#' using the given _classname_ and _code_
+#' The widget command has the same name as the class 
 #' name but consisting only of lowercase letters. To avoid name collisions,
-#' the given classname must have at least one uppercase letter.
+#' the given _classname_ must have at least one uppercase letter.
 #' 
 #' >  Example:
 #' 
@@ -210,6 +212,7 @@ oo::class create ::oowidgets::BaseWidget {
 #'            puts [my cget -message]
 #'        }
 #'    }  
+#'    puts "available commands: [info commands ::test::*]"
 #'    set btn [::test::button .btn -command exit -text Exit]
 #'    pack $btn -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
 #'    $btn test
