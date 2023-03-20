@@ -40,7 +40,7 @@ Let's first load the package:
 
 ```{.tcl echo=false results="hide"}
 ### just for recording setup
-after 500
+after 2500
 ```
 
 ```{.tcl}
@@ -63,7 +63,6 @@ to not interfere with the created Tcl command which will be all lowercase.
 Here our code:
 
 ```{.tcl}
-after 2000
 namespace eval ::flash {}
 oowidgets::widget ::flash::Button {
     constructor {path args} {
@@ -153,7 +152,7 @@ $gb greet "Greetings from the greetbutton!"
 The approach we used until now can be as well called **public inheritance**.
 Our new widgets expose all commands of the widgets from which they are
 derived. Sometimes you however you like to use **private inheritance** were
-you would like to expose only an limited amount of functionality of the
+you would like to expose only a limited amount of functionality of the
 underlying widget. You can achieve this by overwriting the `unknown` method to
 create an error in your new class. Do give an example we create a create a
 class ::flash::FlashButton  which only has the flash, configure and cget
@@ -215,7 +214,7 @@ inheritance often leads to large and complex hierarchies, mixins add some
 required functionality on the fly without the need to extend a base class. Ths
 approach is more flexible, just add the required mixin classes to get some
 desired behaviour. In the following we will create a mixin class `mx::Flash`
-which can flash both Labels and Buttons. We will then add this behaviour to
+which can flash Labels, Text widgets and Buttons. We will then add this behaviour to
 our classes just easily.
 
 Here our class which is not a widget usable by itself:
@@ -291,16 +290,17 @@ $mxl flash 100
 
 The advantage of this approach is obvious: instead of creating complex
 hierarchies we just create classes with some desired functionality and attach
-them to our widgets if we need. As the declaration of these proxy classes
-there exists already a namespace which contains the proxy classes for all
-standard ttk and tk widgets in case when no ttk widget is availble. They can be loaded using a `package require tkoo`:
+them to our widgets if we need. As the declaration of these proxy classes is
+slightly tedious and cumbersome, there exists already a namespace which
+contains the proxy classes for all standard ttk and tk widgets in case when no
+ttk widget is available. They can be all loaded using a `package require tkoo`:
 
 ```{.tcl}
 package require tkoo
 puts [lsort [info procs ::tkoo::*]]
 ```
 
-Let's add the Flashing to a text widget:
+Let's add the ::mx::Flash class to a text widget:
 
 ```{.tcl}
 set txt [tkoo::text .txt]
@@ -325,9 +325,9 @@ using a frame, so something like this:
 
 +----------------------------+
 | Frame cEEE                 |
-|+-------+------------------+|
-|| Label | Entry            || 
-|+-------+------------------+| 
+|+-------+ +----------------+|
+|| Label | | Entry          || 
+|+-------+ +----------------+| 
 +----------------------------+
 ```
 
@@ -374,9 +374,9 @@ puts [info commands ::comp::*]
 
 Usually it is a good idea to place your widgets in a frame and arrange them
 therein using your geometry manager like `pack` or `grid`. The you can decide
-which methods of your widget to expose. In the example above here are all
-methods exposed using the methods `entry` and `label` which then forward the
-arguments to the right internal widget. If no method is given to these
+which methods of your widget to expose. In the example above all
+methods of our internal widgets are exposed using the methods `entry` and `label`
+which then forward the arguments to the right internal widget. If no method is given to these
 commands just the internal widget is returned. 
 
 ```{.tcl}
@@ -411,6 +411,10 @@ then initialization of the components.
 ```{.tcl echo=false results="hide"}
 after 2000 exit
 ```
+
+## Document generation
+
+This document was generated using pandoc and [pantcl](https://github.mittelmark/pantcl).
 
 ## EOF
 
