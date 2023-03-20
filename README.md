@@ -10,6 +10,8 @@ Package for creating megawidgets using TclOO (WIP).
 
 **Links:**
 
+- [Tutorial](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/tutorial.html)
+- [Manual](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/oowidgets/oowidgets.html)
 - [Download](https://github.com/mittelmark/oowidgets/archive/refs/heads/main.zip)
 - [Wiki](https://wiki.tcl-lang.org/page/oowidgets)
 
@@ -53,7 +55,7 @@ pack $fl -side top -padx 10 -pady 10 -fill both -expand true
 $fl flash
 ```
 
-For more examples, including creating composite widgets, using mixins, see the file [samples/flash.tcl](samples/flash.tcl).
+For more examples, including creating composite widgets, using mixins, see the [tutorial](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/tutorial.html)
 
 **License:** BSD
 
