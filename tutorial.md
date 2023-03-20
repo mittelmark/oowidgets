@@ -5,6 +5,26 @@ date: Sun Mar 19 14:27:14 2023
 abstract: >
     Some abstract ...
     on several lines...
+header-includes: 
+- | 
+    ```{=html}
+    <style>
+    body { max-width: 1000px; font-size: 100%; }
+    pre { background: rgb(250,229,211); padding: 8px; }
+    pre.sourceCode, pre.tcl { 
+        background: #eeeeee; 
+        padding: 8px;
+        font-size: 95%;
+    }
+    #TOC li {
+        list-style: square;
+    }
+    .code-title {
+      background: #dddddd;
+      padding: 8px;
+    } 
+    </style>
+    ```
 tcl:
     eval: 1
 ---
@@ -164,7 +184,7 @@ oowidgets::widget ::flash::FlashButton {
             update idletasks
             after $ft
         }
-        puts "slashbutton was flashed"
+        puts "flashbutton was flashed"
     }
 }
 puts [info commands ::flash::*]
@@ -192,7 +212,7 @@ name which does nothing and then unexport them as you see with the `unknown` met
 
 An alternative to the shown approach above is the creation of mixins. Whereas
 inheritance often leads to large and complex hierarchies, mixins add some
-required functionality of the fly without the need to extend a base class. Ths
+required functionality on the fly without the need to extend a base class. Ths
 approach is more flexible, just add the required mixin classes to get some
 desired behaviour. In the following we will create a mixin class `mx::Flash`
 which can flash both Labels and Buttons. We will then add this behaviour to
