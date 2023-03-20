@@ -214,10 +214,13 @@ oo::class create ::oowidgets::BaseWidget {
 #'    }  
 #'    puts "available commands: [info commands ::test::*]"
 #'    set btn [::test::button .btn -command exit -text Exit]
+#'    set btn2 [::test::button .btn2 -command { puts Hello } -text Hello]
 #'    pack $btn -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
+#'    pack $btn2 -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
 #'    $btn test
 #'    $btn configure -message newmessage
 #'    $btn test
+#'    $btn2 invoke
 #'    after 3000 [list $btn invoke]
 #' ```
 #' 
