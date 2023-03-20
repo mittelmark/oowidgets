@@ -321,7 +321,7 @@ assembled out of several widgets. A typical example is a `LabEntry` consisting
 out of a Label and a Entry widget side by side which are usually arranged
 using a frame, so something like this:
 
-```{.kroki dia="ditaa" echo=false cache=false results="hide"}
+```{.kroki dia="ditaa" echo=false}
 
 +----------------------------+
 | Frame cEEE                 |
@@ -330,8 +330,6 @@ using a frame, so something like this:
 |+-------+------------------+| 
 +----------------------------+
 ```
-
-![](images/kroki-1.svg)
 
 Let's create for illustrative purposes such a LabEntry widget. We will place
 it as well in a new namespace:
