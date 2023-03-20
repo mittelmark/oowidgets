@@ -397,7 +397,6 @@ If you like to create new options like `-labeltext` you should create a new
 configure method in your class where you then delegate this option to the right widget. That could look something like this:
 
 ```{.tcl eval=false}
-
 oo::define ::comp::LabEntry method configure {args} {
    next {*}$args
    my label configure -text [my cget -labeltext]
