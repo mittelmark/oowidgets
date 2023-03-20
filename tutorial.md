@@ -292,7 +292,7 @@ $txt flash
 
 Below you see the executed code:
 
-![](img/tutorial-01.gif)
+![](images/tutorial-01.gif)
 
 ## Composition
 
