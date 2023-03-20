@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Detlef Groth" />
+  <title>The packages oowidgets and tkoo - creating megawidgets using tclOO</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">The packages oowidgets and tkoo - creating megawidgets using tclOO</h1>
+<p class="author">Detlef Groth</p>
+<p class="date">Sun Mar 19 14:27:14 2023</p>
+</header>
+<h2 id="introduction">Introduction</h2>
+<p>This is a short tutorial on how to use the packages <code>oowidgets</code> and <code>tkoo</code> to create megawidgets using techniques like inheritance, mixins or composition.</p>
+<p>Let’s first load the package:</p>
+<h2 id="package-loading">Package loading</h2>
+<p></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">lappend</span> <span class="kw">auto_path</span> .</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> oowidgets</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[package</span> <span class="ot">present</span> oowidgets<span class="kw">]</span></span></code></pre></div>
+<pre class="tclout"><code>0.2
+</code></pre>
+<p>Once the package is loaded we can start with a few examples.</p>
+<h2 id="inheritance">Inheritance</h2>
+<p>If we think about object oriented programming the first mechanism to learn is usually <em>inheritance</em>. Let’s use this mechanism and create an extended version of a <code>ttk::button</code> which has as well a flash function. We use the method <code>oowidgets::widget</code> to create a new class and a Tcl command for this widget. Please note that the classname must contain at least one uppercase character to not interfere with the created Tcl command which will be all lowercase.</p>
+<p>Here our code:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">after</span> <span class="dv">2000</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="kw">eval</span> ::<span class="ot">flash</span> <span class="kw">{}</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>oowidgets::widget ::<span class="ot">flash</span>::Button <span class="kw">{</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    constructor <span class="kw">{</span>path <span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>          my install ttk::<span class="kw">button</span> <span class="dt">$path</span><span class="ot"> -flashtime</span> <span class="dv">200</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>          my <span class="ot">configure</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    method <span class="ot">flash</span> <span class="kw">{}</span> <span class="kw">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">set</span> ot <span class="kw">[</span>my <span class="ot">cget -text</span><span class="kw">]</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">set</span> ft <span class="kw">[</span>my <span class="ot">cget -flashtime</span><span class="kw">]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> <span class="kw">{set</span> i <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span><span class="dt">$i</span> &lt; <span class="dv">5</span><span class="kw">}</span> <span class="kw">{incr</span> i<span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            my <span class="ot">configure -text</span> <span class="st">&quot;......&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="kw">update</span> idletasks</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>            <span class="kw">after</span> <span class="dt">$ft</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>            my <span class="ot">configure -text</span> <span class="dt">$ot</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">update</span> idletasks</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">after</span> <span class="dt">$ft</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">}</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">puts</span> flashed</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        my <span class="ot">configure -text</span> <span class="dt">$ot</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code></pre></div>
+<p>This creates the class <code>::flash::Button</code> and a command <code>::flash::button</code> which should be used to create the widget. In the constructor we as well add a new configuration option <code>-flashtime</code> with a default value of 200. Let’s inspect the command created in the <code>::flash</code> namespace:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[info</span> <span class="ot">commands</span> ::<span class="ot">flash</span>::*<span class="kw">]</span></span></code></pre></div>
+<pre class="tclout"><code>::flash::Button ::flash::button
+</code></pre>
+<p>We can now use the command <code>::flash::button</code> the same way we would use the <code>ttk::button</code>, our new command however has now as well the flash method:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> fb <span class="kw">[</span><span class="ot">flash</span>::<span class="kw">button</span> .fb<span class="ot"> -flashtime</span> <span class="dv">100</span><span class="ot"> -width</span> <span class="dv">200</span> \</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    -<span class="kw">text</span> <span class="st">&quot;FlashButton&quot;</span> \</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    -<span class="ot">command</span> <span class="kw">{</span> <span class="kw">puts</span> <span class="st">&quot;I am a flash::button&quot;</span> <span class="kw">}]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$fb</span><span class="ot"> -side</span> top<span class="ot"> -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipady</span> <span class="dv">20</span><span class="ot"> -ipadx</span> <span class="dv">20</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$fb</span> <span class="ot">flash</span></span></code></pre></div>
+<pre class="tclout"><code>flashed
+</code></pre>
+<p>The options <code>-flashtime</code> is a new option which we added in our constructor of the <code>flash::Button</code> class.</p>
+<p>As we use here public inheritance we can still use all the default <code>ttk::button</code> methods for instance a method like <code>invoke</code> and due to a renaming trick we can as well call the methods using the widget path:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">### using variable</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">$fb</span> <span class="ot">invoke</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#### using widget path</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>.fb <span class="ot">invoke</span></span></code></pre></div>
+<pre class="tclout"><code>I am a flash::button
+I am a flash::button
+</code></pre>
+<p>Let’s say we would like to extend the <code>flash::button</code> widget even further and we would like to inherit now from its class, <code>flash::Button</code>, we could do this like this:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>oowidgets::widget ::<span class="ot">flash</span>::GreetButton <span class="kw">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>   superclass ::<span class="ot">flash</span>::Button</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>   method greet <span class="kw">{{message</span> <span class="st">&quot;Hello&quot;</span><span class="kw">}}</span> <span class="kw">{</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">puts</span> <span class="dt">$message</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">}</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[info</span> <span class="ot">commands</span> ::<span class="ot">flash</span>::*<span class="kw">]</span></span></code></pre></div>
+<pre class="tclout"><code>::flash::Button ::flash::button ::flash::GreetButton ::flash::greetbutton
+</code></pre>
+<p>As you can see we have now the new class and the new command in our <code>::flash</code> namespace.</p>
+<p>Please note that the superclass statement must be the very first on our widget definition code.</p>
+<p>We can now use this widget the same way like the <code>flash::button</code> widget:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> gb <span class="kw">[</span><span class="ot">flash</span>::greetbutton .gb<span class="ot"> -text</span> <span class="st">&quot;Greeter&quot;</span><span class="kw">]</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$gb</span><span class="ot"> -fill</span> <span class="ot">x -side</span> top<span class="ot"> -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipady</span> <span class="dv">20</span><span class="ot"> -ipadx</span> <span class="dv">20</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$gb</span> <span class="ot">flash</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$gb</span> greet <span class="st">&quot;Greetings from the greetbutton!&quot;</span></span></code></pre></div>
+<pre class="tclout"><code>flashed
+Greetings from the greetbutton!
+</code></pre>
+<p>The approach we used until now can be as well called <strong>public inheritance</strong>. Our new widgets expose all commands of the widgets from which they are derived. Sometimes you however you like to use <strong>private inheritance</strong> were you would like to expose only an limited amount of functionality of the underlying widget. You can achieve this by overwriting the <code>unknown</code> method to create an error in your new class. Do give an example we create a create a class ::flash::FlashButton which only has the flash, configure and cget methods but not anymore the invoke method of the standard <code>ttk::button</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>oowidgets::widget ::<span class="ot">flash</span>::FlashButton <span class="kw">{</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    constructor <span class="kw">{</span>path <span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        ttk::<span class="kw">style</span> layout FlashButton <span class="kw">[</span>ttk::<span class="kw">style</span> layout TButton<span class="kw">]</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        ttk::<span class="kw">style</span> <span class="ot">configure</span> FlashButton<span class="ot"> -anchor</span> center</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        my install ttk::<span class="kw">button</span> <span class="dt">$path</span><span class="ot"> -flashtime</span> <span class="dv">100</span> \</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>             -<span class="kw">text</span> <span class="kw">[string</span> <span class="ot">repeat</span> <span class="st">&quot;</span><span class="ch">\u</span><span class="st">2588&quot;</span> <span class="dv">10</span><span class="kw">]</span><span class="ot"> -style</span> FlashButton</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        my <span class="ot">configure</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    method <span class="kw">unknown</span> <span class="kw">{</span>method <span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span><span class="ot"> -code</span> <span class="kw">error</span> <span class="st">&quot;Method </span><span class="dt">$</span><span class="st">method not implemented! Valid methods are [info class methods ::flash::FlashButton -all]!&quot;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># hide unknown method to disallow outside use</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    unexport <span class="kw">unknown</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    method <span class="ot">flash</span> <span class="kw">{}</span> <span class="kw">{</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">set</span> fg black</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        <span class="kw">set</span> ft <span class="kw">[</span>my <span class="ot">cget -flashtime</span><span class="kw">]</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">for</span> <span class="kw">{set</span> i <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span><span class="dt">$i</span> &lt; <span class="dv">5</span><span class="kw">}</span> <span class="kw">{incr</span> i<span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>            ttk::<span class="kw">style</span> <span class="ot">configure</span> FlashButton<span class="ot"> -foreground</span> red</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>            <span class="kw">update</span> idletasks</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>            <span class="kw">after</span> <span class="dt">$ft</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>            ttk::<span class="kw">style</span> <span class="ot">configure</span> FlashButton<span class="ot"> -foreground</span> <span class="dt">$fg</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>            <span class="kw">update</span> idletasks</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>            <span class="kw">after</span> <span class="dt">$ft</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>        <span class="kw">}</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        <span class="kw">puts</span> <span class="st">&quot;slashbutton was flashed&quot;</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[info</span> <span class="ot">commands</span> ::<span class="ot">flash</span>::*<span class="kw">]</span></span></code></pre></div>
+<pre class="tclout"><code>::flash::Button ::flash::button ::flash::FlashButton ::flash::flashbutton ::flash::GreetButton ::flash::greetbutton
+</code></pre>
+<p>Let’s now use this <code>flashbutton</code> widget:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> fl <span class="kw">[</span><span class="ot">flash</span>::flashbutton .fl<span class="ot"> -flashtime</span> <span class="dv">200</span><span class="kw">]</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$fl</span><span class="ot"> -side</span> top<span class="ot"> -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipady</span> <span class="dv">20</span><span class="ot"> -ipadx</span> <span class="dv">20</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$fl</span> <span class="ot">configure -command</span> <span class="kw">{</span> <span class="kw">puts</span> Hi <span class="kw">}</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$fl</span> <span class="ot">flash</span></span></code></pre></div>
+<pre class="tclout"><code>slashbutton was flashed
+</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">catch</span> <span class="kw">{</span><span class="dt">$fl</span> <span class="ot">invoke</span><span class="kw">}</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="st">&quot;</span><span class="dt">$</span><span class="st">errorInfo&quot;</span></span></code></pre></div>
+<pre class="tclout"><code>Method invoke not implemented! Valid methods are cget configure destroy flash!
+    while executing
+&quot;$fl invoke&quot;
+</code></pre>
+<p>To remove as well <code>configure</code> and <code>cget</code> you could create two methods of that name which does nothing and then unexport them as you see with the <code>unknown</code> method.</p>
+<h2 id="mixins">Mixins</h2>
+<p>An alternative to the shown approach above is the creation of mixins. Whereas inheritance often leads to large and complex hierarchies, mixins add some required functionality of the fly without the need to extend a base class. Ths approach is more flexible, just add the required mixin classes to get some desired behaviour. In the following we will create a mixin class <code>mx::Flash</code> which can flash both Labels and Buttons. We will then add this behaviour to our classes just easily.</p>
+<p>Here our class which is not a widget usable by itself:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="kw">eval</span> ::mx <span class="kw">{</span> <span class="kw">}</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>oo::<span class="ot">class</span> <span class="ot">create</span> ::mx::Flash <span class="kw">{</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    method <span class="ot">flash</span> <span class="kw">{{</span>flashtime <span class="dv">200</span><span class="kw">}}</span> <span class="kw">{</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">set</span> cls  <span class="kw">[</span>my tkclass<span class="kw">]</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">{</span><span class="dt">$cls</span> eq <span class="st">&quot;TButton&quot;</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>            <span class="kw">set</span> txt <span class="kw">[</span>my <span class="ot">cget -text</span><span class="kw">]</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> <span class="kw">{set</span> i <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span><span class="dt">$i</span> &lt; <span class="dv">5</span><span class="kw">}</span> <span class="kw">{incr</span> i<span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                my <span class="ot">configure -text</span> <span class="kw">[string</span> <span class="ot">repeat</span> <span class="st">&quot;-&quot;</span> <span class="kw">[string</span> <span class="ot">length</span> <span class="dt">$txt</span><span class="kw">]]</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>                <span class="kw">update</span> idletasks</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>                <span class="kw">after</span> <span class="dt">$flashtime</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>                my <span class="ot">configure -text</span> <span class="dt">$txt</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">update</span> idletasks</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>                <span class="kw">after</span> <span class="dt">$flashtime</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">}</span>   </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">}</span> <span class="kw">elseif</span> <span class="kw">{</span><span class="dt">$cls</span> in <span class="kw">[list</span> <span class="st">&quot;Text&quot;</span> <span class="st">&quot;TLabel&quot;</span><span class="kw">]}</span> <span class="kw">{</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>            <span class="kw">set</span> fg <span class="kw">[</span>my <span class="ot">cget -foreground</span><span class="kw">]</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> <span class="kw">{set</span> i <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span><span class="dt">$i</span> &lt; <span class="dv">5</span><span class="kw">}</span> <span class="kw">{incr</span> i<span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>                my <span class="ot">configure -foreground</span> salmon</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>                <span class="kw">update</span> idletasks</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>                <span class="kw">after</span> <span class="dt">$flashtime</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>                my <span class="ot">configure -foreground</span> <span class="dt">$fg</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>                <span class="kw">update</span> idletasks</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>                <span class="kw">after</span> <span class="dt">$flashtime</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>            <span class="kw">}</span>   </span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>        <span class="kw">}</span>   </span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>        <span class="kw">puts</span> <span class="st">&quot;flashing </span><span class="dt">$</span><span class="st">flashtime long&quot;</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code></pre></div>
+<pre class="tclout"><code>::mx::Flash</code></pre>
+<p>To add a mixin to a Tk widget we need first to create a proxy class which is nothing more than the original widget without any addtions. Here two proxy classes:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>oowidgets::widget ::mx::Button <span class="kw">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    constructor <span class="kw">{</span>path <span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        my install ttk::<span class="kw">button</span> <span class="dt">$path</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        my <span class="ot">configure</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>oowidgets::widget ::mx::Label <span class="kw">{</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    constructor <span class="kw">{</span>path <span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        my install ttk::<span class="kw">label</span> <span class="dt">$path</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        my <span class="ot">configure</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[lsort</span> <span class="kw">[info</span> <span class="ot">command</span> ::mx::*<span class="kw">]]</span></span></code></pre></div>
+<pre class="tclout"><code>::mx::Button ::mx::Flash ::mx::Label ::mx::button ::mx::label
+</code></pre>
+<p>Once this is done we can add to our classes the mixin:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>oo::define ::mx::Button <span class="kw">{</span> mixin ::mx::Flash <span class="kw">}</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>oo::define ::mx::Label <span class="kw">{</span> mixin ::mx::Flash <span class="kw">}</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[info</span> <span class="ot">class</span> methods ::mx::Button<span class="ot"> -all</span><span class="kw">]</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> mxb <span class="kw">[</span>::mx::<span class="kw">button</span> .mxb<span class="ot"> -text</span> <span class="st">&quot;Hello ::mx::button&quot;</span><span class="kw">]</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> mxl <span class="kw">[</span>::mx::<span class="kw">label</span> .mxl<span class="ot"> -text</span> <span class="st">&quot;Hello ::mx::Label&quot;</span><span class="ot"> -anchor</span> center<span class="kw">]</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$mxb</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> <span class="ot">x -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipadx</span> <span class="dv">5</span><span class="ot"> -ipady</span> <span class="dv">5</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$mxl</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> <span class="ot">x -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipadx</span> <span class="dv">5</span><span class="ot"> -ipady</span> <span class="dv">5</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="kw">update</span> idletasks</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="dt">$mxb</span> <span class="ot">flash</span> <span class="dv">400</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="dt">$mxl</span> <span class="ot">flash</span> <span class="dv">100</span></span></code></pre></div>
+<pre class="tclout"><code>cget configure destroy flash
+flashing 400 long
+flashing 100 long
+</code></pre>
+<p>The advantage of this approach is obvious: instead of creating complex hierarchies we just create classes with some desired functionality and attach them to our widgets if we need. As the declaration of these proxy classes there exists already a namespace which contains the proxy classes for all standard ttk and tk widgets in case when no ttk widget is availble. They can be loaded using a <code>package require tkoo</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> tkoo</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[lsort</span> <span class="kw">[info</span> <span class="ot">procs</span> ::tkoo::*<span class="kw">]]</span></span></code></pre></div>
+<pre class="tclout"><code>::tkoo::button ::tkoo::canvas ::tkoo::checkbutton ::tkoo::combobox ::tkoo::entry ::tkoo::frame ::tkoo::label ::tkoo::labelframe ::tkoo::listbox ::tkoo::menu ::tkoo::menubutton ::tkoo::notebook ::tkoo::panedwindow ::tkoo::progessbar ::tkoo::radiobutton ::tkoo::scale ::tkoo::scrollbar ::tkoo::separator ::tkoo::sizegrip ::tkoo::spinbox ::tkoo::text ::tkoo::treeview
+</code></pre>
+<p>Let’s add the Flashing to a text widget:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txt<span class="kw">]</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>oo::define ::tkoo::Text <span class="kw">{</span> mixin ::mx::Flash <span class="kw">}</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;Hello this is some text</span><span class="ch">\n</span><span class="st">Which is inserted!&quot;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> <span class="ot">x -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">10</span><span class="ot"> -ipadx</span> <span class="dv">5</span><span class="ot"> -ipady</span> <span class="dv">5</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">flash</span></span></code></pre></div>
+<pre class="tclout"><code>flashing 200 long
+</code></pre>
+<p>Below you see the executed code:</p>
+<p><img src="img/tutorial-01.gif" /></p>
+<h2 id="composition">Composition</h2>
+<p>If we think about megawidgets usually we mean that there are widgets which are assembled out of several widgets. A typical example is a <code>LabEntry</code> consisting out of a Label and a Entry widget side by side which are usually arranged using a frame, so something like this:</p>
+<p></p>
+<p><img src="/home/groth/workspace/oowidgets/images/kroki-1.svg" /></p>
+<p>Let’s create for illustrative purposes such a LabEntry widget. We will place it as well in a new namespace:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> <span class="kw">eval</span> ::comp <span class="kw">{</span> <span class="kw">}</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>oowidgets::widget ::comp::LabEntry <span class="kw">{</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">variable</span> ent</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">variable</span> lab</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    constructor <span class="kw">{</span>path <span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># the main widget is the frame</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># add an additional label</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        my install ttk::<span class="kw">frame</span> <span class="dt">$path</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">set</span> lab <span class="kw">[</span>ttk::<span class="kw">label</span> <span class="dt">$path</span>.lab<span class="kw">]</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">set</span> ent <span class="kw">[</span>ttk::<span class="kw">entry</span> <span class="dt">$path</span>.ent<span class="kw">]</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">pack</span> <span class="dt">$lab</span><span class="ot"> -side</span> left<span class="ot"> -padx</span> <span class="dv">5</span><span class="ot"> -pady</span> <span class="dv">5</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">pack</span> <span class="dt">$ent</span><span class="ot"> -side</span> left<span class="ot"> -padx</span> <span class="dv">5</span><span class="ot"> -pady</span> <span class="dv">5</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        my <span class="ot">configure</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># expose the internal widgets using subcommands</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>    method <span class="kw">label</span> <span class="kw">{</span><span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">{[llength</span> <span class="dt">$args</span><span class="kw">]</span> == <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> <span class="dt">$lab</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">}</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$lab</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>    method <span class="kw">entry</span> <span class="kw">{</span><span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="kw">{[llength</span> <span class="dt">$args</span><span class="kw">]</span> == <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span> <span class="dt">$ent</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>        <span class="kw">}</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$ent</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># you could as well delegate all methods to the entry widget</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># making it your default widget</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>    method <span class="kw">unknown</span> <span class="kw">{</span><span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">$ent</span> <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span> </span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[info</span> <span class="ot">commands</span> ::comp::*<span class="kw">]</span></span></code></pre></div>
+<pre class="tclout"><code>::comp::LabEntry ::comp::labentry
+</code></pre>
+<p>Usually it is a good idea to place your widgets in a frame and arrange them therein using your geometry manager like <code>pack</code> or <code>grid</code>. The you can decide which methods of your widget to expose. In the example above here are all methods exposed using the methods <code>entry</code> and <code>label</code> which then forward the arguments to the right internal widget. If no method is given to these commands just the internal widget is returned.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> lent <span class="kw">[</span>::comp::labentry .lentry<span class="kw">]</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$lent</span><span class="ot"> -side</span> top<span class="ot"> -padx</span> <span class="dv">10</span><span class="ot"> -pady</span> <span class="dv">20</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$lent</span> <span class="kw">label</span> <span class="ot">configure -text</span> <span class="st">&quot;Label: &quot;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$lent</span> <span class="kw">entry</span> <span class="ot">insert</span> <span class="dv">0</span> <span class="st">&quot;Some text&quot;</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[</span><span class="dt">$lent</span> <span class="kw">entry]</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="kw">bind</span> <span class="kw">[</span><span class="dt">$lent</span> <span class="kw">entry]</span> &lt;Destroy&gt; <span class="kw">{</span> <span class="kw">puts</span> <span class="st">&quot;destroyed entry&quot;</span> <span class="kw">}</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="kw">bind</span> <span class="dt">$lent</span> &lt;Destroy&gt; <span class="kw">{</span> <span class="kw">puts</span> <span class="st">&quot;destroyed labentry&quot;</span> <span class="kw">}</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="kw">destroy</span> <span class="dt">$lent</span></span></code></pre></div>
+<pre class="tclout"><code>.lentry.ent
+destroyed entry
+destroyed labentry
+</code></pre>
+<p>If you like to create new options like <code>-labeltext</code> you should create a new configure method in your class where you then delegate this option to the right widget. That could look something like this:</p>
+<div class="sourceCode" id="cb34" data-eval="false"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>oo::define ::comp::LabEntry method <span class="ot">configure</span> <span class="kw">{</span><span class="ot">args</span><span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>   next <span class="kw">{</span>*<span class="kw">}</span><span class="dt">$args</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>   my <span class="kw">label</span> <span class="ot">configure -text</span> <span class="kw">[</span>my <span class="ot">cget -labeltext</span><span class="kw">]</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code></pre></div>
+<p>This can however soon become complex, so you have to update the configuration settings for the class if configure is called via <code>obj label configure</code>. So probably it is the easiest way to leave it as it it is and then update the component configurations via the exposed commands <code>label</code> and <code>entry</code>. This then needs however separate calls for intialization of the main widget and then initialization of the components.</p>
+<p></p>
+<h2 id="eof">EOF</h2>
+</body>
+</html>
