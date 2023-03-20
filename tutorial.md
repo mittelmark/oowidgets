@@ -419,6 +419,8 @@ after 2000 exit
 
 This document was generated using pandoc and [pantcl](https://github.com/mittelmark/pantcl).
 
+See the [Makefile](Makefile) for the used commands.
+
 ## EOF
 
 
