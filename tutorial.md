@@ -414,7 +414,7 @@ after 2000 exit
 
 ## Document generation
 
-This document was generated using pandoc and [pantcl](https://github.mittelmark/pantcl).
+This document was generated using pandoc and [pantcl](https://github.com/mittelmark/pantcl).
 
 ## EOF
 
