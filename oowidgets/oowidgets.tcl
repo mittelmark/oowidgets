@@ -1,5 +1,29 @@
 package require Tk
-package provide oowidgets 0.1
+package provide oowidgets 0.2
+
+#' ---
+#' title: package oowidgets - create megawidgets using TclOO
+#' author: Detlef Groth, University of Potsdam, Germany
+#' date: 2023-03-20
+#' ---
+#' 
+#'
+#' ## NAME 
+#' 
+#' `oowidgets` - package to create megawidgets using TclOO
+#' 
+#' ## SYNOPSIS
+#' 
+#' ```
+#' package require oowidgets
+#' oowidgets::widget _class_ _code_
+#' ```
+#' 
+#' ## METHODS
+#' 
+#' There is only one method currently:
+#' 
+#' 
 namespace eval ::oowidgets { }
 
 # this is a tk-like wrapper around the class,
@@ -124,7 +148,41 @@ oo::class create ::oowidgets::BaseWidget {
       }
       unexport unkown install
 }
-                        
+
+#' **oowidgets::widget** _name_ _body_ 
+#' 
+#' > Creates a class and a widget name using the given _name_ and code 
+#' in the _body_ argument. The widget name is the same name as the class 
+#' name but consisting only of lowercase letters. To avoid name collisions,
+#' the given classname must have at least one uppercase letter.
+#' 
+#' >  Example:
+#' 
+#' ```{.tcl eval=true echo=false results="hide"}
+#' lappend auto_path .
+#' ```
+#' 
+#' ```{.tcl eval=true}
+#'    package require oowidgets
+#'    namespace eval ::test { }
+#'    oowidgets::widget ::test::Button {
+#'        constructor {path args} {
+#'           my install ttk::button $path -message testmessage
+#'           my configure {*}$args
+#'        }
+#'        method test {} {
+#'            puts [my cget -message]
+#'        }
+#'    }  
+#'    set btn [::test::button .btn -command exit -text Exit]
+#'    pack $btn -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
+#'    $btn test
+#'    $btn configure -message newmessage
+#'    $btn test
+#'    after 3000 [list $btn invoke]
+#' ```
+#' 
+
 proc oowidgets::widget {name body} {
     oowidgets::new $name
     oo::class create $name $body
@@ -132,3 +190,40 @@ proc oowidgets::widget {name body} {
         oo::define $name { superclass oowidgets::BaseWidget }
     }
 }
+
+#' ## SEE ALSO
+#' 
+#' - [Tutorial](../tutorial.html)
+#' - [Readme](../README.html)
+#'
+#' ## LICENSE
+#'
+#' Copyright 2023 Detlef Groth
+#' 
+
+#' Redistribution and use in source and binary forms, with or without
+#'  modification, are permitted provided that the following conditions are met: 
+#' 
+#' 1. Redistributions of source code must retain the above copyright notice,
+#' this list of conditions and the following disclaimer. 
+#' 
+#' 2. Redistributions in binary form must reproduce the above copyright
+#' notice, this list of conditions and the following disclaimer in the
+#' documentation and/or other materials provided with the distribution. 
+#' 
+#' 3. Neither the name of the copyright holder nor the names of its
+#' contributors may be used to endorse or promote products derived from this
+#' software without specific prior written permission. 
+#'
+#' THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+#' - AS IS - AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+#' LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+#' PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER
+#' OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+#' EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#' PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#' OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#' WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#' OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#' ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+

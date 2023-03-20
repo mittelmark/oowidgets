@@ -1,7 +1,6 @@
 ---
-title: "Long Title"
-author: 
-- Detlef Groth
+title: "The packages oowidgets and tkoo - creating megawidgets using tclOO"
+author: Detlef Groth
 date: Sun Mar 19 14:27:14 2023
 abstract: >
     Some abstract ...
@@ -12,11 +11,17 @@ tcl:
 
 ## Introduction
 
-This is a short tutorial on how to use the package oowidgets to create
-megawidgets using techniques, concepts of inheritance, mixins, composition and
-mechanisms like mixins, composition or inheritance.
+This is a short tutorial on how to use the packages `oowidgets` and `tkoo` to create
+megawidgets using techniques like inheritance, mixins or composition.
+
+Let's first load the package:
 
 ## Package loading
+
+```{.tcl echo=false results="hide"}
+### just for recording setup
+after 500
+```
 
 ```{.tcl}
 lappend auto_path .
@@ -28,9 +33,9 @@ Once the package is loaded we can start with a few examples.
 
 ## Inheritance
 
-If we think about object oriented programming the first mechanism to lear is
+If we think about object oriented programming the first mechanism to learn is
 usually _inheritance_. Let's use this mechanism and create an extended version
-a a `ttk::button` which has as well a flash function. We use the method
+of a `ttk::button` which has as well a flash function. We use the method
 `oowidgets::widget` to create a new class and a Tcl command for this widget.
 Please note that the classname must contain at least one uppercase character
 to not interfere with the created Tcl command which will be all lowercase.
@@ -38,6 +43,7 @@ to not interfere with the created Tcl command which will be all lowercase.
 Here our code:
 
 ```{.tcl}
+after 2000
 namespace eval ::flash {}
 oowidgets::widget ::flash::Button {
     constructor {path args} {
@@ -119,7 +125,7 @@ We can now use this widget the same way like the `flash::button` widget:
 
 ```{.tcl}
 set gb [flash::greetbutton .gb -text "Greeter"]
-pack $gb -side top -padx 5 -pady 5
+pack $gb -fill x -side top -padx 10 -pady 10 -ipady 20 -ipadx 20
 $gb flash
 $gb greet "Greetings from the greetbutton!"
 ```
@@ -168,7 +174,7 @@ Let's now use this `flashbutton` widget:
 
 ```{.tcl}
 set fl [flash::flashbutton .fl -flashtime 200]
-pack $fl -side top -fill x -padx 10 -pady 10 -ipadx 5 -ipady 5
+pack $fl -side top -padx 10 -pady 10 -ipady 20 -ipadx 20
 $fl configure -command { puts Hi }
 $fl flash
 ```
@@ -255,9 +261,9 @@ oo::define ::mx::Button { mixin ::mx::Flash }
 oo::define ::mx::Label { mixin ::mx::Flash }
 puts [info class methods ::mx::Button -all]
 set mxb [::mx::button .mxb -text "Hello ::mx::button"]
-set mxl [::mx::label .mxl -text "Hello ::mx::Label"]
-pack $mxb
-pack $mxl
+set mxl [::mx::label .mxl -text "Hello ::mx::Label" -anchor center]
+pack $mxb -side top -fill x -padx 10 -pady 10 -ipadx 5 -ipady 5
+pack $mxl -side top -fill x -padx 10 -pady 10 -ipadx 5 -ipady 5
 update idletasks
 $mxb flash 400
 $mxl flash 100
@@ -280,17 +286,110 @@ Let's add the Flashing to a text widget:
 set txt [tkoo::text .txt]
 oo::define ::tkoo::Text { mixin ::mx::Flash }
 $txt insert end "Hello this is some text\nWhich is inserted!"
-pack $txt
+pack $txt -side top -fill x -padx 10 -pady 10 -ipadx 5 -ipady 5
 $txt flash
 ```
 
+Below you see the executed code:
 
-
+![](img/tutorial-01.gif)
 
 ## Composition
 
+If we think about megawidgets usually we mean that there are widgets which are
+assembled out of several widgets. A typical example is a `LabEntry` consisting
+out of a Label and a Entry widget side by side which are usually arranged
+using a frame, so something like this:
+
+```{.kroki dia="ditaa" echo=false}
+
++----------------------------+
+| Frame cEEE                 |
+|+-------+------------------+|
+|| Label | Entry            || 
+|+-------+------------------+| 
++----------------------------+
+```
+
+Let's create for illustrative purposes such a LabEntry widget. We will place
+it as well in a new namespace:
+
 ```{.tcl}
-after 1000 exit
+namespace eval ::comp { }
+oowidgets::widget ::comp::LabEntry {
+    variable ent
+    variable lab
+    constructor {path args} {
+        # the main widget is the frame
+        # add an additional label
+        my install ttk::frame $path
+        set lab [ttk::label $path.lab]
+        set ent [ttk::entry $path.ent]
+        pack $lab -side left -padx 5 -pady 5
+        pack $ent -side left -padx 5 -pady 5
+        my configure {*}$args
+    }
+    # expose the internal widgets using subcommands
+    method label {args} {
+        if {[llength $args] == 0} {
+            return $lab
+        }
+        $lab {*}$args
+    }
+    method entry {args} {
+        if {[llength $args] == 0} {
+            return $ent
+        }
+        $ent {*}$args
+    }
+    # you could as well delegate all methods to the entry widget
+    # making it your default widget
+    method unknown {args} {
+        $ent {*}$args
+    } 
+}
+
+puts [info commands ::comp::*]
+```
+
+Usually it is a good idea to place your widgets in a frame and arrange them
+therein using your geometry manager like `pack` or `grid`. The you can decide
+which methods of your widget to expose. In the example above here are all
+methods exposed using the methods `entry` and `label` which then forward the
+arguments to the right internal widget. If no method is given to these
+commands just the internal widget is returned. 
+
+```{.tcl}
+set lent [::comp::labentry .lentry]
+pack $lent -side top -padx 10 -pady 20
+$lent label configure -text "Label: "
+$lent entry insert 0 "Some text"
+puts [$lent entry]
+bind [$lent entry] <Destroy> { puts "destroyed entry" }
+bind $lent <Destroy> { puts "destroyed labentry" }
+destroy $lent
+```
+
+If you like to create new options like `-labeltext` you should create a new
+configure method in your class where you then delegate this option to the right widget. That could look something like this:
+
+```{.tcl eval=false}
+
+oo::define ::comp::LabEntry method configure {args} {
+   next {*}$args
+   my label configure -text [my cget -labeltext]
+}
+```
+
+This can however soon become complex, so you have to update the configuration
+settings for the class if configure is called via `obj label configure`. So
+probably it is the easiest way to leave it as it it is and then update the
+component configurations via the exposed commands `label` and `entry`. This
+then needs however separate calls for intialization of the main widget and
+then initialization of the components.
+
+```{.tcl echo=false results="hide"}
+after 2000 exit
 ```
 
 ## EOF

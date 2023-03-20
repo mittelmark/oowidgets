@@ -1,5 +1,5 @@
 package require oowidgets
-package provide tkoo 0.1
+package provide tkoo 0.2
 namespace eval ::tkoo { }
 oowidgets::widget ::tkoo::Button {
     constructor {path args} {
