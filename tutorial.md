@@ -321,7 +321,7 @@ assembled out of several widgets. A typical example is a `LabEntry` consisting
 out of a Label and a Entry widget side by side which are usually arranged
 using a frame, so something like this:
 
-```{.kroki dia="ditaa" echo=false}
+```{.kroki dia="ditaa" echo=false cache=false}
 
 +----------------------------+
 | Frame cEEE                 |
