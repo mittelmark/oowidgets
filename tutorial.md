@@ -1,5 +1,5 @@
 ---
-title: "The packages oowidgets and tkoo - creating megawidgets using tclOO"
+title: "The packages oowidgets and tkoo - creating megawidgets using TclOO"
 author: Detlef Groth
 date: Sun Mar 19 14:27:14 2023
 abstract: >
@@ -31,8 +31,11 @@ tcl:
 
 ## Introduction
 
-This is a short tutorial on how to use the packages `oowidgets` and `tkoo` to create
-megawidgets using techniques like inheritance, mixins or composition.
+This is a short tutorial on how to use the packages `oowidgets` and `tkoo` to
+create megawidgets using techniques like inheritance, mixins or composition.
+It is based on the package TclOO which is in the core since Tcl 8.6 so, this
+is the minimal requirement.
+
 
 Let's first load the package:
 
@@ -255,7 +258,7 @@ oo::class create ::mx::Flash {
 ```
 
 To add a mixin to a Tk widget we need first to create a proxy class which is
-nothing more than the original widget without any addtions. Here two proxy classes:
+nothing more than the original widget without any additions. Here two proxy classes:
 
 ```{.tcl}
 oowidgets::widget ::mx::Button {
