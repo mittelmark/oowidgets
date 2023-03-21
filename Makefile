@@ -10,6 +10,7 @@ paul-manual:
 	pandoc paul/header.md -o paul/header.html 	
 	pantcl paul/basegui.tcl paul/basegui.html -s
 	pantcl paul/statusbar.tcl paul/statusbar.html -s
+	pantcl paul/dlabel.tcl paul/dlabel.html -s	
  	
 record:
 	byzanz-record --delay 4 --duration=13 --x=860 --y=40 --width=1065 \

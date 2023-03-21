@@ -60,12 +60,145 @@ For more examples, including creating composite widgets, using mixins, see the [
 There is a sample project which uses `TclOO` and `oowidgets` to create mega widgets. Here two example commands:
 
 - [paul::basegui](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/basegui.html) - base class to build Tk applications, [code](paul/basegui.tcl) 
-- [paul::statusbar](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`, , [code](paul/statusbar.tcl) 
+- [paul::dlabel](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - using inheritance to create changed `ttk::label` with dynamic fontsize,
+   [code](paul/dlabel.tcl) 
+- [paul::statusbar](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`,  
+   [code](paul/statusbar.tcl) 
 
 PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen"..
 
 **License:** BSD
 
+**Snit vs oowidgets**
 
+Here an example widget ins snit, the above mentioned `dlabel` a `ttk::label` with dynamic font-size adaptation, looks like this:
 
+![](images/dlabel.png)
+
+Here the snit code:
+
+```
+package require snit
+snit::widget  dgw::dlabel {
+    component label
+    option -text "Default"
+    delegate method * to label
+    delegate option * to label
+    option -font ""
+    constructor {args} {
+        install label using ttk::label $win.lbl {*}$args
+        $self configurelist $args
+        if {$options(-font) eq ""} {
+            set mfont [font create {*}[font configure TkDefaultFont]]
+            $label configure -font $mfont
+            set options(-font) $mfont
+        }
+        pack $label -side top -fill both -expand yes -padx 10 -pady 10
+        bind  $label <Configure> [mymethod configureBinding %W %w %h] 
+    }
+    method adjustFont {width height} {
+        set cw [font measure $options(-font) $options(-text)]
+        set ch [font metrics $options(-font)]
+        set size [font configure $options(-font) -size]
+        # shrink
+        set shrink false
+        while {true} {
+            set cw [font measure $options(-font) $options(-text)]
+            set ch [font metrics $options(-font)]
+            set size [font configure $options(-font) -size]
+
+            if {$cw < $width && $ch < $height} {
+                break
+            }
+            incr size -2
+            font configure $options(-font) -size $size
+            set shrink true
+        }
+        # grow
+        while {!$shrink} {
+            set cw [font measure $options(-font) $options(-text)]
+            set ch [font metrics $options(-font)]
+            set size [font configure $options(-font) -size]
+            if {$cw > $width || $ch > $height} {
+                incr size -2 ;#set back
+                font configure $options(-font) -size $size
+                break
+            }
+            incr size 2
+            font configure $options(-font) -size $size
+        }
+    }
+    
+    method configureBinding {mwin width height} {
+        bind $mwin <Configure> {}
+        $self adjustFont $width $height
+        after idle [list bind $mwin <Configure> [mymethod configureBinding %W %w %h]]
+    }
+}
+```
+
+And here the oowidget code:
+
+```{.tcl}
+package require oowidgets
+namespace eval paul { }
+
+oowidgets::widget ::paul::Dlabel {
+    variable label
+    constructor {path args} {
+        my install ttk::label $path \
+              -font [font create {*}[font configure TkDefaultFont]] \
+              -text Default
+        my configure {*}$args
+        set label $path
+        bind  $label <Configure> [callback ConfigureBinding %W %w %h] 
+    }
+    method AdjustFont {width height} {
+        set cw [font measure [my cget -font] [my cget -text]]
+        set ch [font metrics [my cget -font]]
+        set size [font configure [my cget -font] -size]
+        # shrink
+        set shrink false
+        while {true} {
+            set cw [font measure [my cget -font] [my cget -text]]
+            set ch [font metrics [my cget -font]]
+            set size [font configure [my cget -font] -size]
+
+            if {$cw < $width && $ch < $height} {
+                break
+            }
+            incr size -2
+            font configure [my cget -font] -size $size
+            set shrink true
+        }
+        # grow
+        while {!$shrink} {
+            set cw [font measure [my cget -font] [my cget -text]]
+            set ch [font metrics [my cget -font]]
+            set size [font configure [my cget -font] -size]
+            if {$cw > $width || $ch > $height} {
+                incr size -2 ;#set back
+                font configure [my cget -font] -size $size
+                break
+            }
+            incr size 2
+            font configure [my cget -font] -size $size
+        }
+    }
+    method ConfigureBinding {mwin width height} {
+        bind $mwin <Configure> {}
+        my AdjustFont $width $height
+        after idle [list bind $mwin <Configure> [callback ConfigureBinding %W %w %h]]
+    }
+}
+
+```
+
+The main differences using `oowidget`:
+
+- no hull widget, just direct install of ttk::label without a frame
+- snit: `$self configurelist $args` - `oowidgets: `my configure {*}$args`
+- all methods and options are automatically delegated to this main widget if there is no hull widget
+- not `mymethod` but the `callback` method suggested in [Tclers Wiki](https://wiki.tcl-lang.org/page/TclOO+Tricks)
+- not using an options array but `my cget`
 
