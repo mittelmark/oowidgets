@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::statusbar documentation
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230320.2055>
+#' Date : <230321.0848>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -21,6 +21,10 @@
 #'     </style>
 #'     ```
 #' ---
+#' 
+#' ```{.tcl eval=true echo=false results="asis"}
+#' include paul/header.html
+#' ```
 #' 
 #' ## NAME
 #'

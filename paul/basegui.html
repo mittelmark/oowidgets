@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Detlef Groth, Schwielowsee, Germany" />
+  <title>paul::basegui base class for building Tk applications</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="pandoc-filter.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <style>
+  html {
+    line-height: 1.2;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: #1a1a1a;
+    background-color: #fdfdfd;
+  }
+  body { max-width: 1000px; }
+  pre#license {
+    background: #fdfdfd;
+  }
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">paul::basegui base class for building Tk applications</h1>
+<p class="author">Detlef Groth, Schwielowsee, Germany</p>
+</header>
+<p></p>
+<center>
+<a href="basegui.html">basegui</a> - <a href="statusbar.html">statusbar</a>
+</center>
+<h2 id="name">NAME</h2>
+<blockquote>
+<p><strong>paul::basegui</strong> - starting point class for writing Tk applications</p>
+</blockquote>
+<h2 id="table-of-contents"><a name='toc'></a>TABLE OF CONTENTS</h2>
+<ul>
+<li><a href="#synopsis">SYNOPSIS</a></li>
+<li><a href="#description">DESCRIPTION</a></li>
+<li><a href="#command">COMMAND</a></li>
+<li><a href="#options">TYPE OPTIONS</a></li>
+<li><a href="#commands">TYPE COMMANDS</a></li>
+<li><a href="#example">EXAMPLE</a></li>
+<li><a href="#inheritance">INHERITANCE</a></li>
+<li><a href="#see">SEE ALSO</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#authors">AUTHOR</a></li>
+<li><a href="#copyright">COPYRIGHT</a></li>
+<li><a href="#license">LICENSE</a></li>
+</ul>
+<h2 id="synopsis"><a name='synopsis'>SYNOPSIS</a></h2>
+<p></p>
+<pre><code>package require paul
+paul::basegui cmdName
+cmdName addStatusBar
+cmdName getFrame
+cmdName getMenu
+cmdName splash imgfile ?-delay milliseconds -message textmessage?
+cmdName status msg ?value?
+cmdName timer mode</code></pre>
+<h2 id="description"><a name='description'>DESCRIPTION</a></h2>
+<p>The <strong>paul::basegui</strong> application class serves as building block for writing Tk applications. It can be used for new applications as starting point providing for instance a ready to use menubar, a mainframe, a statusbar and splash screen or facility to center a window on the screen.</p>
+<h2 id="command"><a name='command'>COMMAND</a></h2>
+<p><strong>paul::basegui</strong> <em>cmdName ?options?</em></p>
+<blockquote>
+<p>Creates and configures a new paul::basegui application using the main Tk window id <em>.</em> and the given <em>options</em>.</p>
+</blockquote>
+<h2 id="class-options"><a name='options'>CLASS OPTIONS</a></h2>
+<p>The <strong>paul::basegui</strong> class supports the following options:</p>
+<p><strong>-style</strong> <em>styleName</em></p>
+<blockquote>
+<p>Configures the ttk style for all widgets within the application. ‘clam’ and ‘default’ should be supported on all platforms. Use <code>ttk::style theme names</code> within an interactive wish session to find out which themes are available on your machine. Default: clam</p>
+</blockquote>
+<h2 id="class-methods"><a name='method'>CLASS METHODS</a></h2>
+<p>The <strong>paul::basegui</strong> command supports the following public methods to be used within inheriting applications to extend the basic application. Alternatively widgets can be added to existing applications as well. &gt; The following methods are available:</p>
+<blockquote>
+<ul>
+<li><a href="#about">about</a></li>
+<li><a href="#addStatusBar">addStatusBar</a></li>
+<li><a href="#autoscroll">autoscroll</a></li>
+<li><a href="#balloon">balloon</a></li>
+<li><a href="#cballoon">cballoon</a></li>
+<li><a href="#center">center</a></li>
+<li><a href="#cget">cget</a></li>
+<li><a href="#configure">configure</a></li>
+<li><a href="#console">console</a></li>
+<li><a href="#exit">exit</a></li>
+<li><a href="#getFrame">getFrame</a></li>
+<li><a href="#getMenu">getMenu</a><br />
+</li>
+<li><a href="#splash">splash</a></li>
+<li><a href="#timer">timer</a></li>
+</ul>
+</blockquote>
+<p><a name="about"> </a> <em>cmdName</em> <strong>about</strong></p>
+<blockquote>
+<p>Shows an about box with information about application.</p>
+</blockquote>
+<p><a name="addStatusBar"> </a> <em>cmdName</em> <strong>addStatusBar</strong></p>
+<blockquote>
+<p>Packs and displays the statusbar widget at the bottom of the application. If not called the statusbar will be invisible.</p>
+</blockquote>
+<p><a name="autoscroll"></a> <em>cmdName</em> <strong>autoscroll</strong> <em>pathname</em></p>
+<blockquote>
+<p>For the widget belonging to <em>pathname</em> add horizontal and vertical scrollbars, shown only when needed. Please note, that the widget in <em>pathname</em> must be the only child of a <code>tk::frame</code> or a <code>ttk::frame</code> widget created already. The widget <em>pathname</em> is then managed by grid, don’t pack or grid the widget in <em>pathname</em> yourself. Handle it’s geometry via its parent frame. See the following example:</p>
+</blockquote>
+<blockquote>
+<div class="sourceCode" id="cb2" data-eval="false"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>::paul::basegui new<span class="ot"> -style</span> clam<span class="kw">]</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> f <span class="kw">[</span><span class="dt">$app</span> getFrame<span class="kw">]</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> tf <span class="kw">[</span>ttk::<span class="kw">frame</span> <span class="dt">$f</span>.tframe<span class="kw">]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> t <span class="kw">[text</span> <span class="dt">$tf</span>.<span class="kw">text</span><span class="ot"> -wrap</span> none<span class="kw">]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> autoscroll <span class="dt">$t</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">for</span> <span class="kw">{set</span> i <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span><span class="dt">$i</span> &lt; <span class="dv">30</span><span class="kw">}</span> <span class="kw">{incr</span> i<span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="dt">$t</span> <span class="ot">insert</span> end <span class="st">&quot;Lorem ipsum dolor sit amet, ....</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$tf</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">destroy</span> .app</span></code></pre></div>
+</blockquote>
+<p><a name="balloon"></a> <em>cmdName</em> <strong>balloon</strong> <em>pathname message ?display?</em></p>
+<blockquote>
+<p>For the widget belonging to <em>pathname</em> displays for around three seconds a small tooltip using the given <em>message</em>. The boolean variable <em>display</em> can be used to unregister the tooltip at a later point. See as well <a href="#cballoon">cballoon</a> for tooltip on canvas tags.</p>
+</blockquote>
+<p><a name="cballoon"></a> <em>cmdName</em> <strong>cballoon</strong> <em>pathname tag message</em></p>
+<blockquote>
+<p>For the widget belonging to <em>pathname</em> display for the canvas items labeled with <em>tag</em> the given message. See as well <a href="#balloon">balloon</a> for standard tooltips for widgets.</p>
+</blockquote>
+<p><a name="center"></a> <em>cmdName</em> <strong>center</strong> <em>window</em></p>
+<blockquote>
+<p>Centers a toplevel window on the screen.</p>
+</blockquote>
+<p><a name="cget"></a> <em>cmdName</em> <strong>cget</strong> <em>option</em></p>
+<blockquote>
+<p>Returns the current value of the configuration option given by option. Option may have any of the values accepted by the paul::basegui command.</p>
+</blockquote>
+<p><a name="configure"></a> <em>cmdName</em> <strong>configure</strong> - <em>?option? ?value option value …?</em></p>
+<blockquote>
+<p>Query or modify the configuration options of the class.</p>
+</blockquote>
+<p><a name="console"></a> <em>cmdName</em> <strong>console</strong> <em>?pathname?</em></p>
+<blockquote>
+<p>Displays a simple console in a toplevel if the target <em>pathname</em> is not given, or within the application if the given <em>pathname</em> is a valid widget path within an existing toplevel. This console can be used to debug applications and to inspect variables, commands etc. Based on wiki code in <a href="https://wiki.tcl-lang.org/page/A+minimal+console">A minimal console</a>. The <em>puts</em> commands entered within the <em>console</em> widget are displayed within the widget.</p>
+</blockquote>
+<p><a name="exit"> </a> <em>cmdName</em> <strong>exit</strong> <em>?ask?</em></p>
+<blockquote>
+<p>Exit the application, if ask is true (default), displays a conformation message.</p>
+</blockquote>
+<p><em>cmdName</em> <strong>getFrame</strong></p>
+<blockquote>
+<p>Returns the mainframe of the application. This function allows adding more widgets to the interior of the application in inheriting applications or at a later point.</p>
+</blockquote>
+<p><em>cmdName</em> <strong>getMenu</strong> <em>menuName ?option value …?</em></p>
+<blockquote>
+<p>Returns the menu entry belonging to the given <em>menuName</em> or creates a new cascade with this <em>menuName</em> in the application menubar. This function allows adding more menu points in inheriting applications or at a later point to the application. At creation time or therafter additional configuration options can be given such as <em>-underline 0</em> for instance. Here an example for inserting new menu points</p>
+</blockquote>
+<blockquote>
+<div class="sourceCode" id="cb3" data-eval="false"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>::paul::basegui new<span class="ot"> -style</span> clam<span class="kw">]</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> fmenu <span class="kw">[</span><span class="dt">$app</span> getMenu <span class="st">&quot;File&quot;</span><span class="kw">]</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$fmenu</span> <span class="ot">insert</span> <span class="dv">0</span> <span class="ot">command -label</span> Open<span class="ot"> -underline</span> <span class="dv">0</span><span class="ot"> -command</span> <span class="kw">{</span> <span class="kw">puts</span> Opening <span class="kw">}</span></span></code></pre></div>
+</blockquote>
+<p><em>cmdName</em> <strong>message</strong> <em>msg</em></p>
+<blockquote>
+<p>Displays the text of <em>msg</em> in the statusbar. Only useful if statusbar is displayed using the <em>addStatusBar</em> command.</p>
+</blockquote>
+<p><em>cmdName</em> <strong>progress</strong> <em>value</em></p>
+<blockquote>
+<p>Displays the given <em>value</em> within the progressbar in the statusbar widget. Only useful if statusbar is displayed using the <em>addStatusBar</em> command. <strong>setAppname</strong> <em>appname revision author year</em></p>
+</blockquote>
+<blockquote>
+<p>Sets meta information about the application, useful to change the about message.</p>
+</blockquote>
+<p><a name="splash"></a> <em>cmdName</em> <strong>splash</strong> <em>imgfile ?-delay milliseconds -message textmessage?</em></p>
+<blockquote>
+<p>Hides the main application and shows the given image in <em>imgfile</em> as well as some textmessage given with the option -message. The splash screen destroys itself after the given delay, default 2500. If delay is given as zero (0), the splash widget is not destroyed. If the <em>imgfile</em> variable is given as <code>update</code> then additional messages can be given to the splash widget. To destroy the splash method should be called with the imgfile argument <code>destroy</code>. See below for an example. The pathname of the splash toplevel is <code>.splash</code>.</p>
+</blockquote>
+<blockquote>
+<p>Example with a simple single message splash:</p>
+</blockquote>
+<blockquote>
+<pre><code>$app splash splash.png -delay 2000 -message &quot;Loading editor application ...&quot;</code></pre>
+</blockquote>
+<blockquote>
+<p>Example with multiple messages:</p>
+</blockquote>
+<blockquote>
+<pre><code>$app splash splash.png -delay 0 -message &quot;Loading editor application ...&quot;
+after 2000 { app splash update -message &quot;Loading data for editor application ...&quot; }
+after 4000 { app splash destroy }</code></pre>
+</blockquote>
+<p><a name="status"></a> <em>cmdName</em> <strong>status</strong> <em>msg ?value?</em></p>
+<blockquote>
+<p>Displays the text of <em>msg</em> as message and the optional value within the progressbar in the statusbar widget. Only useful if statusbar is displayed using the <em>addStatusBar</em> command.</p>
+</blockquote>
+<p><a name="timer"></a> <em>cmdName</em> <strong>timer</strong> <em>mode</em></p>
+<blockquote>
+<p>Simple timer procedure to measure execution time in the GUI. The two modes are <em>reset</em> and <em>time</em>, the first measured time is initialized at <em>paul::basegui</em> initialization:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><em>reset</em> - resets the time to the current time</li>
+<li><em>time</em> - gets the execution time after the last reset, this is the default.</li>
+</ul>
+</blockquote>
+<blockquote>
+<div class="sourceCode" id="cb6" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>paul::basegui new<span class="kw">]</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="st">&quot;Startup in [</span><span class="dt">$</span><span class="st">app timer time] seconds!&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> timer reset</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">after</span> <span class="dv">1500</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="st">&quot;After time [</span><span class="dt">$</span><span class="st">app timer time] seconds!&quot;</span></span></code></pre></div>
+</blockquote>
+<blockquote>
+<pre class="tclout" data-eval="true"><code>Startup in 0 seconds!
+After time 2 seconds!
+</code></pre>
+</blockquote>
+<h2 id="example"><a name='example'>EXAMPLE</a></h2>
+<p>The following example demonstrates a few features for creating new standalone applications using the faciltities of of the <em>paul::basegui</em> snit type. The code can be executed directly using the <em>–demo</em> commandline switch.</p>
+<pre><code>::paul::basegui $app -style clam
+puts &quot;Startup in [$app timer time] seconds!&quot;
+$app timer reset
+after 1500
+puts &quot;After time [$app timer time] seconds!&quot;
+set fmenu [$app getMenu &quot;File&quot;]
+$fmenu insert 0 command -label Open -underline 0 -command { puts Opening }
+$app addStatusBar
+$app progress 10
+$app message &quot;starting ...&quot;
+after 1000
+$app status progressing... 50
+after 1000
+$app status finished 100
+set f [$app getFrame]
+set btn [ttk::button $f.btn -text &quot;Hover me!&quot;]
+$app balloon $btn &quot;This is the hover message!\nNice ?&quot;
+pack $btn -side top
+set tf [ttk::frame $f.tframe]
+set t [text $tf.text -wrap none]
+$app autoscroll $t
+for {set i 0} {$i &lt; 30} {incr i} {
+    $t insert end &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+  sed do eiusmod tempor 
+     incididunt ut labore et dolore magna aliqua. 
+   Ut enim ad minim veniam, quis nostrud exercitation 
+     ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\n&quot;
+}
+pack $tf -side top -fill both -expand yes
+pack [canvas $f.c] -side top -fill both -expand true
+set id [$f.c create oval 10 10 110 110 -fill red]
+$app cballoon $f.c $id &quot;This is a red oval&quot;
+$f.c create rect 130 30 190 90 -fill blue -tag rect
+$app cballoon $f.c rect &quot;This is\na blue square&quot;</code></pre>
+<h2 id="inheritance"><a name='inheritance'>INHERITANCE</a></h2>
+<p>This widget can be used to build up other more specialized applications. Here is an example, where we create a generic Editor class which adds additional menu points and embeds a scrolled text widget.</p>
+<p>The most basic inheritance example would be just copying the functionality without the text widget.</p>
+<pre><code>package require paul
+namespace eval ::test { }
+oo::class create ::test::EditorApp {
+   superclass paul::basegui
+   variable textw
+   constructor {args} {
+        set frame [my getFrame]
+        set textw [text $frame.t -wrap none]
+        $self autoscroll $textw
+   }
+   # added functionality
+   # access functionality of the text widget
+   # like: % app text insert end &quot;hello basegui world&quot;
+   method text {args} {
+      $textw {*}$args
+   }
+}
+if {[info exists argv0] &amp;&amp; $argv0 eq [info script]} {
+   #start editor
+   set app [::test::EditorApp new ]
+   $app text insert end &quot;Hello EditorApp!!&quot;
+}</code></pre>
+<p>This simple example should show how to extend the functionality of the basegui toplevel. Before you start to write specialized applications you should create a simple proxy class which does nothing more than inheriting from <code>paul::basegui</code> first. This is the code above without the text widget parts. You can then extend this base class and your specialized applications inherit from your baseclass. This allows you to extend all your specialized classes using your baseclass. So your setup should be:</p>
+<pre><code>
+                                 -- your::editor
+paul::basegui -- your::basegui ---+
+                                 -- your::databasebrowser
+
+</code></pre>
+<p>This is in the long term better than inheriting from <code>paul::basegui</code> directly. You don’t like to change the code of this class, but you can change <code>your::basegui</code> for instance to give better help facilities in the Help menu, or other features you need in your applications most of the time. If you do this both application <code>your::editor</code> and <code>your::databasebrowser</code> will have this functionality at the same time after implementing it in <code>your::basegui</code> type. If you follow this approach you can easily update the <em>paul::basegui</em> package without loosing your new functionalities.</p>
+<h2 id="todos">TODO’s</h2>
+<ul>
+<li>socket check for starting the application twice</li>
+</ul>
+<h2 id="author"><a name='authors'>AUTHOR</a></h2>
+<p>The <strong>paul::basegui</strong> command was written by Detlef Groth, Schwielowsee, Germany.</p>
+<h2 id="copyright"><a name='copyright'>COPYRIGHT</a></h2>
+<p>Copyright (c) 2019-2023 Dr. Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<h2 id="license"><a name='license'>LICENSE</a></h2>
+<p></p>
+<pre id="licence" class="tclout" data-eval="true" data-echo="false"><code>BSD 3-Clause License
+
+Copyright (c) 2023, D Groth
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</code></pre>
+</body>
+</html>

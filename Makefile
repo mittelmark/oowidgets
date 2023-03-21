@@ -5,6 +5,12 @@ default:
 	mv temp.html tutorial.html
 manual:
 	pantcl oowidgets/oowidgets.tcl oowidgets/oowidgets.html -s 
+
+paul-manual:
+	pandoc paul/header.md -o paul/header.html 	
+	pantcl paul/basegui.tcl paul/basegui.html -s
+	pantcl paul/statusbar.tcl paul/statusbar.html -s
+ 	
 record:
 	byzanz-record --delay 4 --duration=13 --x=860 --y=40 --width=1065 \
 		--height=720 out.gif &  pandoc tutorial.md \
