@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::basegui base class for building Tk applications
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230321.1443>
+#' Date : <230321.1511>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -130,8 +130,8 @@ oo::class create ::paul::basegui {
     }
     # main private methods
     method Init {} {
-        set var(appname) DGBaseGuiApp
-        set var(author) "Dr. Detlef Groth"
+        set var(appname) BaseGuiApp
+        set var(author) "Detlef Groth"
         set var(revision) [package version paul]
         set var(year) 2023
         if {[info exists ::starkit::topdir]} {
