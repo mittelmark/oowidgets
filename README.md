@@ -77,7 +77,7 @@ Here an example widget ins snit, the above mentioned `dlabel` a `ttk::label` wit
 
 Here the snit code:
 
-```
+```{.tcl}
 package require snit
 namespace eval dgw { }
 snit::widget  dgw::dlabel {
@@ -195,11 +195,37 @@ oowidgets::widget ::paul::Dlabel {
 
 ```
 
-The main differences using `oowidget`:
+The main differences using `oowidgets`:
 
 - no hull widget, just direct install of ttk::label without a frame
 - snit: `$self configurelist $args` - `oowidgets: `my configure {*}$args`
 - all methods and options are automatically delegated to this main widget if there is no hull widget
 - not `mymethod` but the `callback` method suggested in [Tclers Wiki](https://wiki.tcl-lang.org/page/TclOO+Tricks)
 - not using an options array but `my cget`
+
+Let's give an other example, the famous readonly text widget, 
+[here the snitcode)(https://wiki.tcl-lang.org/page/Snit%27s+Not+Incr+Tcl) 
+from the dark old times when no OOP was in the Tcl core reimplemented with oowidgets:
+
+```{.tcl}
+package require oowidgets
+namespace evall ::test { }
+::oowidgets::widget ::test::Rotext {
+    variable textw
+    constructor {path args} {
+        # we need the real widget (underline at the end)
+        set textw ${path}_
+        # Create the text widget; turn off its insert cursor
+        my install tk::text $path -insertwidth 0 -border 5 -relief flat
+        my configure {*}$args
+    }
+    # Disable the text widget's insert and delete methods
+    # to make this readonly even if the user writes text.
+    method insert {args} { } 
+    method delete {args} { }
+    # programmatically we can still insert and delete ...
+    method ins {args} { $textw insert {*}$args  }
+    method del {args} { $textw delete {*}$args  }
+}
+```
 

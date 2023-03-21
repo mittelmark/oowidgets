@@ -15,7 +15,7 @@ namespace eval ::paul {
     option add *Text.background    white
 }
 
-
+catch { rename ::paul::Timer "" }
 # simple timer
 oo::class create ::paul::Timer {
     variable time
@@ -42,4 +42,5 @@ if {![package vsatisfies [package provide Tcl] 8.7]} {
 source [file join [file dirname [info script]] statusbar.tcl] 
 source [file join [file dirname [info script]] basegui.tcl] 
 source [file join [file dirname [info script]] dlabel.tcl] 
+source [file join [file dirname [info script]] rotext.tcl] 
 

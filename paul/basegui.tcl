@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::basegui base class for building Tk applications
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230321.1511>
+#' Date : <230321.1658>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -84,6 +84,7 @@ namespace eval paul { }
 #' 
 #' The **paul::basegui** class supports the following options:
 
+catch {rename ::paul::basegui ""}
 oo::class create ::paul::basegui {
     #' 
     #'   __-style__ _styleName_ 

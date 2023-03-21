@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Detlef Groth, Schwielowsee, Germany" />
-  <title>paul::dlabel - label with dynamic font size</title>
+  <title>paul::rotext - readonly text widget</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -98,7 +98,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">paul::dlabel - label with dynamic font size</h1>
+<h1 class="title">paul::rotext - readonly text widget</h1>
 <p class="author">Detlef Groth, Schwielowsee, Germany</p>
 </header>
 <p></p>
@@ -107,38 +107,31 @@
 </center>
 <h2 id="name">NAME</h2>
 <blockquote>
-<p><strong>paul::dlabel</strong> - label with fonts ize adaptation</p>
+<p><strong>paul::rotext</strong> - read only text widget</p>
 </blockquote>
 <h2 id="synopsis"><a name='synopsis'></a> SYNOPSIS</h2>
 <p></p>
 <pre><code>package require paul
-paul::dlabel pathName -text TEXT ?-option value ...?
-pack cmdName</code></pre>
+paul::rotext pathName ?-option value ...?
+pathName ins TEXT
+pack pathName</code></pre>
 <h2 id="command">COMMAND</h2>
-<p><a name="dlabel"><strong>paul::dlabel</strong> <em>pathName</em></a></p>
+<p><a name="rotext"><strong>paul::rotext</strong> <em>pathName</em></a></p>
 <blockquote>
-<p>Creates a ttk::label where the font size is dynamically adjusted to the widget size.</p>
+<p>Creates a <code>tk::text</code> widget which is readonly, text can be only inserted and deleted using the <code>ins</code> and <code>del</code> methods but not the using ‘insert’ or ‘delete’ and as well not with the users keybord.</p>
 </blockquote>
 <h2 id="options">OPTIONS</h2>
-<p>All options of a standard ttk::label are supported.</p>
+<p>All options of a standard <code>tk::text</code> widget are supported.</p>
 <h2 id="methods">METHODS</h2>
-<p>All methods of a standard ttk::label are supported.</p>
+<p>All methods of a standard tk::text are supported except for ‘insert’ and ‘delete’ which are replaced by ‘ins’ and ‘del’.</p>
 <h2 id="example">EXAMPLE</h2>
 <blockquote>
 <div class="sourceCode" id="cb2" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">wm</span> <span class="ot">title</span> . DGApp</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>paul::basegui new<span class="kw">]</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">font</span> <span class="ot">create</span> <span class="ot">title -family</span> Helvetica<span class="ot"> -size</span> <span class="dv">10</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="kw">[winfo</span> <span class="ot">children</span> .<span class="kw">]</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="kw">frame</span> <span class="kw">[</span><span class="dt">$app</span> getFrame<span class="kw">]</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="st">&quot; Some Title &quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> dlab <span class="kw">[</span>paul::dlabel <span class="dt">$frame</span>.l<span class="ot"> -text</span> <span class="dt">$txt</span><span class="kw">]</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span>  <span class="dt">$dlab</span><span class="ot"> -expand</span> <span class="dv">1</span><span class="ot"> -fill</span> both</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">wm</span> <span class="ot">geometry</span> . 400x300+<span class="dv">0</span>+<span class="dv">0</span></span></code></pre></div>
-</blockquote>
-<blockquote>
-<pre class="tclout" data-eval="true"><code>.mbar .#mbar .frame .sep .stb
-</code></pre>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>paul::rotext .<span class="kw">text</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>.<span class="kw">text</span> ins end <span class="st">&quot;This is some readonly text</span><span class="ch">\n</span><span class="st">You can&#39;t edit the text!&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> .<span class="kw">text</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> true</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">wm</span> <span class="ot">geometry</span> . 400x300+<span class="dv">0</span>+<span class="dv">0</span></span></code></pre></div>
 </blockquote>
 <h2 id="see-also"><a name='see'>SEE ALSO</a></h2>
 <ul>
@@ -146,7 +139,7 @@ pack cmdName</code></pre>
 <li><a href="basegui.html">paul::basegui.tcl</a></li>
 </ul>
 <h2 id="author"><a name='authors'>AUTHOR</a></h2>
-<p>The <strong>paul::statusbar</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
+<p>The <strong>paul::rotext</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
 <h2 id="copyright"><a name='copyright'>COPYRIGHT</a></h2>
 <p>Copyright (c) 2021-2023 Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
 <h2 id="license"><a name='license'>LICENSE</a></h2>
