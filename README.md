@@ -59,10 +59,12 @@ For more examples, including creating composite widgets, using mixins, see the [
 
 There is a sample project which uses `TclOO` and `oowidgets` to create mega widgets. Here two example commands:
 
-- [paul::basegui](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/basegui.html) - base class to build Tk applications, [code](paul/basegui.tcl) 
-- [paul::dlabel](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - using inheritance to create changed `ttk::label` with dynamic fontsize,
+- [paul::basegui :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/basegui.html) - base class to build Tk applications, [code](paul/basegui.tcl) 
+- [paul::dlabel :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - using inheritance to create changed `ttk::label` with dynamic fontsize,
    [code](paul/dlabel.tcl) 
-- [paul::statusbar](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`,  
+- [paul::rotext :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/rotext.html) - read only text widget, useful for help pages for instance
+   [code](paul/rotext.tcl) 
+- [paul::statusbar :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`,  
    [code](paul/statusbar.tcl) 
 
 PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen"..
@@ -204,7 +206,7 @@ The main differences using `oowidgets`:
 - not using an options array but `my cget`
 
 Let's give an other example, the famous readonly text widget, 
-[here the snitcode)(https://wiki.tcl-lang.org/page/Snit%27s+Not+Incr+Tcl) 
+[here the snitcode](https://wiki.tcl-lang.org/page/Snit%27s+Not+Incr+Tcl) 
 from the dark old times when no OOP was in the Tcl core reimplemented with oowidgets:
 
 ```{.tcl}
