@@ -79,6 +79,7 @@ Here the snit code:
 
 ```
 package require snit
+namespace eval dgw { }
 snit::widget  dgw::dlabel {
     component label
     option -text "Default"
@@ -94,9 +95,9 @@ snit::widget  dgw::dlabel {
             set options(-font) $mfont
         }
         pack $label -side top -fill both -expand yes -padx 10 -pady 10
-        bind  $label <Configure> [mymethod configureBinding %W %w %h] 
+        bind  $label <Configure> [mymethod ConfigureBinding %W %w %h] 
     }
-    method adjustFont {width height} {
+    method AdjustFont {width height} {
         set cw [font measure $options(-font) $options(-text)]
         set ch [font metrics $options(-font)]
         set size [font configure $options(-font) -size]
@@ -129,10 +130,10 @@ snit::widget  dgw::dlabel {
         }
     }
     
-    method configureBinding {mwin width height} {
+    method ConfigureBinding {mwin width height} {
         bind $mwin <Configure> {}
-        $self adjustFont $width $height
-        after idle [list bind $mwin <Configure> [mymethod configureBinding %W %w %h]]
+        $self AdjustFont $width $height
+        after idle [list bind $mwin <Configure> [mymethod ConfigureBinding %W %w %h]]
     }
 }
 ```
