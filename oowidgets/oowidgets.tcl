@@ -189,10 +189,11 @@ oo::class create ::oowidgets::BaseWidget {
 #' **oowidgets::widget** _classname_ _code_ 
 #' 
 #' > Creates a class with the given _classname_ and a widget command
-#' using the given _classname_ and _code_
-#' The widget command has the same name as the class 
-#' name but consisting only of lowercase letters. To avoid name collisions,
-#' the given _classname_ must have at least one uppercase letter.
+#' using the given _classname_ and _code_ block.
+#' The created widget command has the same name as the class 
+#' name but consists only of lowercase letters. Therefor in order
+#' to avoid name collisions, the given _classname_ must have at least 
+#' one uppercase letter.
 #' 
 #' >  Example:
 #' 
@@ -226,6 +227,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' 
 
 proc oowidgets::widget {name body} {
+    catch { rename $name "" }
     oowidgets::new $name
     oo::class create $name $body
     if {[lindex $body 0] ne "superclass"} {
