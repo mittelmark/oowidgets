@@ -60,7 +60,7 @@ For more examples, including creating composite widgets, using mixins, see the [
 There is a sample project which uses `TclOO` and `oowidgets` to create mega widgets. Here two example commands:
 
 - [paul::basegui](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/basegui.html) - base class to build Tk applications, [code](paul/basegui.tcl) 
-- [paul::statusbar](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`
+- [paul::statusbar](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`, , [code](paul/statusbar.tcl) 
 
 PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen"..
 
