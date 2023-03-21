@@ -60,11 +60,30 @@ package provide oowidgets 0.2
 #' There is only one method currently:
 #' 
 #' 
+
+# not required for Tcl 8.7 very likely
+if {![package vsatisfies [package provide Tcl] 8.7]} {
+    proc ::oo::Helpers::callback {method args} {
+        list [uplevel 1 {namespace which my}] $method {*}$args
+    
+    }
+    proc ::oo::Helpers::mymethod {method args} {
+        list [uplevel 1 {namespace which my}] $method {*}$args
+    
+    }
+    # That is not yet in in Tcl 8.7?
+    proc ::oo::Helpers::myvar {varname} {
+        return [uplevel 1 {namespace qualifiers [namespace which my]}]::$varname
+    }
+}
+
+
 namespace eval ::oowidgets { }
 
 # this is a tk-like wrapper around the class,
 # so that object creation works like other Tk widgets
 # is considered a private function for now
+
 proc oowidgets::new name { 
     eval "
     proc [string tolower $name] {path args}  { 
@@ -227,6 +246,17 @@ oo::class create ::oowidgets::BaseWidget {
 #' 
 
 proc oowidgets::widget {name body} {
+    if {![regexp {[A-Z]} $name]} {
+        # create class name which contains at least one
+        # lowercase character
+        set idx [string last :: $name]
+        if {$idx eq -1} {
+            set name [string toupper $name 0]
+        } else {
+            incr idx 2
+            set name [string toupper $name $idx]
+        }
+    }
     catch { rename $name "" }
     oowidgets::new $name
     oo::class create $name $body

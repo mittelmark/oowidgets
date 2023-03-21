@@ -31,13 +31,6 @@ oo::class create ::paul::Timer {
     }
 }
 
-# not required for Tcl 8.7 very likely
-if {![package vsatisfies [package provide Tcl] 8.7]} {
-    proc ::oo::Helpers::callback {method args} {
-        list [uplevel 1 {namespace which my}] $method {*}$args
-    
-    }
-}
 
 source [file join [file dirname [info script]] statusbar.tcl] 
 source [file join [file dirname [info script]] basegui.tcl] 
