@@ -12,6 +12,8 @@ paul-manual:
 	pantcl paul/statusbar.tcl paul/statusbar.html -s
 	pantcl paul/dlabel.tcl paul/dlabel.html -s	
 	pantcl paul/rotext.tcl paul/rotext.html -s		
+	pantcl paul/notebook.tcl paul/notebook.html -s
+	rm paul/header.html
  	
 record:
 	byzanz-record --delay 4 --duration=13 --x=860 --y=40 --width=1065 \

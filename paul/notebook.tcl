@@ -1,3 +1,99 @@
+#' ---
+#' title: paul::notebook - extended notebook tab management
+#' author: Detlef Groth, Schwielowsee, Germany
+#' Date : <230322.0653>
+#' header-includes: 
+#' - | 
+#'     ```{=html}
+#'     <style>
+#'     html {
+#'       line-height: 1.2;
+#'       font-family: Georgia, serif;
+#'       font-size: 16px;
+#'       color: #1a1a1a;
+#'       background-color: #fdfdfd;
+#'     }
+#'     body { max-width: 1000px; }
+#'     pre#license {
+#'       background: #fdfdfd;
+#'     }
+#'     </style>
+#'     ```
+#' ---
+#' 
+#' ```{.tcl eval=true echo=false results="asis"}
+#' include paul/header.html
+#' ```
+#' 
+#' ## NAME
+#'
+#' > **paul::notebook** - extended ttk::notebook tab management
+#'
+#' ## <a name='synopsis'></a> SYNOPSIS
+#' 
+#' ```{.tcl eval=true echo=false results="hide"}
+#' lappend auto_path .
+#' package require paul
+#' ```
+#' 
+#' > ```{.tcl}
+#' package require paul
+#' paul::notebook pathName ?-option value ...?
+#' pathName add PAGE args
+#' pack pathName
+#' > ```
+#' 
+#' ## COMMAND
+#' 
+#' <a name="notebook"></a>**paul::notebook** *pathName ?args?*
+#' 
+#' > Creates a `ttk::notebook` with extended tab management facilities. 
+#'   You can use right click context menu do rename tabs, move tabs to the left
+#'   or right,
+#'
+#' ## OPTIONS
+#' 
+#' > All options of a standard `ttk::notebook` widget are supported. In addition the following options are added:
+#' 
+#' > - __-closecmd__ _cmdname_  - Invokes the given command _cmdname_ if a notebook page is closed,
+#'        the given widget path is appended as argument to the command.
+#'   - __-createcmd__ _cmdname_ - Invokes the given command _cmdname_ if a new page is created,
+#'        the pathname of the notebook and the page index are added as arguments to the script call. 
+#'   - __-movecmd__ _cmdname_ - Invokes the given command _cmdname_ if a notebook page is moved,
+#'        the given widget path, the page index amd the direction is appended as argument to the command.
+#'   - __-raisecmd__ _cmdname_ - Invokes the given command _cmdname_ if a notebook page is raised,
+#'        the given widget path and the page index is appended as argument to the command.
+#'   - __-renamecmd__ _cmdname_ - Invokes the given command _cmdname_ if a page is renamed,
+#'        the given widget path is appended as argument to the command.
+#' 
+#' ## METHODS
+#' 
+#' > All methods of a standard `ttk:notebook` are supported, in addition the command `bind` is added.
+#' 
+#' ## KEY BINDINGS
+#' 
+#' > The following key bindings are added by default:
+#' 
+#' > - _F2_ - popup for moving and renaming tabs
+#'   - _Button-3_ - popup for moving and renaming tabs
+#'   - _Ctrl-Shift-Left_ - move current tab to the left
+#'   - _Ctrl-Shift-Right_ - move current tab to the right
+#'   - _Ctrl-w_ - close current tab
+#'   - _Ctrl-t_ - create new tab
+#' 
+#' 
+#' ## EXAMPLE
+#'
+#' > ```{.tcl eval=true results="hide"}
+#' package require paul
+#' pack [paul::notebook .nb]
+#' 	.nb add [frame .nb.f1] -text "First tab"
+#' 	.nb add [frame .nb.f2] -text "Second tab"
+#' 	.nb select .nb.f2
+#'         ttk::notebook::enableTraversal .nb
+#' > ``` 
+#' 
+
 package require oowidgets
 
 namespace eval ::paul { }
@@ -35,12 +131,14 @@ oowidgets::widget ::paul::notebook {
     method raise {w} {
         eval [my cget -raisecmd] $w [$w index current]
     }
+    unexport raise
     method new {w} {
         set n [llength [$nb tabs]]
         incr n
         ttk::frame $nb.f$n
         my add $nb.f$n -text "Tab $n"
     }
+    unexport new
     method bind {ev script} {
         bind $nb $ev $script
     }
@@ -50,8 +148,12 @@ oowidgets::widget ::paul::notebook {
         if { $answer } {
             $w forget $child
             destroy $child
+            if {[my cget -closecmd] ne ""} {
+                eval [my cget -closecmd] $w
+            }
         } 
     }
+    unexport tabClose
     method tabRename {x y} {
         set nbtext ""
         if {![info exists .rename]} {
@@ -61,7 +163,6 @@ oowidgets::widget ::paul::notebook {
             set x [winfo pointerx .]
             set y [winfo pointery .]
             entry .rename.ent -textvariable [myvar nbtext]
-            # [namespace qualifiers [namespace which my]]::nbtext
             pack .rename.ent -padx 5 -pady 5
         }
         wm geometry .rename "180x40+$x+$y"
@@ -72,6 +173,7 @@ oowidgets::widget ::paul::notebook {
         bind .rename.ent <Escape> [list destroy .rename]
         
     }
+    unexport tabRename
     method doTabRename {w} {
         set tab [$nb select]
         $nb tab $tab -text $nbtext
@@ -81,6 +183,7 @@ oowidgets::widget ::paul::notebook {
 
         destroy .rename
     }
+    unexport doTabRename
     method tabMove {dir w} {
         #puts move$dir
         set idx [lsearch [$nb tabs] [$nb select]]
@@ -102,11 +205,25 @@ oowidgets::widget ::paul::notebook {
         # how to break automatic switch??
         after 100 [list $nb select $current]
     }
+    unexport doTabRename
 }
 
 
-pack [paul::notebook .nb]
-	.nb add [frame .nb.f1] -text "First tab"
-	.nb add [frame .nb.f2] -text "Second tab"
-	.nb select .nb.f2
-        ttk::notebook::enableTraversal .nb
+#' ## <a name='see'></a>SEE ALSO
+#'
+#' - [oowidgets](../oowidgets.html)
+#' - [paul::basegui](basegui.html)
+#'
+#' ## <a name='authors'></a>AUTHOR
+#'
+#' The **paul::notebook** widget was written by Detlef Groth, Schwielowsee, Germany.
+#'
+#' ## <a name='copyright'></a>COPYRIGHT
+#'
+#' Copyright (c) 2019-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' 
+#' ## <a name='license'></a>LICENSE
+#'
+#' ```{.tcl eval=true id="license" echo=false}
+#' include LICENSE
+#' ```

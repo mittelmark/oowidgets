@@ -36,4 +36,5 @@ source [file join [file dirname [info script]] statusbar.tcl]
 source [file join [file dirname [info script]] basegui.tcl] 
 source [file join [file dirname [info script]] dlabel.tcl] 
 source [file join [file dirname [info script]] rotext.tcl] 
+source [file join [file dirname [info script]] notebook.tcl] 
 
