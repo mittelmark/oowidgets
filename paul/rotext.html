@@ -111,19 +111,25 @@
 </blockquote>
 <h2 id="synopsis"><a name='synopsis'></a> SYNOPSIS</h2>
 <p></p>
-<pre><code>package require paul
-paul::rotext pathName ?-option value ...?
-pathName ins TEXT
-pack pathName</code></pre>
+<blockquote>
+<div class="sourceCode" id="cb1"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>paul::rotext pathName ?-<span class="kw">option</span> value ...?</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pathName ins TEXT</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> pathName</span></code></pre></div>
+</blockquote>
 <h2 id="command">COMMAND</h2>
-<p><a name="rotext"><strong>paul::rotext</strong> <em>pathName</em></a></p>
+<p><a name="rotext"></a><strong>paul::rotext</strong> <em>pathName</em></p>
 <blockquote>
 <p>Creates a <code>tk::text</code> widget which is readonly, text can be only inserted and deleted using the <code>ins</code> and <code>del</code> methods but not the using ‘insert’ or ‘delete’ and as well not with the users keybord.</p>
 </blockquote>
 <h2 id="options">OPTIONS</h2>
+<blockquote>
 <p>All options of a standard <code>tk::text</code> widget are supported.</p>
+</blockquote>
 <h2 id="methods">METHODS</h2>
+<blockquote>
 <p>All methods of a standard tk::text are supported except for ‘insert’ and ‘delete’ which are replaced by ‘ins’ and ‘del’.</p>
+</blockquote>
 <h2 id="example">EXAMPLE</h2>
 <blockquote>
 <div class="sourceCode" id="cb2" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
@@ -133,16 +139,20 @@ pack pathName</code></pre>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> .<span class="kw">text</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> true</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">wm</span> <span class="ot">geometry</span> . 400x300+<span class="dv">0</span>+<span class="dv">0</span></span></code></pre></div>
 </blockquote>
-<h2 id="see-also"><a name='see'>SEE ALSO</a></h2>
+<h2 id="see-also"><a name='see'></a>SEE ALSO</h2>
+<blockquote>
 <ul>
 <li><a href="../oowidgets.html">oowidgets</a></li>
 <li><a href="basegui.html">paul::basegui.tcl</a></li>
 </ul>
-<h2 id="author"><a name='authors'>AUTHOR</a></h2>
+</blockquote>
+<h2 id="author"><a name='authors'></a>AUTHOR</h2>
+<blockquote>
 <p>The <strong>paul::rotext</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
-<h2 id="copyright"><a name='copyright'>COPYRIGHT</a></h2>
+</blockquote>
+<h2 id="copyright"><a name='copyright'></a>COPYRIGHT</h2>
 <p>Copyright (c) 2021-2023 Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
-<h2 id="license"><a name='license'>LICENSE</a></h2>
+<h2 id="license"><a name='license'></a>LICENSE</h2>
 <p></p>
 <pre id="license" class="tclout" data-eval="true" data-echo="false"><code>BSD 3-Clause License
 

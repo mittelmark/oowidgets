@@ -120,7 +120,7 @@
 <li><a href="#copyright">COPYRIGHT</a></li>
 <li><a href="#license">LICENSE</a></li>
 </ul>
-<h2 id="synopsis"><a name='synopsis'>SYNOPSIS</a></h2>
+<h2 id="synopsis"><a name='synopsis'></a>SYNOPSIS</h2>
 <p></p>
 <pre><code>package require paul
 paul::statusbar pathName options
@@ -129,14 +129,14 @@ pathName configure -variable varname
 pathName clear 
 pathname progress value
 pathName set message value</code></pre>
-<h2 id="description"><a name='description'>DESCRIPTION</a></h2>
+<h2 id="description"><a name='description'></a>DESCRIPTION</h2>
 <p><strong>paul::statusbar</strong> - is a composite widget consisiting of a ttk::label and a ttk::progressbar widget. It should be normally packaged at the bottom of an application. The text and the numerical progress value can be displayed either directly using the widget commands or via the <em>-textvariable</em> and <em>-variable</em> options which will be given at initialization time, but these options can be also redefined at a later point.</p>
-<h2 id="command"><a name='command'>COMMAND</a></h2>
+<h2 id="command"><a name='command'></a>COMMAND</h2>
 <p><strong>paul::statusbar</strong> <em>pathName ?options?</em></p>
 <blockquote>
 <p>Creates and configures a new paul::statusbar widget using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
 </blockquote>
-<h2 id="widget-options"><a name='options'>WIDGET OPTIONS</a></h2>
+<h2 id="widget-options"><a name='options'></a>WIDGET OPTIONS</h2>
 <p>The <strong>paul::statusbar</strong> widget is a composite widget where the options are delegated to the original widgets.</p>
 <p><strong>-maximum</strong> <em>value</em></p>
 <blockquote>
@@ -150,7 +150,7 @@ pathName set message value</code></pre>
 <blockquote>
 <p>delegate the variable <em>varname</em> to the ttk::progressbar. Note that the maximum value is 100. So you have to calculate the</p>
 </blockquote>
-<h2 id="widget-commands"><a name='commands'>WIDGET COMMANDS</a></h2>
+<h2 id="widget-commands"><a name='commands'></a>WIDGET COMMANDS</h2>
 <p>Each <strong>paul::statusbar</strong> widgets supports its own as well via the <em>pathName label cmd</em> and <em>pathName progressbar cmd</em> syntax all the commands of its component widgets.</p>
 <p><em>pathName</em> <strong>clear</strong> <em>message ?value?</em></p>
 <blockquote>
@@ -168,7 +168,7 @@ pathName set message value</code></pre>
 <blockquote>
 <p>Displays the given message and value. If the value is not given it is set to zero.</p>
 </blockquote>
-<h2 id="example"><a name='example'>EXAMPLE</a></h2>
+<h2 id="example"><a name='example'></a>EXAMPLE</h2>
 <div class="sourceCode" id="cb2" data-eval="true" data-results="hide"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">wm</span> <span class="ot">title</span> . DGApp</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="kw">[text</span> .txt<span class="kw">]</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span>
@@ -194,16 +194,16 @@ pathName set message value</code></pre>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="dt">$stb</span> <span class="ot">configure -variable</span> val</span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="kw">update</span> idletasks</span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="kw">after</span> <span class="dv">1000</span> <span class="kw">exit</span></span></code></pre></div>
-<h2 id="see-also"><a name='see'>SEE ALSO</a></h2>
+<h2 id="see-also"><a name='see'></a>SEE ALSO</h2>
 <ul>
 <li><a href="../oowidgets.html">oowidgets</a></li>
 <li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_progressbar.htm">ttk::progressbar</a></li>
 </ul>
-<h2 id="author"><a name='authors'>AUTHOR</a></h2>
+<h2 id="author"><a name='authors'></a>AUTHOR</h2>
 <p>The <strong>paul::statusbar</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
-<h2 id="copyright"><a name='copyright'>COPYRIGHT</a></h2>
+<h2 id="copyright"><a name='copyright'></a>COPYRIGHT</h2>
 <p>Copyright (c) 2019-2023 Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
-<h2 id="license"><a name='license'>LICENSE</a></h2>
+<h2 id="license"><a name='license'></a>LICENSE</h2>
 <p></p>
 <pre id="license" class="tclout" data-eval="true" data-echo="false"><code>BSD 3-Clause License
 

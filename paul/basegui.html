@@ -181,7 +181,7 @@ cmdName timer mode</code></pre>
 <p>For the widget belonging to <em>pathname</em> add horizontal and vertical scrollbars, shown only when needed. Please note, that the widget in <em>pathname</em> must be the only child of a <code>tk::frame</code> or a <code>ttk::frame</code> widget created already. The widget <em>pathname</em> is then managed by grid, don’t pack or grid the widget in <em>pathname</em> yourself. Handle it’s geometry via its parent frame. See the following example:</p>
 </blockquote>
 <blockquote>
-<div class="sourceCode" id="cb2" data-eval="false"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>::paul::basegui new<span class="ot"> -style</span> clam<span class="kw">]</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> f <span class="kw">[</span><span class="dt">$app</span> getFrame<span class="kw">]</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> tf <span class="kw">[</span>ttk::<span class="kw">frame</span> <span class="dt">$f</span>.tframe<span class="kw">]</span></span>
@@ -209,7 +209,7 @@ cmdName timer mode</code></pre>
 <blockquote>
 <p>Returns the current value of the configuration option given by option. Option may have any of the values accepted by the paul::basegui command.</p>
 </blockquote>
-<p><a name="configure"></a> <em>cmdName</em> <strong>configure</strong> - <em>?option? ?value option value …?</em></p>
+<p><a name="configure"></a> <em>cmdName</em> <strong>configure</strong> <em>?option? ?value option value …?</em></p>
 <blockquote>
 <p>Query or modify the configuration options of the class.</p>
 </blockquote>
@@ -230,7 +230,7 @@ cmdName timer mode</code></pre>
 <p>Returns the menu entry belonging to the given <em>menuName</em> or creates a new cascade with this <em>menuName</em> in the application menubar. This function allows adding more menu points in inheriting applications or at a later point to the application. At creation time or therafter additional configuration options can be given such as <em>-underline 0</em> for instance. Here an example for inserting new menu points</p>
 </blockquote>
 <blockquote>
-<div class="sourceCode" id="cb3" data-eval="false"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>::paul::basegui new<span class="ot"> -style</span> clam<span class="kw">]</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>::paul::basegui new<span class="ot"> -style</span> clam<span class="kw">]</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> fmenu <span class="kw">[</span><span class="dt">$app</span> getMenu <span class="st">&quot;File&quot;</span><span class="kw">]</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$fmenu</span> <span class="ot">insert</span> <span class="dv">0</span> <span class="ot">command -label</span> Open<span class="ot"> -underline</span> <span class="dv">0</span><span class="ot"> -command</span> <span class="kw">{</span> <span class="kw">puts</span> Opening <span class="kw">}</span></span></code></pre></div>
 </blockquote>
@@ -278,53 +278,50 @@ after 4000 { app splash destroy }</code></pre>
 </ul>
 </blockquote>
 <blockquote>
-<div class="sourceCode" id="cb6" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>paul::basegui new<span class="kw">]</span></span>
+<div class="sourceCode" id="cb6" data-eval="false"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>paul::basegui new<span class="kw">]</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="st">&quot;Startup in [</span><span class="dt">$</span><span class="st">app timer time] seconds!&quot;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> timer reset</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">after</span> <span class="dv">1500</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="st">&quot;After time [</span><span class="dt">$</span><span class="st">app timer time] seconds!&quot;</span></span></code></pre></div>
 </blockquote>
-<blockquote>
-<pre class="tclout" data-eval="true"><code>Startup in 0 seconds!
-After time 1 seconds!
-</code></pre>
-</blockquote>
 <h2 id="example"><a name='example'>EXAMPLE</a></h2>
 <p>The following example demonstrates a few features for creating new standalone applications using the faciltities of of the <em>paul::basegui</em> snit type. The code can be executed directly using the <em>–demo</em> commandline switch.</p>
-<pre><code>::paul::basegui $app -style clam
-puts &quot;Startup in [$app timer time] seconds!&quot;
-$app timer reset
-after 1500
-puts &quot;After time [$app timer time] seconds!&quot;
-set fmenu [$app getMenu &quot;File&quot;]
-$fmenu insert 0 command -label Open -underline 0 -command { puts Opening }
-$app addStatusBar
-$app progress 10
-$app message &quot;starting ...&quot;
-after 1000
-$app status progressing... 50
-after 1000
-$app status finished 100
-set f [$app getFrame]
-set btn [ttk::button $f.btn -text &quot;Hover me!&quot;]
-$app balloon $btn &quot;This is the hover message!\nNice ?&quot;
-pack $btn -side top
-set tf [ttk::frame $f.tframe]
-set t [text $tf.text -wrap none]
-$app autoscroll $t
-for {set i 0} {$i &lt; 30} {incr i} {
-    $t insert end &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-  sed do eiusmod tempor 
-     incididunt ut labore et dolore magna aliqua. 
-   Ut enim ad minim veniam, quis nostrud exercitation 
-     ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\n&quot;
-}
-pack $tf -side top -fill both -expand yes
-pack [canvas $f.c] -side top -fill both -expand true
-set id [$f.c create oval 10 10 110 110 -fill red]
-$app cballoon $f.c $id &quot;This is a red oval&quot;
-$f.c create rect 130 30 190 90 -fill blue -tag rect
-$app cballoon $f.c rect &quot;This is\na blue square&quot;</code></pre>
+<div class="sourceCode" id="cb7" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> app <span class="kw">[</span>::paul::basegui new<span class="kw">]</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="st">&quot;Startup in [</span><span class="dt">$</span><span class="st">app timer time] seconds!&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> timer reset</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> fmenu <span class="kw">[</span><span class="dt">$app</span> getMenu <span class="st">&quot;File&quot;</span><span class="kw">]</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$fmenu</span> <span class="ot">insert</span> <span class="dv">0</span> <span class="ot">command -label</span> Open<span class="ot"> -underline</span> <span class="dv">0</span><span class="ot"> -command</span> <span class="kw">{</span> <span class="kw">puts</span> Opening <span class="kw">}</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> addStatusBar</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> progress <span class="dv">10</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> <span class="kw">message</span> <span class="st">&quot;starting ...&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">after</span> <span class="dv">1000</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> <span class="ot">status</span> progressing... <span class="dv">50</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">after</span> <span class="dv">1000</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> <span class="ot">status</span> finished <span class="dv">100</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> f <span class="kw">[</span><span class="dt">$app</span> getFrame<span class="kw">]</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> btn <span class="kw">[</span>ttk::<span class="kw">button</span> <span class="dt">$f</span>.btn<span class="ot"> -text</span> <span class="st">&quot;Hover me!&quot;</span><span class="kw">]</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> balloon <span class="dt">$btn</span> <span class="st">&quot;This is the hover message!</span><span class="ch">\n</span><span class="st">Nice ?&quot;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$btn</span><span class="ot"> -side</span> top</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> tf <span class="kw">[</span>ttk::<span class="kw">frame</span> <span class="dt">$f</span>.tframe<span class="kw">]</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> t <span class="kw">[text</span> <span class="dt">$tf</span>.<span class="kw">text</span><span class="ot"> -wrap</span> none<span class="kw">]</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> autoscroll <span class="dt">$t</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="kw">for</span> <span class="kw">{set</span> i <span class="dv">0</span><span class="kw">}</span> <span class="kw">{</span><span class="dt">$i</span> &lt; <span class="dv">30</span><span class="kw">}</span> <span class="kw">{incr</span> i<span class="kw">}</span> <span class="kw">{</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">$t</span> <span class="ot">insert</span> end <span class="st">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, </span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="st">  sed do eiusmod tempor </span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="st">     incididunt ut labore et dolore magna aliqua. </span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="st">   Ut enim ad minim veniam, quis nostrud exercitation </span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="st">     ullamco laboris nisi ut aliquip ex ea commodo consequat.</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$tf</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="kw">[canvas</span> <span class="dt">$f</span>.c<span class="kw">]</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> true</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> <span class="ot">id</span> <span class="kw">[</span><span class="dt">$f</span>.c <span class="ot">create</span> oval <span class="dv">10</span> <span class="dv">10</span> <span class="dv">110</span> <span class="dv">110</span><span class="ot"> -fill</span> red<span class="kw">]</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> cballoon <span class="dt">$f</span>.c <span class="dt">$id</span> <span class="st">&quot;This is a red oval&quot;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="dt">$f</span>.c <span class="ot">create</span> rect <span class="dv">130</span> <span class="dv">30</span> <span class="dv">190</span> <span class="dv">90</span><span class="ot"> -fill</span> blue<span class="ot"> -tag</span> rect</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="dt">$app</span> cballoon <span class="dt">$f</span>.c rect <span class="st">&quot;This is</span><span class="ch">\n</span><span class="st">a blue square&quot;</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="kw">puts</span> <span class="st">&quot;After time [</span><span class="dt">$</span><span class="st">app timer time] seconds!&quot;</span></span></code></pre></div>
+<pre class="tclout" data-eval="true"><code>Startup in 0 seconds!
+After time 2 seconds!
+</code></pre>
 <h2 id="inheritance"><a name='inheritance'>INHERITANCE</a></h2>
 <p>This widget can be used to build up other more specialized applications. Here is an example, where we create a generic Editor class which adds additional menu points and embeds a scrolled text widget.</p>
 <p>The most basic inheritance example would be just copying the functionality without the text widget.</p>
