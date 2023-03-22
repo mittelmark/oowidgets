@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::statusbar documentation
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230321.0848>
+#' Date : <230322.0608>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -43,7 +43,7 @@
 #'  - [COPYRIGHT](#copyright)
 #'  - [LICENSE](#license)
 #'  
-#' ## <a name='synopsis'>SYNOPSIS</a>
+#' ## <a name='synopsis'></a>SYNOPSIS
 #' 
 #' ```{.tcl eval=true echo=false results="hide"}
 #' lappend auto_path [file join [file dirname [info script]] ..]
@@ -59,7 +59,7 @@
 #' pathName set message value
 #' ```
 #'
-#' ## <a name='description'>DESCRIPTION</a>
+#' ## <a name='description'></a>DESCRIPTION
 #' 
 #' **paul::statusbar** - is a composite widget consisiting of a ttk::label and a ttk::progressbar widget. 
 #' It should be normally packaged at the bottom of an application.
@@ -68,13 +68,13 @@
 #' but these options can be also redefined at a later point.
 
 #'
-#' ## <a name='command'>COMMAND</a>
+#' ## <a name='command'></a>COMMAND
 #'
 #' **paul::statusbar** *pathName ?options?*
 #' 
 #' > Creates and configures a new paul::statusbar widget  using the Tk window id _pathName_ and the given *options*. 
 #'  
-#' ## <a name='options'>WIDGET OPTIONS</a>
+#' ## <a name='options'></a>WIDGET OPTIONS
 #' 
 #' The **paul::statusbar** widget is a composite widget where the options 
 #' are delegated to the original widgets.
@@ -109,7 +109,7 @@ oowidgets::widget ::paul::Statusbar {
         my configure {*}$args
     }
     #' 
-    #' ## <a name='commands'>WIDGET COMMANDS</a>
+    #' ## <a name='commands'></a>WIDGET COMMANDS
     #' 
     #' Each **paul::statusbar** widgets supports its own as well via the *pathName label cmd* and *pathName progressbar cmd* syntax all the commands of its component widgets.
     #' 
@@ -166,7 +166,7 @@ oowidgets::widget ::paul::Statusbar {
 }
 
 #' 
-#' ## <a name='example'>EXAMPLE</a>
+#' ## <a name='example'></a>EXAMPLE
 #' 
 #' ```{.tcl eval=true results="hide"}
 #' package require paul
@@ -196,20 +196,20 @@ oowidgets::widget ::paul::Statusbar {
 #' after 1000 exit
 #' ```
 #'
-#' ## <a name='see'>SEE ALSO</a>
+#' ## <a name='see'></a>SEE ALSO
 #'
 #' - [oowidgets](../oowidgets.html)
 #' - [ttk::progressbar](https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_progressbar.htm)
 #'
-#' ## <a name='authors'>AUTHOR</a>
+#' ## <a name='authors'></a>AUTHOR
 #'
 #' The **paul::statusbar** widget was written by Detlef Groth, Schwielowsee, Germany.
 #'
-#' ## <a name='copyright'>COPYRIGHT</a>
+#' ## <a name='copyright'></a>COPYRIGHT
 #'
 #' Copyright (c) 2019-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
-#' ## <a name='license'>LICENSE</a>
+#' ## <a name='license'></a>LICENSE
 #'
 #' ```{.tcl eval=true id="license" echo=false}
 #' include LICENSE

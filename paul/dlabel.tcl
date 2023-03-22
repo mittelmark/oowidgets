@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::dlabel - label with dynamic font size
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230321.1505>
+#' Date : <230322.0603>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -27,7 +27,7 @@
 #' 
 #' ## NAME
 #'
-#' > **paul::dlabel** - label with fonts ize adaptation
+#' > **paul::dlabel** - label with fontsize adaptation
 #'
 #' ## <a name='synopsis'></a> SYNOPSIS
 #' 
@@ -44,7 +44,8 @@
 #' 
 #' ## COMMAND
 #' 
-#' <a name="dlabel">**paul::dlabel** *pathName*</a>
+#' <a name="dlabel"></a>
+#' **paul::dlabel** *pathName*
 #' 
 #' > Creates a ttk::label where the font size is dynamically adjusted to the widget size.
 #'
@@ -125,20 +126,20 @@ oowidgets::widget  ::paul::Dlabel {
     }
 }
 
-#' ## <a name='see'>SEE ALSO</a>
+#' ## <a name='see'></a> SEE ALSO
 #'
 #' - [oowidgets](../oowidgets.html)
 #' - [paul::basegui.tcl](basegui.html)
 #'
-#' ## <a name='authors'>AUTHOR</a>
+#' ## <a name='authors'></a> AUTHOR
 #'
 #' The **paul::statusbar** widget was written by Detlef Groth, Schwielowsee, Germany.
 #'
-#' ## <a name='copyright'>COPYRIGHT</a>
+#' ## <a name='copyright'></a>COPYRIGHT
 #'
 #' Copyright (c) 2021-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
-#' ## <a name='license'>LICENSE</a>
+#' ## <a name='license'></a>LICENSE 
 #'
 #' ```{.tcl eval=true id="license" echo=false}
 #' include LICENSE

@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::rotext - readonly text widget 
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230321.1759>
+#' Date : <230322.0606>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -36,27 +36,27 @@
 #' package require paul
 #' ```
 #' 
-#' ```
+#' > ```{.tcl}
 #' package require paul
 #' paul::rotext pathName ?-option value ...?
 #' pathName ins TEXT
 #' pack pathName
-#' ```
+#' > ```
 #' 
 #' ## COMMAND
 #' 
-#' <a name="rotext">**paul::rotext** *pathName*</a>
+#' <a name="rotext"></a>**paul::rotext** *pathName*
 #' 
 #' > Creates a `tk::text` widget which is readonly, text can be only inserted and deleted using the `ins` and `del` methods but not the
 #'   using 'insert' or 'delete' and as well not with the users keybord.
 #'
 #' ## OPTIONS
 #' 
-#' All options of a standard `tk::text` widget are supported.
+#' > All options of a standard `tk::text` widget are supported.
 #' 
 #' ## METHODS
 #' 
-#' All methods of a standard tk::text are supported except for 'insert' and 'delete' which are replaced by 'ins' and 'del'.
+#' > All methods of a standard tk::text are supported except for 'insert' and 'delete' which are replaced by 'ins' and 'del'.
 #' 
 #' ## EXAMPLE
 #'
@@ -90,20 +90,20 @@ namespace eval ::paul { }
     method ins {args} { $textw insert {*}$args  }
     method del {args} { $textw delete {*}$args  }
 }
-#' ## <a name='see'>SEE ALSO</a>
+#' ## <a name='see'></a>SEE ALSO
 #'
-#' - [oowidgets](../oowidgets.html)
-#' - [paul::basegui.tcl](basegui.html)
+#' > - [oowidgets](../oowidgets.html)
+#'   - [paul::basegui.tcl](basegui.html)
 #'
-#' ## <a name='authors'>AUTHOR</a>
+#' ## <a name='authors'></a>AUTHOR
 #'
-#' The **paul::rotext** widget was written by Detlef Groth, Schwielowsee, Germany.
+#' > The **paul::rotext** widget was written by Detlef Groth, Schwielowsee, Germany.
 #'
-#' ## <a name='copyright'>COPYRIGHT</a>
+#' ## <a name='copyright'></a>COPYRIGHT
 #'
 #' Copyright (c) 2021-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
-#' ## <a name='license'>LICENSE</a>
+#' ## <a name='license'></a>LICENSE
 #'
 #' ```{.tcl eval=true id="license" echo=false}
 #' include LICENSE

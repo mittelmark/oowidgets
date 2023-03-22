@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::basegui base class for building Tk applications
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230321.1658>
+#' Date : <230322.0600>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -199,7 +199,7 @@ oo::class create ::paul::basegui {
     #'    The widget *pathname* is then managed by grid, don't pack or grid the widget in *pathname* yourself. Handle it's geometry
     #'   via its parent frame. See the following example:
     #'
-    #' > ```{.tcl eval=false}
+    #' > ```{.tcl}
     #' package require paul
     #' set app [::paul::basegui new -style clam]
     #' set f [$app getFrame]
@@ -313,7 +313,7 @@ oo::class create ::paul::basegui {
     }
     #' 
     #' <a name="configure"></a>
-    #' *cmdName* **configure** - *?option? ?value option value ...?*
+    #' *cmdName* **configure** *?option? ?value option value ...?*
     #' 
     #' > Query or modify the configuration options of the class. 
     method configure {args} {
@@ -431,7 +431,7 @@ oo::class create ::paul::basegui {
     #'   At creation time or therafter additional configuration options can be given such as *-underline 0* for instance. Here an example for inserting new menu points  
     #'
     #' 
-    #' > ```{.tcl eval=false}
+    #' > ```{.tcl}
     #' set app [::paul::basegui new -style clam]
     #' set fmenu [$app getMenu "File"]
     #' $fmenu insert 0 command -label Open -underline 0 -command { puts Opening }
@@ -582,7 +582,7 @@ oo::class create ::paul::basegui {
     #' > - *reset* - resets the time to the current time
     #'   - *time*  - gets the execution time after the last reset, this is the default.
     #'
-    #' > ```{.tcl eval=true}
+    #' > ```{.tcl eval=false}
     #'   set app [paul::basegui new]
     #'   puts "Startup in [$app timer time] seconds!"
     #'   $app timer reset
@@ -604,12 +604,10 @@ oo::class create ::paul::basegui {
 #' The following example demonstrates a few features for creating new standalone applications using the faciltities of 
 #' of the *paul::basegui* snit type. The code can be executed directly using the *--demo* commandline switch.
 #' 
-#' ```
-#' ::paul::basegui $app -style clam
+#' ```{.tcl eval=true}
+#' set app [::paul::basegui new]
 #' puts "Startup in [$app timer time] seconds!"
 #' $app timer reset
-#' after 1500
-#' puts "After time [$app timer time] seconds!"
 #' set fmenu [$app getMenu "File"]
 #' $fmenu insert 0 command -label Open -underline 0 -command { puts Opening }
 #' $app addStatusBar
@@ -639,6 +637,7 @@ oo::class create ::paul::basegui {
 #' $app cballoon $f.c $id "This is a red oval"
 #' $f.c create rect 130 30 190 90 -fill blue -tag rect
 #' $app cballoon $f.c rect "This is\na blue square"
+#' puts "After time [$app timer time] seconds!"
 #' ```
 #'
 #' ## <a name='inheritance'>INHERITANCE</a>
