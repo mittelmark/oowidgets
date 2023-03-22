@@ -1,5 +1,5 @@
 package require Tk
-package provide oowidgets 0.3
+package provide oowidgets 0.3.0
 
 #' ---
 #' title: package oowidgets - create megawidgets using TclOO
