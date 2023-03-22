@@ -131,7 +131,47 @@ oowidgets::widget CLASSNAME CODE</code></pre>
 <p>There is only one method currently:</p>
 <p><strong>oowidgets::widget</strong> <em>classname</em> <em>code</em></p>
 <blockquote>
-<p>Creates a class with the given <em>classname</em> and a widget command using the given <em>classname</em> and <em>code</em> The widget command has the same name as the class name but consisting only of lowercase letters. To avoid name collisions, the given <em>classname</em> must have at least one uppercase letter.</p>
+<p>Creates a class with the given <em>classname</em> and a widget command using the given <em>classname</em> and <em>code</em> block. The created widget command has the same name as the class name but consists only of lowercase letters. Therefor in order to avoid name collisions, the given <em>classname</em> must have at least one uppercase letter.</p>
+</blockquote>
+<blockquote>
+<p>Hint: Since version 0.3 you can use as well only lowercase letters for the <em>classname</em>, the given <em>classname</em> will be then automatically capitalized at the first letter.</p>
+</blockquote>
+<blockquote>
+<p>TclOO Commands:</p>
+</blockquote>
+<blockquote>
+<p>The following new commands can be used inside the new class definition:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>callback</strong> METHODNAME ?args..?_ - alias for <em>mymmethod</em>, see below</li>
+<li><strong>myvar</strong> <em>VARNAME</em> - return the fully qualified variable name, useful useful for arguments requiring variable names, such as <em>-textvariable</em></li>
+<li><strong>mymethod</strong> <em>METHODNAME ?args..?</em> - formatting object methods to use them as callbacks, for instance as arguments for <em>-command</em></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Please note, that at least <em>callback/mymethod</em> will be available in Tcl 8.7</p>
+</blockquote>
+<blockquote>
+<p>Object methods:</p>
+</blockquote>
+<blockquote>
+<p>The following public object commands are implemented within the oowidgets base class:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>cget</strong> <em>-option</em> - the usual cget method for every widget, returning the standard widget options or some new options for the widget</li>
+<li><strong>configure</strong> <em>?-option value …?</em> - the usual configure method for every widget working with default widget options and new options</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>install</strong> <em>basewidget path ?-option value …?</em> - the way to install a default widget with standard and new options</li>
+<li><strong>tkclass</strong> - returns the value of <em>[winfo class widgetPath]</em> for the internal default widget, should be used inside mixins which should be working for different widget types</li>
+</ul>
 </blockquote>
 <blockquote>
 <p>Example:</p>

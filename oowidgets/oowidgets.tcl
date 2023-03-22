@@ -1,5 +1,5 @@
 package require Tk
-package provide oowidgets 0.2
+package provide oowidgets 0.3
 
 #' ---
 #' title: package oowidgets - create megawidgets using TclOO
@@ -212,7 +212,34 @@ oo::class create ::oowidgets::BaseWidget {
 #' The created widget command has the same name as the class 
 #' name but consists only of lowercase letters. Therefor in order
 #' to avoid name collisions, the given _classname_ must have at least 
-#' one uppercase letter.
+#' one uppercase letter. 
+#' 
+#' > Hint: Since version 0.3 you can use as well only lowercase letters for the _classname_,
+#' the given _classname_ will be then automatically capitalized at the first letter.
+#' 
+#' >  TclOO Commands:
+#' 
+#' >  The following new commands can be used inside the new class definition:
+#' 
+#' > - __callback__ METHODNAME ?args..?_ - alias for _mymmethod_, see below
+#'   - __myvar__ _VARNAME_ - return the fully qualified variable name, useful
+#'         useful for arguments requiring variable names, such as _-textvariable_
+#'   - __mymethod__ _METHODNAME ?args..?_ - formatting object methods to use them as callbacks,
+#'         for instance as arguments for _-command_
+#' 
+#' > Please note, that at least _callback/mymethod_ will be available in Tcl 8.7
+#' 
+#' > Object methods:
+#' 
+#' > The following public object commands are implemented within the oowidgets base class:
+#' 
+#' > - __cget__ _-option_ - the usual cget method for every widget, returning the standard widget options or some new options for the widget
+#'   - __configure__ _?-option value ...?_ - the usual configure method for every widget working with default widget options and new options
+#' 
+#' > The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:
+#' 
+#' > - __install__ _basewidget path ?-option value ...?_ - the way to install a default widget with standard and new options
+#'   - __tkclass__  - returns the value of _[winfo class widgetPath]_ for the internal default widget, should be used inside mixins which should be working for different widget types
 #' 
 #' >  Example:
 #' 

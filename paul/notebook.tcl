@@ -36,8 +36,10 @@ oowidgets::widget ::paul::notebook {
         eval [my cget -raisecmd] $w [$w index current]
     }
     method new {w} {
-        frame $nb.f[llength [$nb tabs]]
-        $self add $nb.f[llength [$nb tabs]] -text "Tab [expr {[llength [$nb tabs]] + 1}]"
+        set n [llength [$nb tabs]]
+        incr n
+        ttk::frame $nb.f$n
+        my add $nb.f$n -text "Tab $n"
     }
     method bind {ev script} {
         bind $nb $ev $script
