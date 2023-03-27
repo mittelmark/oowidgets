@@ -211,7 +211,7 @@ from the dark old times when no OOP was in the Tcl core reimplemented with oowid
 
 ```{.tcl}
 package require oowidgets
-namespace evall ::test { }
+namespace eval ::test { }
 ::oowidgets::widget ::test::Rotext {
     variable textw
     constructor {path args} {
