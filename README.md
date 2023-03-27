@@ -231,3 +231,10 @@ namespace eval ::test { }
 }
 ```
 
+## TODO's
+
+- check for mixins, seems not to work for more than one mixin
+- delegate method?
+- component declaration?
+- snit compatibility?
+- Tcl 8.7 check
