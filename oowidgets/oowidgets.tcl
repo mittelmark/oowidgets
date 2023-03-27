@@ -97,7 +97,8 @@ proc oowidgets::new name {
 oo::class create ::oowidgets::BaseWidget {
       variable parentOptions
       variable widgetOptions
-
+      variable widget
+      variable path
       variable widgettype
       constructor {path args} {
               my variable widgetOptions
