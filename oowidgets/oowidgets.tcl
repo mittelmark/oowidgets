@@ -98,7 +98,7 @@ oo::class create ::oowidgets::BaseWidget {
       variable parentOptions
       variable widgetOptions
       variable widget
-      variable path
+      variable widgetpath
       variable widgettype
       constructor {path args} {
               my variable widgetOptions
@@ -115,6 +115,8 @@ oo::class create ::oowidgets::BaseWidget {
           my variable parentOptions
           my variable widgetOptions
           my variable widget
+          my variable widgetpath 
+          set widgetpath $path
           $wtype $path
           set widget ${path}_
           foreach opts [$path configure] {
@@ -155,7 +157,6 @@ oo::class create ::oowidgets::BaseWidget {
           my variable widget
           my variable widgetOptions
           my variable parentOptions
-          
           if {[llength $args] == 0}  {
               return [lsort [list [array get parentOptions] {*}[array get widgetOptions]]]
           } elseif {[llength $args] == 1}  {
@@ -193,7 +194,10 @@ oo::class create ::oowidgets::BaseWidget {
               }
           }
       } 
-      
+      method widget {} {
+          my variable widgetpath
+          return $widgetpath
+      }
       # delegate all other methods to the widget
       method unknown {method args} {
           my variable widget

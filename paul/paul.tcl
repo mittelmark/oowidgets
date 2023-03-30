@@ -1,5 +1,6 @@
 package require Tk
 package require TclOO
+package require tkoo
 package provide paul 0.1
 
 # some generic utilities
@@ -37,4 +38,5 @@ source [file join [file dirname [info script]] basegui.tcl]
 source [file join [file dirname [info script]] dlabel.tcl] 
 source [file join [file dirname [info script]] rotext.tcl] 
 source [file join [file dirname [info script]] notebook.tcl] 
+source [file join [file dirname [info script]] txmixins.tcl] 
 

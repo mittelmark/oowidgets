@@ -13,6 +13,7 @@ paul-manual:
 	pantcl paul/dlabel.tcl paul/dlabel.html -s	
 	pantcl paul/rotext.tcl paul/rotext.html -s		
 	pantcl paul/notebook.tcl paul/notebook.html -s
+	pantcl paul/txmixins.tcl paul/txmixins.html -s	
 	rm paul/header.html
  	
 record:
