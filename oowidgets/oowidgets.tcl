@@ -59,7 +59,6 @@ package provide oowidgets 0.3.0
 #' 
 #' There is only one method currently:
 #' 
-#' 
 
 # not required for Tcl 8.7 very likely
 if {![package vsatisfies [package provide Tcl] 8.7]} {
@@ -240,6 +239,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' 
 #' > - __cget__ _-option_ - the usual cget method for every widget, returning the standard widget options or some new options for the widget
 #'   - __configure__ _?-option value ...?_ - the usual configure method for every widget working with default widget options and new options
+#'   - __widget__ - returns the widget path for the underlying widget
 #' 
 #' > The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:
 #' 
