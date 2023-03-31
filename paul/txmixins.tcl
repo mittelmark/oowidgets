@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::tx - mixins for the tk::text widget
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : 2023-03-31 08:01
+#' Date : 2023-03-31 13:21
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -56,7 +56,7 @@
 #' 
 #' Adds abbreviation support to an existing *tkoo::text* widget, which is a wrapper for the *tk::text* widget using the Tk window id _pathName_ .
 #' The widget indents every new line based on the initial indention of the previous line.
-#' Based on code in the Wiki page https://wiki.tcl-lang.org/page/auto-indent started by Richard Suchenwirth.
+#' Based on code in the Wiki page https://wiki.tcl-lang.org/page/autoreplace started by Richard Suchenwirth.
 #'
 #' Example:
 #' 
