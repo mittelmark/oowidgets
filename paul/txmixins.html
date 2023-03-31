@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Detlef Groth, Schwielowsee, Germany" />
-  <title>paul::txmixins - oo::class mixins for the tk::text widget</title>
+  <title>paul::tx - mixins for the tk::text widget</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -98,7 +98,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">paul::txmixins - oo::class mixins for the tk::text widget</h1>
+<h1 class="title">paul::tx - mixins for the tk::text widget</h1>
 <p class="author">Detlef Groth, Schwielowsee, Germany</p>
 </header>
 <p></p>
@@ -107,7 +107,17 @@
 </center>
 <h2 id="name">NAME</h2>
 <blockquote>
-<p><strong>paul::txmixins</strong> - oo::class mixins for the tk::text widget</p>
+<p><strong>paul::tx</strong> - oo::class mixins for the tk::text widget</p>
+</blockquote>
+<blockquote>
+<p>The following mixins are implemented:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><a href="#txautorep">paul::txautorep</a> - abbreviation tool for text widgets</li>
+<li><a href="#txindent">paul::txindent</a> - automatic indentation for text widgets</li>
+<li><a href="#txunicode">paul::txunicode</a> - entering Unicode characters</li>
+</ul>
 </blockquote>
 <h2 id="synopsis"><a name='synopsis'></a> SYNOPSIS</h2>
 <p></p>
@@ -117,34 +127,85 @@ set txt [tkoo::text pathName ?option value ...?
 oo::objdefine $txt mixin Mixin ?Mixin ...?
 pack $txt</code></pre>
 <h2 id="mixins">MIXINS</h2>
-<p><a name="txindent"></a><strong>paul::txindent</strong> - <em>oo::objdefine pathName mixin paul::txtmixin</em></p>
-<p>Adds indenting capabilities to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . The widget indents every new line based on the initial indention of the previous line. Based on code in the Wiki page https://wiki.tcl-lang.org/page/auto-indent started by Richard Suchenwirth.</p>
-<p>Example:</p>
-<blockquote>
-<div class="sourceCode" id="cb2" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txt<span class="ot"> -background</span> skyblue<span class="kw">]</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">foreach</span> col <span class="kw">[list</span> A B C<span class="kw">]</span> <span class="kw">{</span> </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;# Header </span><span class="dt">$</span><span class="st">col</span><span class="ch">\n\n</span><span class="st">   Some more text.</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;  * item 1</span><span class="ch">\n</span><span class="st">  * item 2 (press return here)&quot;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txindent</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> indent</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
-</blockquote>
 <p><a name="txautorep"></a><strong>paul::txautorep</strong> - <em>oo::objdefine pathName mixin paul::txautorep</em></p>
 <p>Adds abbreviation support to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . The widget indents every new line based on the initial indention of the previous line. Based on code in the Wiki page https://wiki.tcl-lang.org/page/auto-indent started by Richard Suchenwirth.</p>
 <p>Example:</p>
 <blockquote>
-<div class="sourceCode" id="cb3" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txt2<span class="ot"> -background</span> salmon<span class="kw">]</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin ::paul::txautorep</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> autorep <span class="kw">[list</span> (TM) <span class="ch">\u</span>2122 (C) <span class="ch">\u</span>00A9 (R) <span class="ch">\u</span>00AE (K) <span class="ch">\u</span>2654<span class="kw">]</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;# Autorep Example</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">foreach</span> col <span class="kw">[list</span> A B C<span class="kw">]</span> <span class="kw">{</span> </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;# Header </span><span class="dt">$</span><span class="st">col</span><span class="ch">\n\n</span><span class="st">   Some more text.</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;  * item 1</span><span class="ch">\n</span><span class="st">  * item 2</span><span class="ch">\n</span><span class="st">  * Write (DG) and press enter</span><span class="ch">\n</span><span class="st">  * &quot;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
+<div class="sourceCode" id="cb2" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txt2<span class="ot"> -background</span> salmon<span class="kw">]</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin ::paul::txautorep</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> autorep <span class="kw">[list</span> (TM) <span class="ch">\u</span>2122 (C) <span class="ch">\u</span>00A9 (R) <span class="ch">\u</span>00AE (K) <span class="ch">\u</span>2654<span class="kw">]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;# Autorep Example</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">foreach</span> col <span class="kw">[list</span> A B C<span class="kw">]</span> <span class="kw">{</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;# Header </span><span class="dt">$</span><span class="st">col</span><span class="ch">\n\n</span><span class="st">   Some more text.</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;  * item 1</span><span class="ch">\n</span><span class="st">  * item 2</span><span class="ch">\n</span><span class="st">  * Write (DG) and press enter</span><span class="ch">\n</span><span class="st">  * &quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
 </blockquote>
+<p><a name="txindent"></a><strong>paul::txindent</strong> - <em>oo::objdefine pathName mixin paul::txindent</em></p>
+<p>Adds indenting capabilities to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . The widget indents every new line based on the initial indention of the previous line. Based on code in the Wiki page https://wiki.tcl-lang.org/page/auto-indent started by Richard Suchenwirth.</p>
+<p>Example:</p>
+<blockquote>
+<div class="sourceCode" id="cb3" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txt<span class="ot"> -background</span> skyblue<span class="kw">]</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">foreach</span> col <span class="kw">[list</span> A B C<span class="kw">]</span> <span class="kw">{</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;# Header </span><span class="dt">$</span><span class="st">col</span><span class="ch">\n\n</span><span class="st">   Some more text.</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;  * item 1</span><span class="ch">\n</span><span class="st">  * item 2 (press return here)&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txindent</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> indent</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
+</blockquote>
+<p><a name="txunicode"></a><strong>paul::txunicode</strong> - <em>oo::objdefine pathName mixin paul::txtunicode</em></p>
+<p>Adds the capability to enter Unicode symbols to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . If the user presses the default Keystroke Control-u he/she can enter after typing the four Unicode numbers Unicode characters. Based on code in the Wiki page https://wiki.tcl-lang.org/page/Entering+Unicode+characters+in+a+widget</p>
+<p>Example:</p>
+<blockquote>
+<div class="sourceCode" id="cb4" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txtu<span class="ot"> -background</span> grey80<span class="ot"> -font</span> <span class="st">&quot;Courier 18&quot;</span><span class="kw">]</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;Press Ctrl-Shift-u and then therafter 4 numbers like 2602</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txunicode</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> unicode Control-Key-U</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
+</blockquote>
+<h2 id="see-also"><a name='see'></a> SEE ALSO</h2>
+<ul>
+<li><a href="../oowidgets.html">oowidgets</a></li>
+<li><a href="basegui.html">paul::basegui.tcl</a></li>
+</ul>
+<h2 id="author"><a name='authors'></a> AUTHOR</h2>
+<p>The <strong>paul::tx</strong> mixins were written by Detlef Groth, Schwielowsee, Germany.</p>
+<h2 id="copyright"><a name='copyright'></a>COPYRIGHT</h2>
+<p>Copyright (c) 2021-2023 Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<h2 id="license"><a name='license'></a>LICENSE</h2>
+<p></p>
+<pre id="license" class="tclout" data-eval="true" data-echo="false"><code>BSD 3-Clause License
+
+Copyright (c) 2023, D Groth
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</code></pre>
 </body>
 </html>
