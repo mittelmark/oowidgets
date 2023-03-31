@@ -66,6 +66,8 @@ There is a sample project which uses `TclOO` and `oowidgets` to create mega widg
    [code](paul/rotext.tcl) 
 - [paul::statusbar :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`,  
    [code](paul/statusbar.tcl) 
+- [paul::txmixins :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - mixin classes for the `tk::text` widget to extend its functions,  
+   [code](paul/txmixins.tcl) 
 
 PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen"..
 
@@ -233,7 +235,6 @@ namespace eval ::test { }
 
 ## TODO's
 
-- check for mixins, seems not to work for more than one mixin
 - delegate method?
 - component declaration?
 - snit compatibility?
