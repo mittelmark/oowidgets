@@ -40,7 +40,7 @@ tcltest::test flash-1.5 {get flashtime} {
     $btn cget -flashtime
 } {100}
 
-tcltest::test flash-1.5 {create flash method} {
+tcltest::test flash-1.6 {create flash method} {
     oo::define ::test::Button method flash {} {
         return "flashing [my cget -flashtime] millisecs"
     }
