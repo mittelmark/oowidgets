@@ -1,10 +1,7 @@
 ---
 title: "The packages oowidgets and tkoo - creating megawidgets using TclOO"
 author: Detlef Groth
-date: Sun Mar 19 14:27:14 2023
-abstract: >
-    Some abstract ...
-    on several lines...
+date: 2023-08-26
 header-includes: 
 - | 
     ```{=html}
