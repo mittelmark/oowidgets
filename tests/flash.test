@@ -9,7 +9,8 @@ tcltest::test flash-1.1 {new button} {
     namespace eval ::test { }
     oowidgets::widget ::test::Button {
        constructor {path args} {
-          my install ttk::button $path -message testmessage
+          my install ttk::button $path -message testmessage \
+            -flashtime 100
           my configure {*}$args
        }
        method test {} {
@@ -34,6 +35,19 @@ tcltest::test flash-1.4 {update message with variable} {
     $btn configure -message btnmessage
     $btn test
 } {btnmessage}
+
+tcltest::test flash-1.5 {get flashtime} {
+    $btn cget -flashtime
+} {100}
+
+tcltest::test flash-1.5 {create flash method} {
+    oo::define ::test::Button method flash {} {
+        return "flashing [my cget -flashtime] millisecs"
+    }
+    $btn configure -flashtime 200
+    $btn flash
+} {flashing 200 millisecs}
+
 
 tcltest::test exit-1.1 {exit test application} {
     destroy .
