@@ -44,13 +44,13 @@ tcltest::test flash-1.6 {create flash method} {
     oo::define ::test::Button method flash {} {
         set otext [my cget -text]
         update idletasks
-        after 1000 
+        after 300 
         my configure -text "...."
         update idletasks
-        after 1000
+        after 300
         my configure -text $otext
         update idletasks
-        after 1000
+        after 300
         return "flashing [my cget -flashtime] millisecs"
     }
     $btn configure -flashtime 200
