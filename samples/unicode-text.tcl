@@ -1,3 +1,4 @@
+lappend auto_path [file join [file dirname [info script]] ..]
 package require oowidgets
 # wrapper widget
 
@@ -55,8 +56,8 @@ proc ::sample::unicode::handle_uc_key {widget key} {
     }
 }
 
-set txt [sample::text .txtu -background grey80 -font "Courier 18"]
-$txt insert  end "Press Ctrl-Shift-u and then therafter 4 numbers like 2602\n\n"
+set txt [sample::text .txtu -background grey90 -font "Courier 16"]
+$txt insert  end "Click into the text widget!\nThereafter press Ctrl-Shift-u and then therafter 4 numbers like 2602\n\n"
 oo::objdefine $txt mixin sample::txunicode
 $txt unicode Control-Key-U
 pack $txt -side top -fill both -expand yes

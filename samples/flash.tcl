@@ -146,9 +146,10 @@ pack  $lbl -side top
 set btn [ttk::button .btn  -text "Exit" -command exit]
 pack $btn -side top
 $lbl flash
-if {false} {
-    set fb [flash::button .fb -text "Exit" -flashtime 100 -command exit]
-    pack $fb -side top -pady 10 -pady 10 -fill both -expand true
+set fb [flash::button .fb -text "Exit" -flashtime 100 -command exit]
+pack $fb -side top -pady 10 -pady 10 -fill both -expand true
+
+if {true} {
     set fl [flash::label .fl -text "FlashLabel" -flashtime 50 -anchor center]
     pack $fl -side top -padx 10 -pady 10 -fill both -expand true
     set le [flash::labentry .le -relief ridge -borderwidth 5 -labeltext "Label 2:"]

@@ -1,10 +1,10 @@
 package require Tk 8.6
-package provide oowidgets 0.3.1
+package provide oowidgets 0.3.2
 
 #' ---
 #' title: package oowidgets - create megawidgets using TclOO
 #' author: Detlef Groth, University of Potsdam, Germany
-#' date: 2023-03-20
+#' date: 2023-08-26
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -177,19 +177,22 @@ oo::class create ::oowidgets::BaseWidget {
           
           # process the new configuration options...
           array set opts $args
+          set nargs [list]
           foreach opt [lsort [array names opts]] {
               set val $opts($opt)
               # overwrite with new value
               if { [info exists widgetOptions($opt)] } {
                   set widgetOptions($opt) $val
               } elseif {[info exists parentOptions($opt)]} {
+                  lappend nargs $opt
+                  lappend nargs $val
                   set parentOptions($opt) $val
               } else {
                   return -code error "unknown configuration option: \"$opt\" specified"
                   
               }
           }
-          return [$widget configure {*}$args]
+          return [$widget configure {*}$nargs]
       } 
       method widget {} {
           my variable widgetpath
