@@ -165,11 +165,15 @@
 #' $txt insert end "* parenthesis ( and )\n"
 #' $txt insert end "* brackets    \[ and \]\n"
 #' $txt insert end "* braces      { and }\n\n"
-#' oo::objdefine $txt mixin paul::txmatching
+#' $txt insert end "Unicode adding works as well\nPress Ctrl-Shift-u and then write 4 digits ...\n\n"
+#' oo::objdefine $txt mixin paul::txmatching paul::txunicode
 #' $txt matchbrace
 #' $txt matchparen
 #' $txt matchbracket
+#' $txt unicode Control-Key-U
 #' pack $txt -side top -fill both -expand yes
+#' ### adding your own additional bindings is still possible
+#' bind $txt <KeyRelease> +[list puts "now pressed %K"]
 #' > ```
 #' 
 

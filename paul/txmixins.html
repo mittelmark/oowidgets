@@ -167,11 +167,15 @@ pack $txt</code></pre>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;* parenthesis ( and )</span><span class="ch">\n</span><span class="st">&quot;</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;* brackets    </span><span class="ch">\[</span><span class="st"> and </span><span class="ch">\]\n</span><span class="st">&quot;</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;* braces      { and }</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txmatching</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchbrace</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchparen</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchbracket</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;Unicode adding works as well</span><span class="ch">\n</span><span class="st">Press Ctrl-Shift-u and then write 4 digits ...</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txmatching paul::txunicode</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchbrace</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchparen</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchbracket</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> unicode Control-Key-U</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">### adding your own additional bindings is still possible</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">bind</span> <span class="dt">$txt</span> &lt;KeyRelease&gt; +<span class="kw">[list</span> <span class="kw">puts</span> <span class="st">&quot;now pressed %K&quot;</span><span class="kw">]</span></span></code></pre></div>
 </blockquote>
 <p><a name="txunicode"></a><strong>paul::txunicode</strong> - <em>oo::objdefine pathName mixin paul::txunicode</em></p>
 <p>Adds the capability to enter Unicode symbols to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . If the user presses the default Keystroke Control-u he/she can enter after typing the four Unicode numbers Unicode characters. Based on code in the Wiki page https://wiki.tcl-lang.org/page/Entering+Unicode+characters+in+a+widget</p>
