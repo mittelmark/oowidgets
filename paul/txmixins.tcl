@@ -33,13 +33,14 @@
 #' 
 #' > - [paul::txautorep](#txautorep) - abbreviation tool for text widgets
 #'   - [paul::txindent](#txindent) - automatic indentation for text widgets
+#'   - [paul::txmatching](#txmatching) - hilight matching parenthesis, brackets or braces
 #'   - [paul::txunicode](#txunicode) - entering Unicode characters
 #'
 #' ## <a name='synopsis'></a> SYNOPSIS
 #' 
 #' ```{.tcl eval=true echo=false results="hide"}
 #' lappend auto_path .
-#' package require paul
+#' #package require paul
 #' ```
 #' 
 #' ```
@@ -90,7 +91,6 @@
         variable textw
         set w $win
         foreach {abbrev value} $automap {
-            puts $abbrev
             set n [string length $abbrev]
             if {[$w get "insert-$n chars" insert] eq $abbrev} {
                 $w delete "insert-$n chars" insert
@@ -129,7 +129,6 @@
     }
     method iindent {{extra "    "}} {
         set w [self]
-        puts "w is $w"
         set lineno [expr {int([$w index insert])}]
         set line [$w get $lineno.0 $lineno.end]
         regexp {^(\s*)} $line -> prefix
@@ -148,9 +147,197 @@
     }
     #unexport iindent
 }
+#'
+#' <a name="txmatching"></a>**paul::txmatching** -  *oo::objdefine pathName mixin paul::txmatching*
+#' 
+#' Adds a matching parenthesis, brackets or braces behaviour.
+#' If the user enters an unmatched parenthesis, bracket or brace it is highlighted,
+#' if the matching closing character is entered it the region between these two characters
+#' is shortly highlighted and thereafter the higlighting is removed.
+#' Based on code in the Wiki page https://wiki.tcl-lang.org/page/Tk+Text+Window+Brace+Parenthesis%2C+and+Bracket+Matching
+#'
+#' Example:
+#' 
+#' > ```{.tcl eval=true}
+#' package require paul
+#' set txt [tkoo::text .txtm -background salmon -font "Courier 18"]
+#' $txt insert  end "Start typing some text containing\n" 
+#' $txt insert end "* parenthesis ( and )\n"
+#' $txt insert end "* brackets    \[ and \]\n"
+#' $txt insert end "* braces      { and }\n\n"
+#' oo::objdefine $txt mixin paul::txmatching
+#' $txt matchbrace
+#' $txt matchparen
+#' $txt matchbracket
+#' pack $txt -side top -fill both -expand yes
+#' > ```
+#' 
+
+namespace eval ::paul::matching {
+    # return -1 if  idx1 if before idx2
+    # return 1 if idx1 is after idx2
+    # return 0 if idx1 is same as idx2 
+    proc idxCompare { idx1 idx2 } {
+        if { "$idx1" eq "$idx2" } { return 0 } 
+        lassign [split $idx1 . ] r1 col1
+        lassign [split $idx2 . ] r2 col2
+        if { $r1 < $r2 } { return -1; }
+        if { $r1 > $r2 } { return 1; }
+        if { $col1 < $col2 } { return -1; }
+        return 1;
+    }
+    
+    
+    proc markUnBalanced { w char matchChar tag2apply } {
+        set matched {}
+        set unmatched {}
+        set unmatchedEnd {}
+        $w tag remove $tag2apply 1.0 end
+        set tempCharIndexs  [ $w search -forward  -all "\\$char" 1.0 ]
+        set tempMatchIndexs [ $w search -forward -all "\\$matchChar" 1.0]
+        set charIndexs  [ $w search -forward -all $char 1.0 ]
+        set matchIndexs [ $w search -forward  -all $matchChar 1.0 ]
+        
+        foreach idx $tempCharIndexs {
+            set rIdx [ lsearch $charIndexs [ $w index $idx+1c ] ]
+            if { $rIdx >= 0 } {
+                set charIndexs [lreplace $charIndexs $rIdx $rIdx ]
+            }
+        }
+        foreach idx $tempMatchIndexs {
+            set rIdx [ lsearch $matchIndexs  [ $w index $idx+1c ] ]
+            if { $rIdx >= 0 } {
+                set matchIndexs [lreplace $matchIndexs $rIdx $rIdx ]
+            }
+        }
+        if { [llength $charIndexs ] == 0 } {
+            set unmatchedEnd $matchIndexs
+        } elseif { [llength $matchIndexs ] == 0 } {
+            set unmatched $charIndexs
+        } elseif { [llength $charIndexs ] == 1 && [llength $matchIndexs ] == 0  } { 
+            if { [idxCompare [lindex $charIndexs 0  ] [lindex $matchIndexs0  ]  ] > 0 } {
+                set matchedEnd [lindex $matchIndexs0  ] 
+                set unmatched [lindex $charIndexs 0  ]
+            }
+        } else {
+            foreach endIdx $matchIndexs {
+                set c 0
+                while { $c < [llength $charIndexs ]  &&  [idxCompare [lindex $charIndexs $c ] $endIdx ] < 0 } {
+                    incr c ;
+                }
+                incr c -1;
+                if {  $c >= [llength $charIndexs ] ||  $c < 0 } {
+                    lappend unmatchedEnd $endIdx
+                } else {
+                    lappend matched [list [lindex $charIndexs $c ] $endIdx ]
+                    set charIndexs [lreplace $charIndexs $c $c ]
+                }
+            }
+            set unmatched $charIndexs
+        }
+        if { [llength $unmatched ] } {
+            foreach idx $unmatched {
+                $w tag add $tag2apply $idx $idx+1c
+            }
+        }
+        if { [llength $unmatchedEnd ] } {
+            foreach idx $unmatchedEnd  {
+                $w tag add $tag2apply $idx  $idx+1c
+            }
+        }
+        return $matched
+    }
+    proc genericHandler { w inputChar  char matchChar matchtag unmatchtag } {
+        set matched  [ markUnBalanced $w $char $matchChar $unmatchtag ]
+        set idx "" 
+        if { "$inputChar" eq $matchChar  ||  [$w get insert-1c insert ] eq $matchChar } {
+            set idx [$w index insert-1c ]
+        } elseif { [$w get insert insert+1c] eq $matchChar  } {
+            set idx [$w index insert ]
+        } 
+        if { $idx ne "" } {
+            set matchpair [ lsearch -inline -index 1 $matched $idx ]
+            if { [llength $matchpair ] } { 
+                $w tag add $matchtag {*}$matchpair+1c
+                after 1000 [list $w tag remove $matchtag {*}$matchpair+1c ]
+            }
+        }
+        
+        if { "$inputChar" eq $char  ||  [$w get insert-1c insert ] eq $char } {
+            set idx [$w index insert-1c ]
+        } elseif { [$w get insert insert+1c] eq $char  } {
+            set idx [$w index insert ]
+        } 
+        if { $idx ne "" } {
+            set matchpair [ lsearch -inline -index 0 $matched $idx ]
+            if { [llength $matchpair ] } { 
+                $w tag add $matchtag {*}$matchpair+1c
+                after 1000 [list $w tag remove $matchtag {*}$matchpair+1c   ]
+            }
+        }
+    }
+    proc handleBracket { w input matchtag unmatchtag } {
+        genericHandler $w $input "\[" "\]" $matchtag $unmatchtag
+    }
+    proc handleParenthesis { w input matchtag  unmatchtag } {
+        genericHandler $w $input "\(" "\)" $matchtag $unmatchtag
+    }
+    proc handleBrace { w input matchtag  unmatchtag } {
+        genericHandler $w $input "\{" "\}" $matchtag $unmatchtag
+    }
+}
+
+::oo::class create ::paul::txmatching {
+    method matchparen {{cols {#b3ccff #ff3333}}} {
+        set w [my widget]
+        $w tag configure matchingParen   -background [lindex $cols 0]
+        $w tag configure unmatchingParen -background [lindex $cols 1]
+        bind $w <KeyRelease> {
+            %W handleTags %W %A
+        }
+        bind $w <ButtonRelease> {
+            %W handleTags %W %A
+        }
+    }
+    method matchbrace {{cols {#ffccff #ff704d}}} {
+        set w [my widget]
+        $w tag configure matchingBrace   -background [lindex $cols 0]
+        $w tag configure unmatchingBrace -background [lindex $cols 1]
+        bind $w <KeyRelease> {
+            %W handleTags %W %A
+        }
+        bind $w <ButtonRelease> {
+            %W handleTags %W %A
+        }
+    }
+    method matchbracket {{cols {#ccffdd #ff704d}}} {
+        set w [my widget]
+        $w tag configure matchingBracket   -background [lindex $cols 0]
+        $w tag configure unmatchingBracket -background [lindex $cols 1]
+        bind $w <KeyRelease> {
+            %W handleTags %W %A
+        }
+        bind $w <ButtonRelease> {
+            %W handleTags %W %A
+        }
+    }
+    method handleTags {w a} {
+        set tnames [$w tag names]
+        if {[lsearch $tnames matchingParen] > -1} {
+            ::paul::matching::handleParenthesis $w $a matchingParen unmatchingParen
+        }
+        if {[lsearch $tnames matchingBrace] > -1} {
+            ::paul::matching::handleBrace $w $a matchingBrace unmatchingBrace
+        }
+        if {[lsearch $tnames matchingBracket] > -1} {
+            ::paul::matching::handleBracket $w $a matchingBracket unmatchingBracket
+        }
+    }
+        
+}
 
 #'
-#' <a name="txunicode"></a>**paul::txunicode** -  *oo::objdefine pathName mixin paul::txtunicode*
+#' <a name="txunicode"></a>**paul::txunicode** -  *oo::objdefine pathName mixin paul::txunicode*
 #' 
 #' Adds the capability to enter Unicode symbols to an existing *tkoo::text* widget, which is a wrapper for the *tk::text* widget using the Tk window id _pathName_ .
 #' If the user presses the default Keystroke Control-u he/she can enter after typing the four Unicode numbers
@@ -175,7 +362,6 @@ namespace eval ::paul::unicode {
 proc ::paul::unicode::enable_unicode_entry {widget} {
     variable uc_keys
     set uc_keys($widget) {}
-    puts enabled
 }
 
 proc ::paul::unicode::disable_unicode_entry {widget} {
@@ -204,7 +390,6 @@ proc ::paul::unicode::handle_uc_key {widget key} {
         }      
     }        
 }
-
 
 ::oo::class create ::paul::txunicode {
     method unicode {{keypress Control-Key-u}} {
