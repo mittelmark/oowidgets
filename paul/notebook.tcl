@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::notebook - extended notebook tab management
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230322.0653>
+#' Date : <240513.1010>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -86,11 +86,16 @@
 #'
 #' > ```{.tcl eval=true results="hide"}
 #' package require paul
-#' pack [paul::notebook .nb]
-#' 	.nb add [frame .nb.f1] -text "First tab"
-#' 	.nb add [frame .nb.f2] -text "Second tab"
-#' 	.nb select .nb.f2
-#'         ttk::notebook::enableTraversal .nb
+#' pack [paul::notebook .nb -side top -fill both -expand true]
+#'      ### child tab widgets
+#'      .nb add [frame .nb.f1] -text "First tab"
+#'      ttk::label .nb.f1.lb -text "Right Click notebook labels I" -width 50
+#'      pack .nb.f1.lb -side top -fill both -expand true -anchor center -padx 20 -pady 20
+#'      .nb add [frame .nb.f2] -text "Second tab"
+#'      ttk::label .nb.f2.lb -text "Right Click notebook labels II" -width 50
+#'      pack .nb.f2.lb -side top -fill both -expand true -anchor center -padx 20 -pady 20
+#' .nb select .nb.f2
+#' ttk::notebook::enableTraversal .nb
 #' > ``` 
 #' 
 
@@ -227,3 +232,46 @@ oowidgets::widget ::paul::notebook {
 #' ```{.tcl eval=true id="license" echo=false}
 #' include LICENSE
 #' ```
+
+if {[info exists argv0] && $argv0 eq [info script] && [regexp notebook $argv0]} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require paul
+    if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
+        puts [package version paul]
+        destroy .
+    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {
+        set code [::paul::getExampleCode [info script]]
+        eval $code
+    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {
+        set code [::paul::getExampleCode [info script]]
+        puts $code
+        destroy .
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--license")} {
+        puts [::paul::getLicense [info script]]
+        destroy .
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--man" || [lindex $argv 0] eq "--markdown")} {
+        puts [::paul::getMarkdown [info script]]
+        destroy .
+    } else {
+        destroy .
+        puts "\n    -------------------------------------"
+        puts "     The paul::notebook class for Tcl"
+        puts "    -------------------------------------\n"
+        puts "Copyright (c) 2019-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de\n"
+        puts "License: BSD - License see manual page"
+        puts "\nThe paul::notebook class provides an extended notebook widget"
+        puts "                   with improved tab handling."
+        puts ""
+        puts "Usage: [info nameofexe] [info script] option\n"
+        puts "    Valid options are:\n"
+        puts "        --help    : printing out this help page"
+        puts "        --demo    : runs a small demo application."
+        puts "        --code    : shows the demo code."
+        puts "        --license : printing the license to the terminal"
+        puts "        --man     : printing the man page in pandoc markdown to the terminal"
+        puts "\n\n      Hint: You can read the documentation like this:\n"
+        puts "         tclsh [info script]  --man | pandoc -f Markdown -t plain | less"
+        puts "         tclsh [info script]  --man | pandoc -f Markdown -t html | w3m -T text/html -"
+        puts ""
+    }
+}
