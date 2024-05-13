@@ -157,7 +157,7 @@ oo::class create ::oowidgets::BaseWidget {
           my variable widgetOptions
           my variable parentOptions
           if {[llength $args] == 0}  {
-              return [lsort [list [array get parentOptions] {*}[array get widgetOptions]]]
+              return [list {*}[array get parentOptions] {*}[array get widgetOptions]]
           } elseif {[llength $args] == 1}  {
               # return configuration value for this option
               set opt $args
