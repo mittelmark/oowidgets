@@ -51,7 +51,30 @@
 #' pack $txt
 #' ```
 #' 
-#' ## MIXINS
+#' ## <a name='example'></a> EXAMPLE
+#'
+#' > ```{.tcl eval=true}
+#' package require paul
+#' set txt [tkoo::text .txt2 -background salmon]
+#' oo::objdefine $txt mixin ::paul::txautorep
+#' $txt autorep [list (TM) \u2122 (C) \u00A9 (R) \u00AE (K) \u2654]
+#' $txt insert end "# Autorep Example\n\n"
+#' foreach col [list A B C] { 
+#'    $txt insert  end "# Header $col\n\n   Some more text.\n\n"
+#' }
+#' $txt insert end "  * item 1\n  * item 2\n  * Write (DG) and press enter\n  * "
+#' pack $txt -side top -fill both -expand yes
+#' set txt [tkoo::text .txt -background skyblue]
+#' foreach col [list A B C] { 
+#'    $txt insert  end "# Header $col\n\n## Indent example\n\n"
+#' }
+#' $txt insert end "  * item 1\n  * item 2 (press return here)"
+#' oo::objdefine $txt mixin paul::txindent
+#' $txt indent
+#' pack $txt -side top -fill both -expand yes
+#' > ```
+#'
+#' ## <a name='mixins'></a> MIXINS
 #' 
 #' <a name="txautorep"></a>**paul::txautorep** -  *oo::objdefine pathName mixin paul::txautorep*
 #' 
@@ -75,6 +98,7 @@
 #' > ```
 #' 
 
+catch { rename ::paul::txautorep {} }
 ::oo::class create ::paul::txautorep {
     variable automap 
     method autorep {{abbrev ""}} {
@@ -122,6 +146,7 @@
 #' > ```
 #' 
 
+catch { rename ::paul::txindent {} }
 ::oo::class create ::paul::txindent {
     method indent {} {
         set w [my widget]
@@ -291,6 +316,7 @@ namespace eval ::paul::matching {
     }
 }
 
+catch { rename ::paul::txmatching {} }
 ::oo::class create ::paul::txmatching {
     method matchparen {{cols {#b3ccff #ff3333}}} {
         set w [my widget]
@@ -395,6 +421,7 @@ proc ::paul::unicode::handle_uc_key {widget key} {
     }        
 }
 
+catch { rename ::paul::txunicode {} }
 ::oo::class create ::paul::txunicode {
     method unicode {{keypress Control-Key-u}} {
         set w [my widget]
@@ -437,3 +464,45 @@ if {false} {
 #' ```
 
 
+if {[info exists argv0] && $argv0 eq [info script] && [regexp txmixins $argv0]} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require paul
+    if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
+        puts [package version paul]
+        destroy .
+    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {
+        set code [::paul::getExampleCode [info script]]
+        eval $code
+    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {
+        set code [::paul::getExampleCode [info script]]
+        puts $code
+        destroy .
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--license")} {
+        puts [::paul::getLicense [info script]]
+        destroy .
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--man" || [lindex $argv 0] eq "--markdown")} {
+        puts [::paul::getMarkdown [info script]]
+        destroy .
+    } else {
+        destroy .
+        puts "\n    -------------------------------------"
+        puts "     The paul::txmixins class for Tcl"
+        puts "    -------------------------------------\n"
+        puts "Copyright (c) 2019-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de\n"
+        puts "License: BSD - License see manual page"
+        puts "\nThe paul::txmixins class provides widget"
+        puts "                   mixins to be added to the default tk::text widget."
+        puts ""
+        puts "Usage: [info nameofexe] [info script] option\n"
+        puts "    Valid options are:\n"
+        puts "        --help    : printing out this help page"
+        puts "        --demo    : runs a small demo application."
+        puts "        --code    : shows the demo code."
+        puts "        --license : printing the license to the terminal"
+        puts "        --man     : printing the man page in pandoc markdown to the terminal"
+        puts "\n\n      Hint: You can read the documentation like this:\n"
+        puts "         tclsh [info script]  --man | pandoc -f Markdown -t plain | less"
+        puts "         tclsh [info script]  --man | pandoc -f Markdown -t html | w3m -T text/html -"
+        puts ""
+    }
+}

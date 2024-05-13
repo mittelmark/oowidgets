@@ -1,7 +1,7 @@
 package require Tk
 package require TclOO
 package require tkoo
-package provide paul 0.1
+package provide paul 0.2.0
 
 # some generic utilities
 
@@ -52,7 +52,7 @@ proc ::paul::getMarkdown {filename} {
         while {[gets $infh line] >= 0} {
             if {[regexp {^#' } $line]} {
                 append docu "[string range $line 3 end]\n"
-            } elseif {[regexp {^#' } $line]} {
+            } elseif {[regexp {^#'} $line]} {
                 append docu "\n"
             }
         }
