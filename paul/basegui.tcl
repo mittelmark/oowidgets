@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::basegui base class for building Tk applications
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230322.0600>
+#' Date : <240513.0941>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -713,23 +713,30 @@ oo::class create ::paul::basegui {
 #' 
 
 if {[info exists argv0] && $argv0 eq [info script] && [regexp basegui $argv0]} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require paul
     if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
         puts [package version paul]
         destroy .
-    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {    
-        puts "not done yet"
+    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {
+        set code [::paul::getExampleCode [info script]]
+        eval $code
     } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {
-        puts "not done yet"
+        set code [::paul::getExampleCode [info script]]
+        puts $code
         destroy .
-    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--license" || [lindex $argv 0] eq "--man" || [lindex $argv 0] eq "--html" || [lindex $argv 0] eq "--markdown")} {
-        puts "not done yet"
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--license")} {
+        puts [::paul::getLicense [info script]]
+        destroy .
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--man" || [lindex $argv 0] eq "--markdown")} {
+        puts [::paul::getMarkdown [info script]]
         destroy .
     } else {
         destroy .
         puts "\n    -------------------------------------"
         puts "     The paul::basegui class for Tcl"
         puts "    -------------------------------------\n"
-        puts "Copyright (c) 2019-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de\n"
+        puts "Copyright (c) 2019-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de\n"
         puts "License: BSD - License see manual page"
         puts "\nThe paul::basegui class provides a basic application framework for"
         puts "                       building Tk applications."
@@ -741,6 +748,10 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp basegui $argv0]} {
         puts "        --code    : shows the demo code."
         puts "        --license : printing the license to the terminal"
         puts "        --man     : printing the man page in pandoc markdown to the terminal"
+        puts "\n\n      Hint: You can read the documentation like this:\n"
+        puts "         tclsh paul/basegui.tcl  --man | pandoc -f Markdown -t plain | less"
+        puts "         tclsh paul/basegui.tcl  --man | pandoc -f Markdown -t html | w3m -T text/html -"
+        
         puts ""
     }
 }

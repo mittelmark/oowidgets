@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::dlabel - label with dynamic font size
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <230322.0603>
+#' Date : <240513.0946>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -144,5 +144,48 @@ oowidgets::widget  ::paul::Dlabel {
 #' ```{.tcl eval=true id="license" echo=false}
 #' include LICENSE
 #' ```
+
+if {[info exists argv0] && $argv0 eq [info script] && [regexp dlabel $argv0]} {
+    lappend auto_path [file join [file dirname [info script]] ..]
+    package require paul
+    if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
+        puts [package version paul]
+        destroy .
+    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {
+        set code [::paul::getExampleCode [info script]]
+        eval $code
+    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {
+        set code [::paul::getExampleCode [info script]]
+        puts $code
+        destroy .
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--license")} {
+        puts [::paul::getLicense [info script]]
+        destroy .
+    } elseif {[llength $argv] == 1 && ([lindex $argv 0] eq "--man" || [lindex $argv 0] eq "--markdown")} {
+        puts [::paul::getMarkdown [info script]]
+        destroy .
+    } else {
+        destroy .
+        puts "\n    -------------------------------------"
+        puts "     The paul::dlabel class for Tcl"
+        puts "    -------------------------------------\n"
+        puts "Copyright (c) 2019-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de\n"
+        puts "License: BSD - License see manual page"
+        puts "\nThe paul::dlabel class provides a label widget which resizes dynamically"
+        puts "                   the font size based on the available space."
+        puts ""
+        puts "Usage: [info nameofexe] [info script] option\n"
+        puts "    Valid options are:\n"
+        puts "        --help    : printing out this help page"
+        puts "        --demo    : runs a small demo application."
+        puts "        --code    : shows the demo code."
+        puts "        --license : printing the license to the terminal"
+        puts "        --man     : printing the man page in pandoc markdown to the terminal"
+        puts "\n\n      Hint: You can read the documentation like this:\n"
+        puts "         tclsh paul/basegui.tcl  --man | pandoc -f Markdown -t plain | less"
+        puts "         tclsh paul/basegui.tcl  --man | pandoc -f Markdown -t html | w3m -T text/html -"
+        puts ""
+    }
+}
 
 
