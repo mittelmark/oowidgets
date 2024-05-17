@@ -139,14 +139,14 @@ oo::class create ::oowidgets::BaseWidget {
               my variable widgetOptions
               my variable parentOptions
               if { [string length $opt] == 0 } {
-                      return [lsort [list [array get parentOptions] {*}[array get widgetOptions]]]
+                  return -code error "wrong # args: should be $widgetpath cget option"
               }
               if { [info exists widgetOptions($opt) ] } {
                       return $widgetOptions($opt)
               } elseif {[info exists parentOptions($opt)]} {
                       return $parentOptions($opt)
               } 
-              return -code error "# unknown option"
+              return -code error "# unknown option $opt"
       }
       method tkclass {} {
           return [winfo class [string range [self] 2 end]]
