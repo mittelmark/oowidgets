@@ -139,7 +139,7 @@ oo::class create ::oowidgets::BaseWidget {
               my variable widgetOptions
               my variable parentOptions
               if { [string length $opt] == 0 } {
-                  return -code error "wrong # args: should be $widgetpath cget option"
+                  return -code error "wrong # args: should be [my widget] cget option"
               }
               if { [info exists widgetOptions($opt) ] } {
                       return $widgetOptions($opt)
