@@ -703,13 +703,17 @@ oo::class create ::paul::basegui {
 #' 
 #' * socket check for starting the application twice
 #'
+#' ## <a name='see'></a> SEE ALSO
+#'
+#' - [oowidgets](../oowidgets/oowidgets.html)
+#'
 #' ## <a name='authors'>AUTHOR</a>
 #'
 #' The **paul::basegui** command was written by Detlef Groth, Schwielowsee, Germany.
 #'
 #' ## <a name='copyright'>COPYRIGHT</a>
 #'
-#' Copyright (c) 2019-2023  Dr. Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2019-2024  Dr. Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #'
 #' ## <a name='license'>LICENSE</a>
 #' 

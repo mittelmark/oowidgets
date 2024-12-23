@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::notebook - extended notebook tab management
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <240513.1010>
+#' Date : <241223.1238>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -216,7 +216,7 @@ oowidgets::widget ::paul::notebook {
 
 #' ## <a name='see'></a>SEE ALSO
 #'
-#' - [oowidgets](../oowidgets.html)
+#' - [oowidgets](../oowidgets/oowidgets.html)
 #' - [paul::basegui](basegui.html)
 #'
 #' ## <a name='authors'></a>AUTHOR
@@ -225,7 +225,7 @@ oowidgets::widget ::paul::notebook {
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
-#' Copyright (c) 2019-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2019-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
 #' ## <a name='license'></a>LICENSE
 #'

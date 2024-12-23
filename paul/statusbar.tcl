@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::statusbar documentation
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <240513.1017>
+#' Date : <241223.1240>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -198,7 +198,7 @@ oowidgets::widget ::paul::Statusbar {
 #'
 #' ## <a name='see'></a>SEE ALSO
 #'
-#' - [oowidgets](../oowidgets.html)
+#' - [oowidgets](../oowidgets/oowidgets.html)
 #' - [ttk::progressbar](https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_progressbar.htm)
 #'
 #' ## <a name='authors'></a>AUTHOR
@@ -207,7 +207,7 @@ oowidgets::widget ::paul::Statusbar {
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
-#' Copyright (c) 2019-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2019-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
 #' ## <a name='license'></a>LICENSE
 #'

@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::rotext - readonly text widget 
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <240513.1009>
+#' Date : <241223.1239>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -92,7 +92,7 @@ namespace eval ::paul { }
 }
 #' ## <a name='see'></a>SEE ALSO
 #'
-#' > - [oowidgets](../oowidgets.html)
+#' > - [oowidgets](../oowidgets/oowidgets.html)
 #'   - [paul::basegui.tcl](basegui.html)
 #'
 #' ## <a name='authors'></a>AUTHOR
@@ -101,7 +101,7 @@ namespace eval ::paul { }
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
-#' Copyright (c) 2021-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2021-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
 #' ## <a name='license'></a>LICENSE
 #'
