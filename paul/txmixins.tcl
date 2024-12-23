@@ -53,7 +53,7 @@
 #' 
 #' ## <a name='example'></a> EXAMPLE
 #'
-#' > ```{.tcl eval=true}
+#' ```{.tcl eval=true}
 #' package require paul
 #' set txt [tkoo::text .txt2 -background salmon]
 #' oo::objdefine $txt mixin ::paul::txautorep
@@ -72,7 +72,7 @@
 #' oo::objdefine $txt mixin paul::txindent
 #' $txt indent
 #' pack $txt -side top -fill both -expand yes
-#' > ```
+#' ```
 #'
 #' ## <a name='mixins'></a> MIXINS
 #' 
@@ -84,7 +84,7 @@
 #'
 #' Example:
 #' 
-#' > ```{.tcl eval=true}
+#' ```{.tcl eval=true}
 #' package require paul
 #' set txt [tkoo::text .txt2 -background salmon]
 #' oo::objdefine $txt mixin ::paul::txautorep
@@ -95,7 +95,7 @@
 #' }
 #' $txt insert end "  * item 1\n  * item 2\n  * Write (DG) and press enter\n  * "
 #' pack $txt -side top -fill both -expand yes
-#' > ```
+#' ```
 #' 
 
 catch { rename ::paul::txautorep {} }
@@ -133,7 +133,7 @@ catch { rename ::paul::txautorep {} }
 #'
 #' Example:
 #' 
-#' > ```{.tcl eval=true}
+#' ```{.tcl eval=true}
 #' package require paul
 #' set txt [tkoo::text .txt -background skyblue]
 #' foreach col [list A B C] { 
@@ -143,7 +143,7 @@ catch { rename ::paul::txautorep {} }
 #' oo::objdefine $txt mixin paul::txindent
 #' $txt indent
 #' pack $txt -side top -fill both -expand yes
-#' > ```
+#' ```
 #' 
 
 catch { rename ::paul::txindent {} }
@@ -183,7 +183,7 @@ catch { rename ::paul::txindent {} }
 #'
 #' Example:
 #' 
-#' > ```{.tcl eval=true}
+#' ```{.tcl eval=true}
 #' package require paul
 #' set txt [tkoo::text .txtm -background salmon -font "Courier 18"]
 #' $txt insert  end "Start typing some text containing\n" 
@@ -199,7 +199,7 @@ catch { rename ::paul::txindent {} }
 #' pack $txt -side top -fill both -expand yes
 #' ### adding your own additional bindings is still possible
 #' bind $txt <KeyRelease> +[list puts "now pressed %K"]
-#' > ```
+#' ```
 #' 
 
 namespace eval ::paul::matching {
@@ -376,14 +376,14 @@ catch { rename ::paul::txmatching {} }
 #'
 #' Example:
 #' 
-#' > ```{.tcl eval=true}
+#' ```{.tcl eval=true}
 #' package require paul
 #' set txt [tkoo::text .txtu -background grey80 -font "Courier 18"]
 #' $txt insert  end "Press Ctrl-Shift-u and then therafter 4 numbers like 2602\n\n"
 #' oo::objdefine $txt mixin paul::txunicode
 #' $txt unicode Control-Key-U
 #' pack $txt -side top -fill both -expand yes
-#' > ```
+#' ```
 #' 
 namespace eval ::paul::unicode { 
     variable uc_keys
