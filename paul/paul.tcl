@@ -1,7 +1,7 @@
 package require Tk
 package require TclOO
 package require tkoo
-package provide paul 0.2.0
+package provide paul 0.2.2
 
 # some generic utilities
 
@@ -13,7 +13,9 @@ namespace eval ::paul {
     ttk::style configure ToolButton -borderwidth 2
     ttk::style configure ToolButton -padding {2 2 2 2} 
     ttk::style configure Treeview -background white
-    option add *Text.background    white
+    catch {
+        option add *Text.background    white
+    }
 }
 
 catch { rename ::paul::Timer "" }
