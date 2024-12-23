@@ -1,10 +1,10 @@
 package require Tk 8.6
-package provide oowidgets 0.3.3
+package provide oowidgets 0.3.4
 
 #' ---
 #' title: package oowidgets - create megawidgets using TclOO
 #' author: Detlef Groth, University of Potsdam, Germany
-#' date: 2023-08-26
+#' date: 2024-12-23
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -254,27 +254,27 @@ oo::class create ::oowidgets::BaseWidget {
 #' ```
 #' 
 #' ```{.tcl eval=true}
-#'    package require oowidgets
-#'    namespace eval ::test { }
-#'    oowidgets::widget ::test::Button {
-#'        constructor {path args} {
-#'           my install ttk::button $path -message testmessage
-#'           my configure {*}$args
-#'        }
-#'        method test {} {
-#'            puts [my cget -message]
-#'        }
-#'    }  
-#'    puts "available commands: [info commands ::test::*]"
-#'    set btn [::test::button .btn -command exit -text Exit]
-#'    set btn2 [::test::button .btn2 -command { puts Hello } -text Hello]
-#'    pack $btn -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
-#'    pack $btn2 -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
-#'    $btn test
-#'    $btn configure -message newmessage
-#'    $btn test
-#'    $btn2 invoke
-#'    after 3000 [list $btn invoke]
+#' package require oowidgets
+#' namespace eval ::test { }
+#' oowidgets::widget ::test::Button {
+#'     constructor {path args} {
+#'        my install ttk::button $path -message testmessage
+#'        my configure {*}$args
+#'     }
+#'     method test {} {
+#'         puts [my cget -message]
+#'     }
+#' }  
+#' puts "available commands: [info commands ::test::*]"
+#' set btn [::test::button .btn -command exit -text Exit]
+#' set btn2 [::test::button .btn2 -command { puts Hello } -text Hello]
+#' pack $btn -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
+#' pack $btn2 -side top -padx 10 -pady 10 -ipadx 10 -ipady 10
+#' $btn test
+#' $btn configure -message newmessage
+#' $btn test
+#' $btn2 invoke
+#' after 3000 [list $btn invoke]
 #' ```
 #' 
 

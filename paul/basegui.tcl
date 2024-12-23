@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::basegui base class for building Tk applications
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <240513.0941>
+#' Date : 2024-12-23
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -122,7 +122,7 @@ oo::class create ::paul::basegui {
     variable timer
     variable options
     constructor {args} { 
-        array set options [list -style clam {*} $args]
+        array set options [list -style clam {*}$args]
         set timer [::paul::Timer new]
         set path .
         set top $path ;# $path
@@ -151,6 +151,8 @@ oo::class create ::paul::basegui {
         } else {
             set t $top
         }
+        
+        
         menu $t.mbar
         $top configure -menu $t.mbar
         menu $t.mbar.fl -tearoff 0
@@ -199,7 +201,7 @@ oo::class create ::paul::basegui {
     #'    The widget *pathname* is then managed by grid, don't pack or grid the widget in *pathname* yourself. Handle it's geometry
     #'   via its parent frame. See the following example:
     #'
-    #' > ```{.tcl}
+    #' ```{.tcl}
     #' package require paul
     #' set app [::paul::basegui new -style clam]
     #' set f [$app getFrame]
@@ -211,7 +213,7 @@ oo::class create ::paul::basegui {
     #' }
     #' pack $tf -side top -fill both -expand yes
     #' destroy .app
-    #' > ```
+    #' ```
     #'
     method autoscroll {w} {
         set frame [winfo parent $w]
@@ -431,11 +433,11 @@ oo::class create ::paul::basegui {
     #'   At creation time or therafter additional configuration options can be given such as *-underline 0* for instance. Here an example for inserting new menu points  
     #'
     #' 
-    #' > ```{.tcl}
+    #' ```{.tcl}
     #' set app [::paul::basegui new -style clam]
     #' set fmenu [$app getMenu "File"]
     #' $fmenu insert 0 command -label Open -underline 0 -command { puts Opening }
-    #' > ```
+    #' ```
     #'  
 
     method getMenu {name args} {
@@ -511,17 +513,17 @@ oo::class create ::paul::basegui {
     #'
     #' > Example with a simple single message splash:
     #' 
-    #' > ```
+    #' ```
     #' $app splash splash.png -delay 2000 -message "Loading editor application ..."
-    #' > ```
+    #' ```
     #' 
     #' > Example with multiple messages:
     #' 
-    #' > ```
+    #' ```
     #' $app splash splash.png -delay 0 -message "Loading editor application ..."
     #' after 2000 { app splash update -message "Loading data for editor application ..." }
     #' after 4000 { app splash destroy }
-    #' > ```
+    #' ```
     method splash {imgfile args} {
         array set arg [list -delay 0 -message "Loading application ..."]
         array set arg $args
@@ -582,13 +584,13 @@ oo::class create ::paul::basegui {
     #' > - *reset* - resets the time to the current time
     #'   - *time*  - gets the execution time after the last reset, this is the default.
     #'
-    #' > ```{.tcl eval=false}
+    #' ```{.tcl eval=false}
     #'   set app [paul::basegui new]
     #'   puts "Startup in [$app timer time] seconds!"
     #'   $app timer reset
     #'   after 1500
     #'   puts "After time [$app timer time] seconds!"
-    #' > ```
+    #' ```
     #' 
     method timer {{mode time}} {
         if {$mode eq "time"} {
@@ -655,9 +657,10 @@ oo::class create ::paul::basegui {
 #'    superclass paul::basegui
 #'    variable textw
 #'    constructor {args} {
+#'         next {*}$args
 #'         set frame [my getFrame]
 #'         set textw [text $frame.t -wrap none]
-#'         $self autoscroll $textw
+#'         [self] autoscroll $textw
 #'    }
 #'    # added functionality
 #'    # access functionality of the text widget
@@ -670,6 +673,9 @@ oo::class create ::paul::basegui {
 #'    #start editor
 #'    set app [::test::EditorApp new ]
 #'    $app text insert end "Hello EditorApp!!"
+#'    $app addStatusBar
+#'    $app progress 50
+#'    $app message "Editor was loaded!"
 #' }
 #' ``` 
 #'

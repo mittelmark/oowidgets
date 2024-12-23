@@ -1,205 +1,201 @@
+
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="author" content="Detlef Groth, Schwielowsee, Germany" />
-  <title>paul::tx - mixins for the tk::text widget</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {   }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #7d9029; } /* Attribute */
-    code span.bn { color: #40a070; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4070a0; } /* Char */
-    code span.cn { color: #880000; } /* Constant */
-    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-    code span.dt { color: #902000; } /* DataType */
-    code span.dv { color: #40a070; } /* DecVal */
-    code span.er { color: #ff0000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #40a070; } /* Float */
-    code span.fu { color: #06287e; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-    code span.op { color: #666666; } /* Operator */
-    code span.ot { color: #007020; } /* Other */
-    code span.pp { color: #bc7a00; } /* Preprocessor */
-    code span.sc { color: #4070a0; } /* SpecialChar */
-    code span.ss { color: #bb6688; } /* SpecialString */
-    code span.st { color: #4070a0; } /* String */
-    code span.va { color: #19177c; } /* Variable */
-    code span.vs { color: #4070a0; } /* VerbatimString */
-    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <link rel="stylesheet" href="pandoc-filter.css" />
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-  <style>
-  html {
-    line-height: 1.2;
-    font-family: Georgia, serif;
-    font-size: 16px;
-    color: #1a1a1a;
-    background-color: #fdfdfd;
-  }
-  body { max-width: 1000px; }
-  pre#license {
-    background: #fdfdfd;
-  }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="title" content="paul::tx - mixins for the tk::text widget">
+<meta name="author" content="Detlef Groth, Schwielowsee, Germany">
+    
+<title>paul::tx - mixins for the tk::text widget</title>
+    
+    
+
+<style>
+@import url("data:text/css;base64,ICAgIGh0bWwgewogICAgICAgIG92ZXJmbG93LXk6IHNjcm9sbDsKICAgIH0KICAgIGJvZHkgewogICAgICAgIGNvbG9yOiAjNDQ0OwogICAgICAgIGZvbnQtZmFtaWx5OiBHZW9yZ2lhLCBQYWxhdGlubywgJ1BhbGF0aW5vIExpbm90eXBlJywgVGltZXMsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZjsKICAgICAgICBsaW5lLWhlaWdodDogMS4yOwogICAgICAgIHBhZGRpbmc6IDFlbTsKICAgICAgICBtYXJnaW46IGF1dG87CiAgICAgICAgbWF4LXdpZHRoOiAgMTAwMHB4OwogICAgfQogICAgYSB7CiAgICAgICAgY29sb3I6ICMwNjQ1YWQ7CiAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogICAgfQogICAgYTp2aXNpdGVkIHsKICAgICAgICBjb2xvcjogIzBiMDA4MDsKICAgIH0KICAgIGE6aG92ZXIgewogICAgICAgIGNvbG9yOiAjMDZlOwogICAgfQogICAgYTphY3RpdmUgewogICAgICAgIGNvbG9yOiAjZmFhNzAwOwogICAgfQogICAgYTpmb2N1cyB7CiAgICAgICAgb3V0bGluZTogdGhpbiBkb3R0ZWQ7CiAgICB9CiAgICAjYWJzdHJhY3QgewogICAgICAgIG1hcmdpbjogMi41ZW07CiAgICAgICAgZm9udC1zaXplOiA3MCU7CiAgICB9CiAgICBwIHsKICAgICAgICBtYXJnaW46IDAuNWVtIDA7CiAgICB9CiAgICBwLmRhdGUgewogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgIH0KICAgIGltZyB7CiAgICAgICAgbWF4LXdpZHRoOiAxMDAlOwogICAgfQogICAgCiAgICBoMSwgaDIsIGgzLCBoNCwgaDUsIGg2IHsKICAgICAgICBjb2xvcjogIzExMTsKICAgICAgICBsaW5lLWhlaWdodDogMTE1JTsKICAgICAgICBtYXJnaW4tdG9wOiAxZW07CiAgICAgICAgZm9udC13ZWlnaHQ6IG5vcm1hbDsKICAgIH0KICAgIGgxIHsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9CiAgICBoNC5hdXRob3IsIGg0LmRhdGUsIHAuYXV0aG9yLCBwLmRhdGUgewogICAgICAgIGZvbnQtc2l6ZTogMTEwJTsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9CiAgICBoMi5hdXRob3IsIGgyLmRhdGUsIHAuYXV0aG9yLCBwLmRhdGUgewogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgIH0KICAgIAogICAgcHJlLCBibG9ja3F1b3RlIHByZSB7CiAgICAgICAgYm9yZGVyLXRvcDogMC4xZW0gIzlhYyBzb2xpZDsKICAgICAgICBiYWNrZ3JvdW5kOiAjZTlmNmZmOwogICAgICAgIHBhZGRpbmc6IDEwcHg7CiAgICAgICAgbWFyZ2luLWxlZnQ6IDUwcHg7CiAgICAgICAgYm9yZGVyLWJvdHRvbTogMC4xZW0gIzlhYyBzb2xpZDsKICAgIH0KICAgIAogICAgYmxvY2txdW90ZSB7CiAgICAgICAgbWFyZ2luOiAwOwogICAgICAgIHBhZGRpbmctbGVmdDogM2VtOyAKICAgIH0KICAgIAogICAgaHIgewogICAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICAgIGhlaWdodDogMnB4OwogICAgICAgIGJvcmRlcjogMDsKICAgICAgICBib3JkZXItdG9wOiAxcHggc29saWQgI2FhYTsKICAgICAgICBib3JkZXItYm90dG9tOiAxcHggc29saWQgI2VlZTsKICAgICAgICBtYXJnaW46IDFlbSAwOwogICAgICAgIHBhZGRpbmc6IDA7CiAgICB9CiAgICAKICAgIHByZSwgY29kZSwga2JkLCBzYW1wIHsKICAgICAgICBjb2xvcjogIzAwMDsKICAgICAgICBmb250LWZhbWlseTogTW9uYWNvLCAnY291cmllciBuZXcnLCBtb25vc3BhY2U7CiAgICAgICAgZm9udC1zaXplOiA5MCU7IAogICAgfQogICAgY29kZS5yIHsKICAgICAgICBjb2xvcjogIzc3MDAwMDsKICAgIH0KICAgIHByZSB7CiAgICAgICAgd2hpdGUtc3BhY2U6IHByZTsKICAgICAgICB3aGl0ZS1zcGFjZTogcHJlLXdyYXA7CiAgICAgICAgd29yZC13cmFwOiBicmVhay13b3JkOwogICAgfQogICAgLyogZml4LCBkbyBub3QgbGlrZSBib2xkIGZvciBldmVyeSBrZXl3b3JkICovCiAgICBjb2RlIHNwYW4ua3cgeyBjb2xvcjogIzAwNzAyMDsgZm9udC13ZWlnaHQ6IG5vcm1hbDsgfSAvKiBLZXl3b3JkICovCiAgICAgcHJlLnNvdXJjZUNvZGUgewogICAgICAgIGJhY2tncm91bmQ6ICNmZmY2ZjY7CiAgICB9IAogICAgZmlndXJlLCBwLmF1dGhvciB7CiAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyOwogICAgfQogICAgdGggeyBiYWNrZ3JvdW5kLWNvbG9yOiAjZGRkIDsgIH0KICAgIHRoZWFkIHRyIHsgYm9yZGVyLWJvdHRvbTogMnB4IHNvbGlkOyB9CiAgICB0YWJsZSB7ICAKICAgICAgICBib3JkZXItY29sbGFwc2U6IGNvbGxhcHNlOyAKICAgICAgICBib3JkZXItYm90dG9tOiAycHggc29saWQ7CiAgICAgICAgYm9yZGVyLXRvcDogMnB4IHNvbGlkOwogICAgfQogICAgICB0aDpmaXJzdC1jaGlsZCB7CgogICAgICB9CiAgICB0aCwgdGQgewogICAgICAgIHRleHQtYWxpZ246IGxlZnQ7CiAgICAgICAgcGFkZGluZzogOHB4OwogICAgfQoKICAgIHRyOm50aC1jaGlsZChldmVuKSB7YmFja2dyb3VuZC1jb2xvcjogI2YyZjJmMjt9Cg==");
+</style>
+
+    
 </head>
 <body>
-<header id="title-block-header">
+    
+
+
+
 <h1 class="title">paul::tx - mixins for the tk::text widget</h1>
-<p class="author">Detlef Groth, Schwielowsee, Germany</p>
-</header>
-<p></p>
-<center>
-<a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> - <a href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> - <a href="txmixins.html">txmixins</a>
-</center>
-<h2 id="name">NAME</h2>
+<h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
+<h2 class="date">2024-12-23</h2>
+
+<p><center>
+<a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> -
+<a href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a>
+- <a href="statusbar.html">statusbar</a> - <a
+href="txmixins.html">txmixins</a>
+</center></p>
+
+<h2>NAME</h2>
+
 <blockquote>
 <p><strong>paul::tx</strong> - oo::class mixins for the tk::text widget</p>
-</blockquote>
-<blockquote>
+
 <p>The following mixins are implemented:</p>
-</blockquote>
-<blockquote>
+
 <ul>
 <li><a href="#txautorep">paul::txautorep</a> - abbreviation tool for text widgets</li>
 <li><a href="#txindent">paul::txindent</a> - automatic indentation for text widgets</li>
 <li><a href="#txmatching">paul::txmatching</a> - hilight matching parenthesis, brackets or braces</li>
-<li><a href="#txunicode">paul::txunicode</a> - entering Unicode characters</li>
-</ul>
+<li><a href="#txunicode">paul::txunicode</a> - entering Unicode characters</li></ul>
+
+
 </blockquote>
-<h2 id="synopsis"><a name='synopsis'></a> SYNOPSIS</h2>
-<p></p>
-<pre><code>package require paul
+
+<h2><a name='synopsis'></a> SYNOPSIS</h2>
+
+<pre class='code'><code>package require paul
 package require tkoo
 set txt [tkoo::text pathName ?option value ...?
 oo::objdefine $txt mixin Mixin ?Mixin ...?
 pack $txt</code></pre>
-<h2 id="mixins">MIXINS</h2>
-<p><a name="txautorep"></a><strong>paul::txautorep</strong> - <em>oo::objdefine pathName mixin paul::txautorep</em></p>
-<p>Adds abbreviation support to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . The widget indents every new line based on the initial indention of the previous line. Based on code in the Wiki page https://wiki.tcl-lang.org/page/autoreplace started by Richard Suchenwirth.</p>
-<p>Example:</p>
+
+<h2><a name='example'></a> EXAMPLE</h2>
+
 <blockquote>
-<div class="sourceCode" id="cb2" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txt2<span class="ot"> -background</span> salmon<span class="kw">]</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin ::paul::txautorep</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> autorep <span class="kw">[list</span> (TM) <span class="ch">\u</span>2122 (C) <span class="ch">\u</span>00A9 (R) <span class="ch">\u</span>00AE (K) <span class="ch">\u</span>2654<span class="kw">]</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;# Autorep Example</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">foreach</span> col <span class="kw">[list</span> A B C<span class="kw">]</span> <span class="kw">{</span> </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;# Header </span><span class="dt">$</span><span class="st">col</span><span class="ch">\n\n</span><span class="st">   Some more text.</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;  * item 1</span><span class="ch">\n</span><span class="st">  * item 2</span><span class="ch">\n</span><span class="st">  * Write (DG) and press enter</span><span class="ch">\n</span><span class="st">  * &quot;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
+<pre class='code'><code class='tclinn'>package require paul
+set txt [tkoo::text .txt2 -background salmon]
+oo::objdefine $txt mixin ::paul::txautorep
+$txt autorep [list (TM) \u2122 (C) \u00A9 (R) \u00AE (K) \u2654]
+$txt insert end &quot;# Autorep Example\n\n&quot;
+foreach col [list A B C] { 
+   $txt insert  end &quot;# Header $col\n\n   Some more text.\n\n&quot;
+}
+$txt insert end &quot;  * item 1\n  * item 2\n  * Write (DG) and press enter\n  * &quot;
+pack $txt -side top -fill both -expand yes
+set txt [tkoo::text .txt -background skyblue]
+foreach col [list A B C] { 
+   $txt insert  end &quot;# Header $col\n\n## Indent example\n\n&quot;
+}
+$txt insert end &quot;  * item 1\n  * item 2 (press return here)&quot;
+oo::objdefine $txt mixin paul::txindent
+$txt indent
+pack $txt -side top -fill both -expand yes</code></pre>
 </blockquote>
-<p><a name="txindent"></a><strong>paul::txindent</strong> - <em>oo::objdefine pathName mixin paul::txindent</em></p>
-<p>Adds indenting capabilities to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . The widget indents every new line based on the initial indention of the previous line. Based on code in the Wiki page https://wiki.tcl-lang.org/page/auto-indent started by Richard Suchenwirth.</p>
+
+<h2><a name='mixins'></a> MIXINS</h2>
+
+<p><a name="txautorep"></a><strong>paul::txautorep</strong> -  <em>oo::objdefine pathName mixin paul::txautorep</em></p>
+
+<p>Adds abbreviation support to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> .
+The widget indents every new line based on the initial indention of the previous line.
+Based on code in the Wiki page https://wiki.tcl-lang.org/page/autoreplace started by Richard Suchenwirth.</p>
+
 <p>Example:</p>
+
 <blockquote>
-<div class="sourceCode" id="cb3" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txt<span class="ot"> -background</span> skyblue<span class="kw">]</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">foreach</span> col <span class="kw">[list</span> A B C<span class="kw">]</span> <span class="kw">{</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;# Header </span><span class="dt">$</span><span class="st">col</span><span class="ch">\n\n</span><span class="st">   Some more text.</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;  * item 1</span><span class="ch">\n</span><span class="st">  * item 2 (press return here)&quot;</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txindent</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> indent</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
+<pre class='code'><code class='tclinn'>package require paul
+set txt [tkoo::text .txt2 -background salmon]
+oo::objdefine $txt mixin ::paul::txautorep
+$txt autorep [list (TM) \u2122 (C) \u00A9 (R) \u00AE (K) \u2654]
+$txt insert end &quot;# Autorep Example\n\n&quot;
+foreach col [list A B C] { 
+   $txt insert  end &quot;# Header $col\n\n   Some more text.\n\n&quot;
+}
+$txt insert end &quot;  * item 1\n  * item 2\n  * Write (DG) and press enter\n  * &quot;
+pack $txt -side top -fill both -expand yes</code></pre>
+
+<pre class='code'><code class='tclout'>Error: window name &quot;txt2&quot; already exists in parent
+    while executing
+&quot;$wtype $path&quot;
+    (class &quot;::oowidgets::BaseWidget&quot; method &quot;install&quot; line 7)</code></pre>
 </blockquote>
-<p><a name="txmatching"></a><strong>paul::txmatching</strong> - <em>oo::objdefine pathName mixin paul::txmatching</em></p>
-<p>Adds a matching parenthesis, brackets or braces behaviour. If the user enters an unmatched parenthesis, bracket or brace it is highlighted, if the matching closing character is entered it the region between these two characters is shortly highlighted and thereafter the higlighting is removed. Based on code in the Wiki page https://wiki.tcl-lang.org/page/Tk+Text+Window+Brace+Parenthesis%2C+and+Bracket+Matching</p>
+
+<p><a name="txindent"></a><strong>paul::txindent</strong> -  <em>oo::objdefine pathName mixin paul::txindent</em></p>
+
+<p>Adds indenting capabilities to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> .
+The widget indents every new line based on the initial indention of the previous line.
+Based on code in the Wiki page https://wiki.tcl-lang.org/page/auto-indent started by Richard Suchenwirth.</p>
+
 <p>Example:</p>
+
 <blockquote>
-<div class="sourceCode" id="cb4" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txtm<span class="ot"> -background</span> salmon<span class="ot"> -font</span> <span class="st">&quot;Courier 18&quot;</span><span class="kw">]</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;Start typing some text containing</span><span class="ch">\n</span><span class="st">&quot;</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;* parenthesis ( and )</span><span class="ch">\n</span><span class="st">&quot;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;* brackets    </span><span class="ch">\[</span><span class="st"> and </span><span class="ch">\]\n</span><span class="st">&quot;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;* braces      { and }</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span> end <span class="st">&quot;Unicode adding works as well</span><span class="ch">\n</span><span class="st">Press Ctrl-Shift-u and then write 4 digits ...</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txmatching paul::txunicode</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchbrace</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchparen</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> matchbracket</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> unicode Control-Key-U</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">### adding your own additional bindings is still possible</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">bind</span> <span class="dt">$txt</span> &lt;KeyRelease&gt; +<span class="kw">[list</span> <span class="kw">puts</span> <span class="st">&quot;now pressed %K&quot;</span><span class="kw">]</span></span></code></pre></div>
+<pre class='code'><code class='tclinn'>package require paul
+set txt [tkoo::text .txt -background skyblue]
+foreach col [list A B C] { 
+   $txt insert  end &quot;# Header $col\n\n   Some more text.\n\n&quot;
+}
+$txt insert end &quot;  * item 1\n  * item 2 (press return here)&quot;
+oo::objdefine $txt mixin paul::txindent
+$txt indent
+pack $txt -side top -fill both -expand yes</code></pre>
+
+<pre class='code'><code class='tclout'>Error: window name &quot;txt&quot; already exists in parent
+    while executing
+&quot;$wtype $path&quot;
+    (class &quot;::oowidgets::BaseWidget&quot; method &quot;install&quot; line 7)</code></pre>
 </blockquote>
-<p><a name="txunicode"></a><strong>paul::txunicode</strong> - <em>oo::objdefine pathName mixin paul::txunicode</em></p>
-<p>Adds the capability to enter Unicode symbols to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> . If the user presses the default Keystroke Control-u he/she can enter after typing the four Unicode numbers Unicode characters. Based on code in the Wiki page https://wiki.tcl-lang.org/page/Entering+Unicode+characters+in+a+widget</p>
+
+<p><a name="txmatching"></a><strong>paul::txmatching</strong> -  <em>oo::objdefine pathName mixin paul::txmatching</em></p>
+
+<p>Adds a matching parenthesis, brackets or braces behaviour.
+If the user enters an unmatched parenthesis, bracket or brace it is highlighted,
+if the matching closing character is entered it the region between these two characters
+is shortly highlighted and thereafter the higlighting is removed.
+Based on code in the Wiki page https://wiki.tcl-lang.org/page/Tk+Text+Window+Brace+Parenthesis%2C+and+Bracket+Matching</p>
+
 <p>Example:</p>
+
 <blockquote>
-<div class="sourceCode" id="cb5" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">set</span> txt <span class="kw">[</span>tkoo::<span class="kw">text</span> .txtu<span class="ot"> -background</span> grey80<span class="ot"> -font</span> <span class="st">&quot;Courier 18&quot;</span><span class="kw">]</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> <span class="ot">insert</span>  end <span class="st">&quot;Press Ctrl-Shift-u and then therafter 4 numbers like 2602</span><span class="ch">\n\n</span><span class="st">&quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>oo::objdefine <span class="dt">$txt</span> mixin paul::txunicode</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dt">$txt</span> unicode Control-Key-U</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> <span class="dt">$txt</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> yes</span></code></pre></div>
+<pre class='code'><code class='tclinn'>package require paul
+set txt [tkoo::text .txtm -background salmon -font &quot;Courier 18&quot;]
+$txt insert  end &quot;Start typing some text containing\n&quot; 
+$txt insert end &quot;* parenthesis ( and )\n&quot;
+$txt insert end &quot;* brackets    \[ and \]\n&quot;
+$txt insert end &quot;* braces      { and }\n\n&quot;
+$txt insert end &quot;Unicode adding works as well\nPress Ctrl-Shift-u and then write 4 digits ...\n\n&quot;
+oo::objdefine $txt mixin paul::txmatching paul::txunicode
+$txt matchbrace
+$txt matchparen
+$txt matchbracket
+$txt unicode Control-Key-U
+pack $txt -side top -fill both -expand yes
+### adding your own additional bindings is still possible
+bind $txt &lt;KeyRelease&gt; +[list puts &quot;now pressed %K&quot;]</code></pre>
 </blockquote>
-<h2 id="see-also"><a name='see'></a> SEE ALSO</h2>
+
+<p><a name="txunicode"></a><strong>paul::txunicode</strong> -  <em>oo::objdefine pathName mixin paul::txunicode</em></p>
+
+<p>Adds the capability to enter Unicode symbols to an existing <em>tkoo::text</em> widget, which is a wrapper for the <em>tk::text</em> widget using the Tk window id <em>pathName</em> .
+If the user presses the default Keystroke Control-u he/she can enter after typing the four Unicode numbers
+Unicode characters.
+Based on code in the Wiki page https://wiki.tcl-lang.org/page/Entering+Unicode+characters+in+a+widget</p>
+
+<p>Example:</p>
+
+<blockquote>
+<pre class='code'><code class='tclinn'>package require paul
+set txt [tkoo::text .txtu -background grey80 -font &quot;Courier 18&quot;]
+$txt insert  end &quot;Press Ctrl-Shift-u and then therafter 4 numbers like 2602\n\n&quot;
+oo::objdefine $txt mixin paul::txunicode
+$txt unicode Control-Key-U
+pack $txt -side top -fill both -expand yes</code></pre>
+</blockquote>
+
+<h2><a name='see'></a> SEE ALSO</h2>
+
 <ul>
 <li><a href="../oowidgets.html">oowidgets</a></li>
-<li><a href="basegui.html">paul::basegui.tcl</a></li>
-</ul>
-<h2 id="author"><a name='authors'></a> AUTHOR</h2>
+<li><a href="basegui.html">paul::basegui.tcl</a>
+</li></ul>
+
+<h2><a name='authors'></a> AUTHOR</h2>
+
 <p>The <strong>paul::tx</strong> mixins were written by Detlef Groth, Schwielowsee, Germany.</p>
-<h2 id="copyright"><a name='copyright'></a>COPYRIGHT</h2>
-<p>Copyright (c) 2021-2023 Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
-<h2 id="license"><a name='license'></a>LICENSE</h2>
-<p></p>
-<pre id="license" class="tclout" data-eval="true" data-echo="false"><code>BSD 3-Clause License
+
+<h2><a name='copyright'></a>COPYRIGHT</h2>
+
+<p>Copyright (c) 2021-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+
+<h2><a name='license'></a>LICENSE </h2>
+
+<pre class='code'><code class='tclout'>BSD 3-Clause License
 
 Copyright (c) 2023, D Groth
 
@@ -226,7 +222,10 @@ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-</code></pre>
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
+
+
+
 </body>
 </html>
+

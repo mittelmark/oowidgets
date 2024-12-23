@@ -1,160 +1,107 @@
+
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="author" content="Detlef Groth, Schwielowsee, Germany" />
-  <title>paul::rotext - readonly text widget</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      {   }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-    code span.at { color: #7d9029; } /* Attribute */
-    code span.bn { color: #40a070; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #4070a0; } /* Char */
-    code span.cn { color: #880000; } /* Constant */
-    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-    code span.dt { color: #902000; } /* DataType */
-    code span.dv { color: #40a070; } /* DecVal */
-    code span.er { color: #ff0000; font-weight: bold; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #40a070; } /* Float */
-    code span.fu { color: #06287e; } /* Function */
-    code span.im { } /* Import */
-    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-    code span.op { color: #666666; } /* Operator */
-    code span.ot { color: #007020; } /* Other */
-    code span.pp { color: #bc7a00; } /* Preprocessor */
-    code span.sc { color: #4070a0; } /* SpecialChar */
-    code span.ss { color: #bb6688; } /* SpecialString */
-    code span.st { color: #4070a0; } /* String */
-    code span.va { color: #19177c; } /* Variable */
-    code span.vs { color: #4070a0; } /* VerbatimString */
-    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
-  <link rel="stylesheet" href="pandoc-filter.css" />
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-  <style>
-  html {
-    line-height: 1.2;
-    font-family: Georgia, serif;
-    font-size: 16px;
-    color: #1a1a1a;
-    background-color: #fdfdfd;
-  }
-  body { max-width: 1000px; }
-  pre#license {
-    background: #fdfdfd;
-  }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="title" content="paul::rotext - readonly text widget">
+<meta name="author" content="Detlef Groth, Schwielowsee, Germany">
+    
+<title>paul::rotext - readonly text widget</title>
+    
+    
+
+<style>
+@import url("data:text/css;base64,ICAgIGh0bWwgewogICAgICAgIG92ZXJmbG93LXk6IHNjcm9sbDsKICAgIH0KICAgIGJvZHkgewogICAgICAgIGNvbG9yOiAjNDQ0OwogICAgICAgIGZvbnQtZmFtaWx5OiBHZW9yZ2lhLCBQYWxhdGlubywgJ1BhbGF0aW5vIExpbm90eXBlJywgVGltZXMsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZjsKICAgICAgICBsaW5lLWhlaWdodDogMS4yOwogICAgICAgIHBhZGRpbmc6IDFlbTsKICAgICAgICBtYXJnaW46IGF1dG87CiAgICAgICAgbWF4LXdpZHRoOiAgMTAwMHB4OwogICAgfQogICAgYSB7CiAgICAgICAgY29sb3I6ICMwNjQ1YWQ7CiAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogICAgfQogICAgYTp2aXNpdGVkIHsKICAgICAgICBjb2xvcjogIzBiMDA4MDsKICAgIH0KICAgIGE6aG92ZXIgewogICAgICAgIGNvbG9yOiAjMDZlOwogICAgfQogICAgYTphY3RpdmUgewogICAgICAgIGNvbG9yOiAjZmFhNzAwOwogICAgfQogICAgYTpmb2N1cyB7CiAgICAgICAgb3V0bGluZTogdGhpbiBkb3R0ZWQ7CiAgICB9CiAgICAjYWJzdHJhY3QgewogICAgICAgIG1hcmdpbjogMi41ZW07CiAgICAgICAgZm9udC1zaXplOiA3MCU7CiAgICB9CiAgICBwIHsKICAgICAgICBtYXJnaW46IDAuNWVtIDA7CiAgICB9CiAgICBwLmRhdGUgewogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgIH0KICAgIGltZyB7CiAgICAgICAgbWF4LXdpZHRoOiAxMDAlOwogICAgfQogICAgCiAgICBoMSwgaDIsIGgzLCBoNCwgaDUsIGg2IHsKICAgICAgICBjb2xvcjogIzExMTsKICAgICAgICBsaW5lLWhlaWdodDogMTE1JTsKICAgICAgICBtYXJnaW4tdG9wOiAxZW07CiAgICAgICAgZm9udC13ZWlnaHQ6IG5vcm1hbDsKICAgIH0KICAgIGgxIHsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9CiAgICBoNC5hdXRob3IsIGg0LmRhdGUsIHAuYXV0aG9yLCBwLmRhdGUgewogICAgICAgIGZvbnQtc2l6ZTogMTEwJTsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9CiAgICBoMi5hdXRob3IsIGgyLmRhdGUsIHAuYXV0aG9yLCBwLmRhdGUgewogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgIH0KICAgIAogICAgcHJlLCBibG9ja3F1b3RlIHByZSB7CiAgICAgICAgYm9yZGVyLXRvcDogMC4xZW0gIzlhYyBzb2xpZDsKICAgICAgICBiYWNrZ3JvdW5kOiAjZTlmNmZmOwogICAgICAgIHBhZGRpbmc6IDEwcHg7CiAgICAgICAgbWFyZ2luLWxlZnQ6IDUwcHg7CiAgICAgICAgYm9yZGVyLWJvdHRvbTogMC4xZW0gIzlhYyBzb2xpZDsKICAgIH0KICAgIAogICAgYmxvY2txdW90ZSB7CiAgICAgICAgbWFyZ2luOiAwOwogICAgICAgIHBhZGRpbmctbGVmdDogM2VtOyAKICAgIH0KICAgIAogICAgaHIgewogICAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICAgIGhlaWdodDogMnB4OwogICAgICAgIGJvcmRlcjogMDsKICAgICAgICBib3JkZXItdG9wOiAxcHggc29saWQgI2FhYTsKICAgICAgICBib3JkZXItYm90dG9tOiAxcHggc29saWQgI2VlZTsKICAgICAgICBtYXJnaW46IDFlbSAwOwogICAgICAgIHBhZGRpbmc6IDA7CiAgICB9CiAgICAKICAgIHByZSwgY29kZSwga2JkLCBzYW1wIHsKICAgICAgICBjb2xvcjogIzAwMDsKICAgICAgICBmb250LWZhbWlseTogTW9uYWNvLCAnY291cmllciBuZXcnLCBtb25vc3BhY2U7CiAgICAgICAgZm9udC1zaXplOiA5MCU7IAogICAgfQogICAgY29kZS5yIHsKICAgICAgICBjb2xvcjogIzc3MDAwMDsKICAgIH0KICAgIHByZSB7CiAgICAgICAgd2hpdGUtc3BhY2U6IHByZTsKICAgICAgICB3aGl0ZS1zcGFjZTogcHJlLXdyYXA7CiAgICAgICAgd29yZC13cmFwOiBicmVhay13b3JkOwogICAgfQogICAgLyogZml4LCBkbyBub3QgbGlrZSBib2xkIGZvciBldmVyeSBrZXl3b3JkICovCiAgICBjb2RlIHNwYW4ua3cgeyBjb2xvcjogIzAwNzAyMDsgZm9udC13ZWlnaHQ6IG5vcm1hbDsgfSAvKiBLZXl3b3JkICovCiAgICAgcHJlLnNvdXJjZUNvZGUgewogICAgICAgIGJhY2tncm91bmQ6ICNmZmY2ZjY7CiAgICB9IAogICAgZmlndXJlLCBwLmF1dGhvciB7CiAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyOwogICAgfQogICAgdGggeyBiYWNrZ3JvdW5kLWNvbG9yOiAjZGRkIDsgIH0KICAgIHRoZWFkIHRyIHsgYm9yZGVyLWJvdHRvbTogMnB4IHNvbGlkOyB9CiAgICB0YWJsZSB7ICAKICAgICAgICBib3JkZXItY29sbGFwc2U6IGNvbGxhcHNlOyAKICAgICAgICBib3JkZXItYm90dG9tOiAycHggc29saWQ7CiAgICAgICAgYm9yZGVyLXRvcDogMnB4IHNvbGlkOwogICAgfQogICAgICB0aDpmaXJzdC1jaGlsZCB7CgogICAgICB9CiAgICB0aCwgdGQgewogICAgICAgIHRleHQtYWxpZ246IGxlZnQ7CiAgICAgICAgcGFkZGluZzogOHB4OwogICAgfQoKICAgIHRyOm50aC1jaGlsZChldmVuKSB7YmFja2dyb3VuZC1jb2xvcjogI2YyZjJmMjt9Cg==");
+</style>
+
+    
 </head>
 <body>
-<header id="title-block-header">
+    
+
+
+
 <h1 class="title">paul::rotext - readonly text widget</h1>
-<p class="author">Detlef Groth, Schwielowsee, Germany</p>
-</header>
-<p></p>
-<center>
-<a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> - <a href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> - <a href="txmixins.html">txmixins</a>
-</center>
-<h2 id="name">NAME</h2>
+<h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
+<h2 class="date">2024-12-23</h2>
+
+<p><center>
+<a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> -
+<a href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a>
+- <a href="statusbar.html">statusbar</a> - <a
+href="txmixins.html">txmixins</a>
+</center></p>
+
+<h2>NAME</h2>
+
 <blockquote>
 <p><strong>paul::rotext</strong> - read only text widget</p>
 </blockquote>
-<h2 id="synopsis"><a name='synopsis'></a> SYNOPSIS</h2>
-<p></p>
+
+<h2><a name='synopsis'></a> SYNOPSIS</h2>
+
 <blockquote>
-<div class="sourceCode" id="cb1"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>paul::rotext pathName ?-<span class="kw">option</span> value ...?</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pathName ins TEXT</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> pathName</span></code></pre></div>
+<pre class='code'><code class='tclinn'>package require paul
+paul::rotext pathName ?-option value ...?
+pathName ins TEXT
+pack pathName</code></pre>
 </blockquote>
-<h2 id="command">COMMAND</h2>
+
+<h2>COMMAND</h2>
+
 <p><a name="rotext"></a><strong>paul::rotext</strong> <em>pathName</em></p>
+
 <blockquote>
-<p>Creates a <code>tk::text</code> widget which is readonly, text can be only inserted and deleted using the <code>ins</code> and <code>del</code> methods but not the using ‘insert’ or ‘delete’ and as well not with the users keybord.</p>
+<p>Creates a <code>tk::text</code> widget which is readonly, text can be only inserted and deleted using the <code>ins</code> and <code>del</code> methods but not the
+  using 'insert' or 'delete' and as well not with the users keybord.</p>
 </blockquote>
-<h2 id="options">OPTIONS</h2>
+
+<h2>OPTIONS</h2>
+
 <blockquote>
 <p>All options of a standard <code>tk::text</code> widget are supported.</p>
 </blockquote>
-<h2 id="methods">METHODS</h2>
+
+<h2>METHODS</h2>
+
 <blockquote>
-<p>All methods of a standard tk::text are supported except for ‘insert’ and ‘delete’ which are replaced by ‘ins’ and ‘del’.</p>
+<p>All methods of a standard tk::text are supported except for 'insert' and 'delete' which are replaced by 'ins' and 'del'.</p>
 </blockquote>
-<h2 id="example">EXAMPLE</h2>
+
+<h2>EXAMPLE</h2>
+
 <blockquote>
-<div class="sourceCode" id="cb2" data-eval="true"><pre class="sourceCode tcl"><code class="sourceCode tcl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">package</span> <span class="ot">require</span> paul</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">wm</span> <span class="ot">title</span> . DGApp</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>paul::rotext .<span class="kw">text</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>.<span class="kw">text</span> ins end <span class="st">&quot;This is some readonly text</span><span class="ch">\n</span><span class="st">You can&#39;t edit the text!&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">pack</span> .<span class="kw">text</span><span class="ot"> -side</span> top<span class="ot"> -fill</span> both<span class="ot"> -expand</span> true</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">wm</span> <span class="ot">geometry</span> . 400x300+<span class="dv">0</span>+<span class="dv">0</span></span></code></pre></div>
+<pre class='code'><code class='tclinn'>package require paul
+wm title . DGApp
+paul::rotext .text
+.text ins end &quot;This is some readonly text\nYou can't edit the text!&quot;
+pack .text -side top -fill both -expand true
+wm geometry . 400x300+0+0</code></pre>
 </blockquote>
-<h2 id="see-also"><a name='see'></a>SEE ALSO</h2>
+
+<h2><a name='see'></a>SEE ALSO</h2>
+
 <blockquote>
 <ul>
 <li><a href="../oowidgets.html">oowidgets</a></li>
-<li><a href="basegui.html">paul::basegui.tcl</a></li>
-</ul>
+<li><a href="basegui.html">paul::basegui.tcl</a></li></ul>
+
+
 </blockquote>
-<h2 id="author"><a name='authors'></a>AUTHOR</h2>
+
+<h2><a name='authors'></a>AUTHOR</h2>
+
 <blockquote>
 <p>The <strong>paul::rotext</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
 </blockquote>
-<h2 id="copyright"><a name='copyright'></a>COPYRIGHT</h2>
-<p>Copyright (c) 2021-2023 Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
-<h2 id="license"><a name='license'></a>LICENSE</h2>
-<p></p>
-<pre id="license" class="tclout" data-eval="true" data-echo="false"><code>BSD 3-Clause License
+
+<h2><a name='copyright'></a>COPYRIGHT</h2>
+
+<p>Copyright (c) 2021-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+
+<h2><a name='license'></a>LICENSE</h2>
+
+<pre class='code'><code class='tclout'>BSD 3-Clause License
 
 Copyright (c) 2023, D Groth
 
@@ -181,7 +128,10 @@ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
 SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-</code></pre>
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
+
+
+
 </body>
 </html>
+

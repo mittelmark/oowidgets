@@ -4,16 +4,16 @@ default:
 	htmlark tutorial.html -o temp.html
 	mv temp.html tutorial.html
 manual:
-	pantcl oowidgets/oowidgets.tcl oowidgets/oowidgets.html -s 
+	pantcl oowidgets/oowidgets.tcl oowidgets/oowidgets.html --css "mini.css"
 
 paul-manual:
 	pandoc paul/header.md -o paul/header.html 	
-	pantcl paul/basegui.tcl paul/basegui.html -s
-	pantcl paul/statusbar.tcl paul/statusbar.html -s
-	pantcl paul/dlabel.tcl paul/dlabel.html -s	
-	pantcl paul/rotext.tcl paul/rotext.html -s		
-	pantcl paul/notebook.tcl paul/notebook.html -s
-	pantcl paul/txmixins.tcl paul/txmixins.html -s	
+	pantcl paul/basegui.tcl paul/basegui.html --css mini.css
+	pantcl paul/statusbar.tcl paul/statusbar.html --css mini.css
+	pantcl paul/dlabel.tcl paul/dlabel.html --css mini.css
+	pantcl paul/rotext.tcl paul/rotext.html --css mini.css
+	pantcl paul/notebook.tcl paul/notebook.html --css mini.css
+	pantcl paul/txmixins.tcl paul/txmixins.html --css mini.css
 	rm paul/header.html
 
 test:
