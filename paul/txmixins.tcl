@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::tx - mixins for the tk::text widget
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : 2023-03-31 13:21
+#' Date : 2024-12-23
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -446,7 +446,7 @@ if {false} {
 
 #' ## <a name='see'></a> SEE ALSO
 #'
-#' - [oowidgets](../oowidgets.html)
+#' - [oowidgets](../oowidgets/oowidgets.html)
 #' - [paul::basegui.tcl](basegui.html)
 #'
 #' ## <a name='authors'></a> AUTHOR
@@ -455,7 +455,7 @@ if {false} {
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
-#' Copyright (c) 2021-2023  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2021-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
 #' ## <a name='license'></a>LICENSE 
 #'
