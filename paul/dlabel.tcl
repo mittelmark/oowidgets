@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::dlabel - label with dynamic font size
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <241223.1233>
+#' Date : <241223.1236>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -59,7 +59,7 @@
 #' 
 #' ## EXAMPLE
 #'
-#' > ```{.tcl eval=true}
+#' ```{.tcl eval=true}
 #' package require paul
 #' wm title . DGApp
 #' set app [paul::basegui new]
@@ -70,7 +70,7 @@
 #' set dlab [paul::dlabel $frame.l -text $txt]
 #' pack  $dlab -expand 1 -fill both
 #' wm geometry . 400x300+0+0
-#' > ```
+#' ```
 #' 
 
 package require oowidgets
