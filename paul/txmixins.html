@@ -58,7 +58,6 @@ pack $txt</code></pre>
 
 <h2><a name='example'></a> EXAMPLE</h2>
 
-<blockquote>
 <pre class='code'><code class='tclinn'>package require paul
 set txt [tkoo::text .txt2 -background salmon]
 oo::objdefine $txt mixin ::paul::txautorep
@@ -77,7 +76,6 @@ $txt insert end &quot;  * item 1\n  * item 2 (press return here)&quot;
 oo::objdefine $txt mixin paul::txindent
 $txt indent
 pack $txt -side top -fill both -expand yes</code></pre>
-</blockquote>
 
 <h2><a name='mixins'></a> MIXINS</h2>
 
@@ -89,7 +87,6 @@ Based on code in the Wiki page https://wiki.tcl-lang.org/page/autoreplace starte
 
 <p>Example:</p>
 
-<blockquote>
 <pre class='code'><code class='tclinn'>package require paul
 set txt [tkoo::text .txt2 -background salmon]
 oo::objdefine $txt mixin ::paul::txautorep
@@ -105,7 +102,6 @@ pack $txt -side top -fill both -expand yes</code></pre>
     while executing
 &quot;$wtype $path&quot;
     (class &quot;::oowidgets::BaseWidget&quot; method &quot;install&quot; line 7)</code></pre>
-</blockquote>
 
 <p><a name="txindent"></a><strong>paul::txindent</strong> -  <em>oo::objdefine pathName mixin paul::txindent</em></p>
 
@@ -115,7 +111,6 @@ Based on code in the Wiki page https://wiki.tcl-lang.org/page/auto-indent starte
 
 <p>Example:</p>
 
-<blockquote>
 <pre class='code'><code class='tclinn'>package require paul
 set txt [tkoo::text .txt -background skyblue]
 foreach col [list A B C] { 
@@ -130,7 +125,6 @@ pack $txt -side top -fill both -expand yes</code></pre>
     while executing
 &quot;$wtype $path&quot;
     (class &quot;::oowidgets::BaseWidget&quot; method &quot;install&quot; line 7)</code></pre>
-</blockquote>
 
 <p><a name="txmatching"></a><strong>paul::txmatching</strong> -  <em>oo::objdefine pathName mixin paul::txmatching</em></p>
 
@@ -142,7 +136,6 @@ Based on code in the Wiki page https://wiki.tcl-lang.org/page/Tk+Text+Window+Bra
 
 <p>Example:</p>
 
-<blockquote>
 <pre class='code'><code class='tclinn'>package require paul
 set txt [tkoo::text .txtm -background salmon -font &quot;Courier 18&quot;]
 $txt insert  end &quot;Start typing some text containing\n&quot; 
@@ -158,7 +151,6 @@ $txt unicode Control-Key-U
 pack $txt -side top -fill both -expand yes
 ### adding your own additional bindings is still possible
 bind $txt &lt;KeyRelease&gt; +[list puts &quot;now pressed %K&quot;]</code></pre>
-</blockquote>
 
 <p><a name="txunicode"></a><strong>paul::txunicode</strong> -  <em>oo::objdefine pathName mixin paul::txunicode</em></p>
 
@@ -169,14 +161,12 @@ Based on code in the Wiki page https://wiki.tcl-lang.org/page/Entering+Unicode+c
 
 <p>Example:</p>
 
-<blockquote>
 <pre class='code'><code class='tclinn'>package require paul
 set txt [tkoo::text .txtu -background grey80 -font &quot;Courier 18&quot;]
 $txt insert  end &quot;Press Ctrl-Shift-u and then therafter 4 numbers like 2602\n\n&quot;
 oo::objdefine $txt mixin paul::txunicode
 $txt unicode Control-Key-U
 pack $txt -side top -fill both -expand yes</code></pre>
-</blockquote>
 
 <h2><a name='see'></a> SEE ALSO</h2>
 
