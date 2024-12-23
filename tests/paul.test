@@ -60,19 +60,21 @@ tcltest::test basegui-1.6 {complex example} {
     foreach child [winfo children .] {
         destroy $child
     }   
-    set app [::paul::basegui new]
+    set app [::paul::basegui new -style clam]
     puts "Startup in [$app timer time] seconds!"
     $app timer reset
     set fmenu [$app getMenu "File"]
     $fmenu insert 0 command -label Open -underline 0 -command { puts Opening }
     $app addStatusBar
     $app progress 10
-    $app message "starting ..."
+    update idletasks
+    $app message "starting ......."
     after 1000
-    $app status progressing... 50
+    $app status progressing...... 50
     after 1000
     $app status finished 100
     set f [$app getFrame]
+    pack $f
     set btn [ttk::button $f.btn -text "Hover me!"]
     $app balloon $btn "This is the hover message!\nNice ?"
     pack $btn -side top
@@ -132,4 +134,20 @@ tcltest::test basegui-1.7 {simple text editor} {
     set x 1
 } {1}
 
-
+tcltest::test dlabel-1.1 {dlabel example} {
+    foreach child [winfo children .] {
+        destroy $child
+    }   
+    wm title . DGApp
+    set app [paul::basegui new]
+    font create title -family Helvetica -size 10
+    puts [winfo children .]
+    set frame [$app getFrame]
+    set txt " Some Title "
+    set dlab [paul::dlabel $frame.l -text $txt]
+    pack  $dlab -expand 1 -fill both
+    wm geometry . 400x300+0+0
+    update idletasks
+    after 2000
+    set x 1
+} {1}
