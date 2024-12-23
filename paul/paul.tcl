@@ -1,7 +1,7 @@
 package require Tk
 package require TclOO
 package require tkoo
-package provide paul 0.2.2
+package provide paul 0.3.0
 
 # some generic utilities
 

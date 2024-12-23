@@ -108,6 +108,9 @@ Alternatively widgets can be added to existing applications as well.
 <li><a href="#configure">configure</a></li>
 <li><a href="#console">console</a></li>
 <li><a href="#exit">exit</a></li>
+<li><a href="#fontDecrease">fontDecrease</a></li>
+<li><a href="#fontIncrease">fontIncrease</a></li>
+<li><a href="#fontSizeBind">fontSizeBind</a></li>
 <li><a href="#getFrame">getFrame</a></li>
 <li><a href="#getMenu">getMenu</a><br/></li>
 <li><a href="#splash">splash</a></li>
@@ -205,6 +208,30 @@ destroy .app</code></pre>
 
 <blockquote>
 <p>Exit the application, if ask is true (default), displays a conformation message.</p>
+</blockquote>
+
+<p><a name="fontDecrease"> </a>
+<em>cmdName</em> <strong>fontDecrease</strong></p>
+
+<blockquote>
+<p>Decrease the font size for all widgets and menues by two pixels, usually you would 
+  use <em>fontSizeBind</em> to do this for instance using the Control-minus key combination.</p>
+</blockquote>
+
+<p><a name="fontIncrease"> </a>
+<em>cmdName</em> <strong>fontIncrease</strong></p>
+
+<blockquote>
+<p>Increase the font size for all widgets and menues by two pixels, usually you would 
+  use <em>fontSizeBind</em> to do this for instance using the Control-plus key combinations.</p>
+</blockquote>
+
+<p><a name="fontSizeBind"> </a>
+<em>cmdName</em> <strong>fontSizeBind</strong> <em>?bindings [list Control-plus Control-minus]?</em></p>
+
+<blockquote>
+<p>Use the given bindings to increase and decrease the font size for the complete
+  Tk application. Default key bindings are Control-plus and Control-minus.</p>
 </blockquote>
 
 <p><em>cmdName</em> <strong>getFrame</strong></p>

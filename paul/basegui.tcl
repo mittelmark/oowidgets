@@ -109,6 +109,9 @@ oo::class create ::paul::basegui {
     #'    - [configure](#configure)
     #'    - [console](#console)
     #'    - [exit](#exit)
+    #'    - [fontDecrease](#fontDecrease)
+    #'    - [fontIncrease](#fontIncrease)
+    #'    - [fontSizeBind](#fontSizeBind)
     #'    - [getFrame](#getFrame)
     #'    - [getMenu](#getMenu)    
     #'    - [splash](#splash)
@@ -414,6 +417,49 @@ oo::class create ::paul::basegui {
             } 
         }
 
+    }
+    #' 
+    #' <a name="fontDecrease"> </a>
+    #' *cmdName* **fontDecrease** 
+    #' 
+    #' > Decrease the font size for all widgets and menues by two pixels, usually you would 
+    #'   use *fontSizeBind* to do this for instance using the Control-minus key combination.
+    #' 
+    method fontDecrease {} {
+        foreach fnt [font names] {
+            set currentFont [font configure $fnt]
+            set currentSize [font actual $fnt -size]
+            set newSize [expr {$currentSize - 2}]
+            font configure $fnt -size $newSize
+        }
+    }
+    #' 
+    #' <a name="fontIncrease"> </a>
+    #' *cmdName* **fontIncrease** 
+    #' 
+    #' > Increase the font size for all widgets and menues by two pixels, usually you would 
+    #'   use *fontSizeBind* to do this for instance using the Control-plus key combinations.
+    #' 
+    method fontIncrease {} {
+        foreach fnt [font names] {
+            set currentFont [font configure $fnt]
+            set currentSize [font actual $fnt -size]
+            set newSize [expr {$currentSize + 2}]
+            font configure $fnt -size $newSize
+        }
+    }
+    #' 
+    #' <a name="fontSizeBind"> </a>
+    #' *cmdName* **fontSizeBind** *?bindings [list Control-plus Control-minus]?*
+    #' 
+    #' > Use the given bindings to increase and decrease the font size for the complete
+    #'   Tk application. Default key bindings are Control-plus and Control-minus. 
+    #' 
+    method fontSizeBind {{bindings {Control-plus Control-minus}}} {
+        set plus [lindex $bindings 0]
+        set minus [lindex $bindings 1]        
+        bind all <${plus}> [list [self] fontIncrease]
+        bind all <${minus}> [list [self] fontDecrease]
     }
     #'
     #' *cmdName* **getFrame**  
