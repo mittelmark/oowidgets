@@ -3,7 +3,7 @@ package require tcltest
 tcltest::test package-1.1 {package load} {
     lappend auto_path .
     package require oowidgets
-} {0.3.4}
+} {0.4.0}
 
 tcltest::test flash-1.1 {new button} {
     namespace eval ::test { }
