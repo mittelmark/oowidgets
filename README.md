@@ -1,3 +1,8 @@
+[![License](https://img.shields.io/badge/license-GPL2-lightgray.svg)](https://github.com/mittelmark/oowidgets/blob/main/LICENSE)
+[![Release](https://img.shields.io/github/v/release/mittelmark/oowidgets.svg?label=current+release)](https://github.com/mittelmark/oowidgets/releases)
+![Downloads](https://img.shields.io/github/downloads/mittelmark/oowidgets/total)
+![Commits](https://img.shields.io/github/commits-since/mittelmark/oowidgets/latest)
+
 # oowidgets
 
 Package for creating megawidgets using TclOO (WIP).
@@ -233,9 +238,13 @@ namespace eval ::test { }
 }
 ```
 
+## CHANGES
+
+- 2024-12-29 : 0.4.0 Making it Tcl 9 ready
+
 ## TODO's
 
 - delegate method?
 - component declaration?
 - snit compatibility?
-- Tcl 8.7 check
+- Tcl 9 check (done)
