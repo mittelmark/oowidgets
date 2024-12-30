@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-GPL2-lightgray.svg)](https://github.com/mittelmark/oowidgets/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-BSD3-lightgray.svg)](https://github.com/mittelmark/oowidgets/blob/main/LICENSE)
 [![Release](https://img.shields.io/github/v/release/mittelmark/oowidgets.svg?label=current+release)](https://github.com/mittelmark/oowidgets/releases)
 ![Downloads](https://img.shields.io/github/downloads/mittelmark/oowidgets/total)
 ![Commits](https://img.shields.io/github/commits-since/mittelmark/oowidgets/latest)
