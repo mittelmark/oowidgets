@@ -55,7 +55,7 @@
 #'
 #' ```{.tcl eval=true}
 #' package require paul
-#' set txt [tkoo::text .txt2 -background salmon]
+#' set txt [tkoo::text .txtx -background salmon]
 #' oo::objdefine $txt mixin ::paul::txautorep
 #' $txt autorep [list (TM) \u2122 (C) \u00A9 (R) \u00AE (K) \u2654]
 #' $txt insert end "# Autorep Example\n\n"
@@ -64,7 +64,7 @@
 #' }
 #' $txt insert end "  * item 1\n  * item 2\n  * Write (DG) and press enter\n  * "
 #' pack $txt -side top -fill both -expand yes
-#' set txt [tkoo::text .txt -background skyblue]
+#' set txt [tkoo::text .txty -background skyblue]
 #' foreach col [list A B C] { 
 #'    $txt insert  end "# Header $col\n\n## Indent example\n\n"
 #' }
@@ -86,7 +86,7 @@
 #' 
 #' ```{.tcl eval=true}
 #' package require paul
-#' set txt [tkoo::text .txt2 -background salmon]
+#' set txt [tkoo::text .txta -background salmon]
 #' oo::objdefine $txt mixin ::paul::txautorep
 #' $txt autorep [list (TM) \u2122 (C) \u00A9 (R) \u00AE (K) \u2654]
 #' $txt insert end "# Autorep Example\n\n"
@@ -135,7 +135,7 @@ catch { rename ::paul::txautorep {} }
 #' 
 #' ```{.tcl eval=true}
 #' package require paul
-#' set txt [tkoo::text .txt -background skyblue]
+#' set txt [tkoo::text .txti -background skyblue]
 #' foreach col [list A B C] { 
 #'    $txt insert  end "# Header $col\n\n   Some more text.\n\n"
 #' }
