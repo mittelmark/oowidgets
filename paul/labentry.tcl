@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::labentry documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250202.0625>
+#' Date : <250202.0700>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -25,6 +25,7 @@
 #' ---
 #' 
 #' ```{.tcl eval=true echo=false results="asis"}
+#' lappend auto_path .
 #' include paul/header.html
 #' ```
 #' 
@@ -136,7 +137,7 @@ oowidgets::widget ::paul::LabEntry {
 #' 
 #' ## <a name='example'></a>EXAMPLE
 #' 
-#' ```{.tcl eval=true}
+#' ```{.tcl eval=true results="hide"}
 #' package require paul
 #' wm title . DGApp
 #' pack [paul::labentry .le] -side top -fill both -expand yes

@@ -1,6 +1,7 @@
 <center>
 [basegui](basegui.html) -
 [dlabel](dlabel.html) -
+[labentry](labentry.html) -
 [notebook](notebook.html) -
 [rotext](rotext.html) -
 [statusbar](statusbar.html) -
