@@ -4,7 +4,7 @@ default:
 	htmlark tutorial.html -o temp.html
 	mv temp.html tutorial.html
 manual:
-	pantcl oowidgets/oowidgets.tcl oowidgets/oowidgets.html --css "mini.css"
+	pantcl oowidgets/oowidgets.tcl oowidgets/oowidgets.html --css "mini.css" --no-pandoc
 
 paul-manual:
 	pandoc paul/header.md -o paul/header.html 	

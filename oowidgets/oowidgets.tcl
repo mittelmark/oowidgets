@@ -1,10 +1,10 @@
 package require Tk 8.6-
-package provide oowidgets 0.4.0
+package provide oowidgets 0.5.0
 
 #' ---
 #' title: package oowidgets - create megawidgets using TclOO
 #' author: Detlef Groth, University of Potsdam, Germany
-#' date: 2024-12-23
+#' date: 2025-02-02
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -77,16 +77,21 @@ if {![package vsatisfies [package provide Tcl] 8.7]} {
 }
 
 
-namespace eval ::oowidgets { }
+namespace eval ::oowidgets { 
+    variable tmp
+    set tmp 0
+}
 
 # this is a tk-like wrapper around the class,
 # so that object creation works like other Tk widgets
 # is considered a private function for now
 
 proc oowidgets::new name { 
+    variable tmp
+    incr tmp
     eval "
     proc [string tolower $name] {path args}  { 
-      set obj \[$name create tmp \$path {*}\$args\]
+      set obj \[$name create tmp$tmp \$path {*}\$args\]
         rename \$obj ::\$path
         return \$path
     }
@@ -305,7 +310,7 @@ proc oowidgets::widget {name body} {
 #'
 #' ## LICENSE
 #'
-#' Copyright 2023 Detlef Groth
+#' Copyright 2023-2025 Detlef Groth, University of Potsdam, Germany
 #' 
 
 #' Redistribution and use in source and binary forms, with or without
