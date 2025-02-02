@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::statusbar documentation
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <241223.1240>
+#' Date : <250202.0632>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -111,7 +111,7 @@ oowidgets::widget ::paul::Statusbar {
     #' 
     #' ## <a name='commands'></a>WIDGET COMMANDS
     #' 
-    #' Each **paul::statusbar** widgets supports its own as well via the *pathName label cmd* and *pathName progressbar cmd* syntax all the commands of its component widgets.
+    #' Each **paul::statusbar** widget supports its own as well via the *pathName label cmd* and *pathName progressbar cmd* syntax all the commands of its component widgets.
     #' 
     #' *pathName* **clear** *message ?value?*
     #' 
@@ -152,7 +152,6 @@ oowidgets::widget ::paul::Statusbar {
             return [next {*}$args]
         } else {
             next {*}$args
-            puts $args
             array set opts $args
             foreach key [array names opts] {
                 if {$key eq "-textvariable"} {

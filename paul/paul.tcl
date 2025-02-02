@@ -1,7 +1,8 @@
 package require Tk
 package require TclOO
+package require oowidgets
 package require tkoo
-package provide paul 0.4.0
+package provide paul 0.5.0
 
 # some generic utilities
 
@@ -93,6 +94,7 @@ proc ::paul::getExampleCode {filename} {
 source [file join [file dirname [info script]] statusbar.tcl] 
 source [file join [file dirname [info script]] basegui.tcl] 
 source [file join [file dirname [info script]] dlabel.tcl] 
+source [file join [file dirname [info script]] labentry.tcl] 
 source [file join [file dirname [info script]] rotext.tcl] 
 source [file join [file dirname [info script]] notebook.tcl] 
 source [file join [file dirname [info script]] txmixins.tcl] 

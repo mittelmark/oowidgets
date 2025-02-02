@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="title" content="paul::dlabel - label with dynamic font size">
-<meta name="author" content="Detlef Groth, Schwielowsee, Germany">
+<meta name="title" content="paul::labentry documentation">
+<meta name="author" content="Detlef Groth, University of Potsdam, Germany">
     
-<title>paul::dlabel - label with dynamic font size</title>
+<title>paul::labentry documentation</title>
     
     
 
@@ -21,8 +21,8 @@
 
 
 
-<h1 class="title">paul::dlabel - label with dynamic font size</h1>
-<h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
+<h1 class="title">paul::labentry documentation</h1>
+<h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
 <h2 class="date">2025-02-02</h2>
 
 <p><center>
@@ -35,64 +35,102 @@ href="txmixins.html">txmixins</a>
 
 <h2>NAME</h2>
 
-<blockquote>
-<p><strong>paul::dlabel</strong> - label with fontsize adaptation</p>
-</blockquote>
+<p><strong>paul::labentry</strong> - labendtry widget for Tk applications based on a ttk::label and a ttk::entryr widget.
+This is a proof of principle example widget, kept as easy as possible.</p>
 
-<h2><a name='synopsis'></a> SYNOPSIS</h2>
+<h2><a name='toc'></a>Table of Contents</h2>
+
+<ul>
+<li><a href="#synopsis">SYNOPSIS</a></li>
+<li><a href="#description">DESCRIPTION</a></li>
+<li><a href="#command">COMMAND</a></li>
+<li><a href="#options">WIDGET OPTIONS</a></li>
+<li><a href="#commands">WIDGET COMMANDS</a></li>
+<li><a href="#example">EXAMPLE</a></li>
+<li><a href="#see">SEE ALSO</a></li>
+<li><a href="#authors">AUTHOR</a></li>
+<li><a href="#copyright">COPYRIGHT</a></li>
+<li><a href="#license">LICENSE</a>
+ </li></ul>
+
+<h2><a name='synopsis'></a>SYNOPSIS</h2>
 
 <pre class='code'><code>package require paul
-paul::dlabel pathName -text TEXT ?-option value ...?
-pack cmdName</code></pre>
+paul::labentry pathName options
+pathName label configure -textvariable varname
+pathName entry configure -textvariable varname</code></pre>
 
-<h2>COMMAND</h2>
+<h2><a name='description'></a>DESCRIPTION</h2>
 
-<p><a name="dlabel"></a>
-<strong>paul::dlabel</strong> <em>pathName</em></p>
+<p><strong>paul::labentry</strong> - is a composite widget consisiting of a ttk::label and a ttk::entry.
+It should serve as an illustration for a simple composite widget based on two widgets packed
+into a ttk::frame. It as well illustrated create new configure options, here --labeltext.
+which are delegated to one of the widgets and adding subwidget commands, here <em>label</em> abd <em>entry</em>.
+One of  the widgets is the main widget where all methods are delegated to.</p>
+
+<h2><a name='command'></a>COMMAND</h2>
+
+<p><strong>paul::labentry</strong> <em>pathName ?options?</em></p>
 
 <blockquote>
-<p>Creates a ttk::label where the font size is dynamically adjusted to the widget size.</p>
+<p>Creates and configures a new paul::labentry widget  using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
 </blockquote>
 
-<h2>OPTIONS</h2>
+<h2><a name='options'></a>WIDGET OPTIONS</h2>
 
-<p>All options of a standard ttk::label are supported.</p>
+<p>The <strong>paul::labentry</strong> widget is a composite widget where the options 
+are delegated to the original widgets. In addition to the default options the following option(s)
+are added:</p>
 
-<h2>METHODS</h2>
+<p><strong>-labeltext</strong> - the text which should be displayed on the label:</p>
 
-<p>All methods of a standard ttk::label are supported.</p>
+<h2><a name='commands'></a>WIDGET COMMANDS</h2>
 
-<h2>EXAMPLE</h2>
+<p>Each <strong>paul::labentry</strong> widget supports its own as well via the 
+<em>pathName label cmd</em> and <em>pathName entry cmd</em> syntax all the commands of its component widgets.</p>
+
+<p><em>pathName</em> <strong>label</strong> <em>?args?</em></p>
+
+<blockquote>
+<p>Delegates all given methods to the internal label widget, if no argument is
+  given returns the widget itself
+<em>pathName</em> <strong>entry</strong> <em>?args?</em></p>
+
+<p>Delegates all given methods to the internal entry widget, if no argument is
+  given returns the widget itself</p>
+</blockquote>
+
+<h2><a name='example'></a>EXAMPLE</h2>
 
 <pre class='code'><code class='tclinn'>package require paul
 wm title . DGApp
-set app [paul::basegui new]
-font create title -family Helvetica -size 10
-puts [winfo children .]
-set frame [$app getFrame]
-set txt &quot; Some Title &quot;
-set dlab [paul::dlabel $frame.l -text $txt]
-pack  $dlab -expand 1 -fill both
-wm geometry . 400x300+0+0</code></pre>
+pack [paul::labentry .le] -side top -fill both -expand yes
+.le label configure -text &quot;Label: &quot;
+.le entry insert 0 hello
+update idletasks
+after 3000 exit</code></pre>
 
-<pre class='code'><code class='tclout'>.mbar .#mbar .frame .sep .stb</code></pre>
+<pre class='code'><code class='tclout'>Error: can't find package paul
+    while executing
+&quot;package require paul&quot;</code></pre>
 
-<h2><a name='see'></a> SEE ALSO</h2>
+<h2><a name='see'></a>SEE ALSO</h2>
 
 <ul>
 <li><a href="../oowidgets/oowidgets.html">oowidgets</a></li>
-<li><a href="basegui.html">paul::basegui.tcl</a>
+<li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm">ttk::entry</a></li>
+<li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm">ttk::label</a>
 </li></ul>
 
-<h2><a name='authors'></a> AUTHOR</h2>
+<h2><a name='authors'></a>AUTHOR</h2>
 
-<p>The <strong>paul::statusbar</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
+<p>The <strong>paul::labentry</strong> widget was written by Detlef Groth, University of Potsdam, Germany.</p>
 
 <h2><a name='copyright'></a>COPYRIGHT</h2>
 
-<p>Copyright (c) 2021-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<p>Copyright (c) 2019-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
 
-<h2><a name='license'></a>LICENSE </h2>
+<h2><a name='license'></a>LICENSE</h2>
 
 <pre class='code'><code class='tclout'>BSD 3-Clause License
 

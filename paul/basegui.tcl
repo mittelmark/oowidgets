@@ -63,7 +63,6 @@
 #' ```
 
 package require Tk
-package require paul
 
 #' ## <a name='description'>DESCRIPTION</a>
 #'

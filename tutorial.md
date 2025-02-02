@@ -394,13 +394,23 @@ If you like to create new options like `-labeltext` you should create a new
 configure method in your class where you then delegate this option to the right widget. That could look something like this:
 
 ```{.tcl eval=false}
-oo::define ::comp::LabEntry method configure {args} {
-   next {*}$args
-   my label configure -text [my cget -labeltext]
+oowidgets::widget ::paul::LabEntry {
+    variable ent
+    variable lab
+    constructor {path args} {
+        ### initialize with option -labeltext, defaults empty string
+        my install ttk::frame $path -labeltext ""
+        .... code like before
+    }
+    ... methods like before
+    method configure {args} {
+       next {*}$args
+       my label configure -text [my cget -labeltext]
+    }    
 }
 ```
 
-This can however soon become complex, so you have to update the configuration
+This can however soon become complex with more options, so you have to update the configuration
 settings for the class if configure is called via `obj label configure`. So
 probably it is the easiest way to leave it as it it is and then update the
 component configurations via the exposed commands `label` and `entry`. This
@@ -417,7 +427,6 @@ This document was generated using pandoc and [pantcl](https://github.com/mittelm
 
 See the [Makefile](Makefile) for the used commands.
 
-## EOF
 
 
 

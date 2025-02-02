@@ -62,17 +62,24 @@ $fl flash
 
 For more examples, including creating composite widgets, using mixins, see the [tutorial](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/tutorial.html)
 
-There is a sample project which uses `TclOO` and `oowidgets` to create mega widgets. Here two example commands:
+There is a sample project which uses `TclOO` and `oowidgets` to create mega widgets. Here commands delivered in a package paul to demonstrate the different programming concepts inheritance, composition and mixins:
 
-- [paul::basegui :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/basegui.html) - base class to build Tk applications, [code](paul/basegui.tcl) 
-- [paul::dlabel :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - using inheritance to create changed `ttk::label` with dynamic fontsize,
-   [code](paul/dlabel.tcl) 
-- [paul::rotext :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/rotext.html) - read only text widget, useful for help pages for instance
-   [code](paul/rotext.tcl) 
-- [paul::statusbar :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`,  
+- [paul::basegui :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/basegui.html) - 
+  base class to build Tk applications, [code](paul/basegui.tcl) 
+- [paul::dlabel :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - 
+  using inheritance to create changed `ttk::label` with dynamic fontsize,  [code](paul/dlabel.tcl) 
+- [paul::labentry :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/labentry.html) - 
+   using composition to combine a `ttk::label` and and `ttk::entry` widget
+   [code](paul/labentry.tcl) 
+- [paul::notebook :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/notebook.html) - 
+   using inheritance to extend a `ttk::notebook` with new functionalities to label and to move tabs   [code](paul/notebook.tcl) 
+- [paul::rotext :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/rotext.html) - 
+  read only text widget, useful for help pages for instance  [code](paul/rotext.tcl) 
+- [paul::statusbar :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/statusbar.html) - 
+   composite widget based on a `ttk::frame`, a `ttk::label` and a `ttk::progessbar`,  
    [code](paul/statusbar.tcl) 
-- [paul::txmixins :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/txmixins.html) - mixin classes for the `tk::text` widget to extend its functions,  
-   [code](paul/txmixins.tcl) 
+- [paul::txmixins :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/txmixins.html) - 
+   mixin classes for the `tk::text` widget to extend its functions  [code](paul/txmixins.tcl) 
 
 PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen"..
 
