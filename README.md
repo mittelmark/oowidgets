@@ -68,6 +68,8 @@ There is a sample project which uses `TclOO` and `oowidgets` to create mega widg
   base class to build Tk applications, [code](paul/basegui.tcl) 
 - [paul::dlabel :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - 
   using inheritance to create changed `ttk::label` with dynamic fontsize,  [code](paul/dlabel.tcl) 
+- [paul::imedit :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/imedit.html) - 
+  show case using composition of composed widgets like `paul::labentry`, `tk.Text` and `ttk.Label` to create a larger megawidget,  [code](paul/imedit.tcl) 
 - [paul::labentry :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/labentry.html) - 
    using composition to combine a `ttk::label` and and `ttk::entry` widget
    [code](paul/labentry.tcl) 
@@ -81,9 +83,9 @@ There is a sample project which uses `TclOO` and `oowidgets` to create mega widg
 - [paul::txmixins :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/txmixins.html) - 
    mixin classes for the `tk::text` widget to extend its functions  [code](paul/txmixins.tcl) 
 
-PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen"..
+PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen" ...
 
-**License:** BSD
+**License:** BSD 
 
 **Snit vs oowidgets**
 
