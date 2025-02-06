@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::labentry documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250202.0700>
+#' Date : <250206.0548>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -122,7 +122,7 @@ oowidgets::widget ::paul::LabEntry {
         if {[llength $args] == 0} {
             return $ent
         }
-        $ent {*}$args
+        return [$ent {*}$args]
     }
     method configure {args} {
         next {*}$args
@@ -139,10 +139,14 @@ oowidgets::widget ::paul::LabEntry {
 #' 
 #' ```{.tcl eval=true results="hide"}
 #' package require paul
+#' proc getEntry { } {
+#'    puts "text in entry:[.le entry get]"
+#' }
 #' wm title . DGApp
 #' pack [paul::labentry .le] -side top -fill both -expand yes
 #' .le label configure -text "Label: "
 #' .le entry insert 0 hello
+#' pack [ttk::button .btn -command getEntry -text "Check Entry Text"] -side top -padx 10 -pady 10 -fill x 
 #' update idletasks
 #' after 3000 exit
 #' ```

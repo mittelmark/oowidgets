@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250202.0824>
+#' Date : <250206.0547>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -34,11 +34,6 @@
 #' **paul::imedit** - imedit widget for Tk applications based on a paul::labentry for entering
 #' a command line to create an image, tk::text to write the image cde commands and ttk::label
 #' to display the image.
-#' This is a proof of principle example widget, to demonstrate the composition of a megawidget
-#' based on a paul package megawidget and standard Tk widgets. The UML schema for this widget is
-#' shown below:
-#'
-#' ![](https://kroki.io/plantuml/svg/eNptT1sOwiAQ_OcUG7_Uhgvw4Sm8ALakIaAlskZN07uXd7pN-WJnZmdnnOyNHBWcYJq-ehgV-vCfGYTXW-l9w2GGhS3MtQUnPzZpsy6OQuinGjQWgw5Q_fB8KYOVD2XJ9ML3PwDBdutRmezSQZURE5rlbjZJ0AgRD6fEBYpYWi01WivOb7uzR1yuxUhHft0vUjrwNckB0wKtKzJ6QQ==)
 #'
 #' ## <a name='toc'></a>Table of Contents
 #' 
@@ -77,6 +72,12 @@
 #' widget to display that image. It is a proof of principle widget that paul widgets can be used as
 #' component of megawidgets, so that we can build megawidgets based on other megawidgets.
 #'
+#' This is a proof of principle example widget, to demonstrate the composition of a megawidget
+#' based on a paul package megawidget and standard Tk widgets. The UML schema for this widget is
+#' shown below:
+#'
+#' ![](https://kroki.io/plantuml/svg/eNp1UFsOwiAQ_OcUG7_Uphfgw1N4AdqSpgHbRrZR03B3eacg8sXM7M7O7sp6wUYOJ1iW1zSMHJX57wTM6yVTKvGwgyaarKlhZZt0tb7OQkqnBx8mDAYNIH_j-RKAZB2XGZrx-TGEsT16RMW7NBDLMpM8y10ckqCg1A52iQNlOddakt2GuMywaziyYb4dkvZv21sRsKb5A5DsGu21bMxlo8fMFSVF_6P5DUhxu2rrr-rgFwpap6o=)
+#'
 #' ## <a name='command'></a>COMMAND
 #'
 #' **paul::imedit** *pathName ?options?*
@@ -91,25 +92,96 @@
 #'
 #' - __-commandline__ - the text which should be aded to the entry widget as the command line and which is executed if the 
 #'   code in the text widget is saved
+#' - __-filename__ - the file which should be opened into the text widget to be edited by the user
+#' - __-labeltext__ - the text which should be displayed in the label widget left from the command line entry widget
+#' - __pane__ - orientation of the paned window widget, either horizontal or vertical, default: vertical
+#' - __-statuslabel__ - an optional label widget to display status messages
+#' 
 package require oowidgets
-namespace eval ::paul { }
+namespace eval ::paul { 
+    image create photo ::paul::devscreen22 -data {
+        R0lGODlhFgAWAIcAAPwCBAQCBPTy9PTu9Ozq7OTi5Nze3OTe5Nza3NzW3NTS
+        1MzOzMzKzMzGzMTCxMTGxOzm7AwGDBQOFBQSFCQeHCwmLCwuLDQyNDw6PERC
+        RFROVEQ+RDQ2NLy+vKSipISChGxqbExKTOzu7OTm5Pz+/GRiZMS+xLy6vBQW
+        FLy2vCwiHFQ+NMSmfNSyhIxmTDwuLJx+bLS2tCwmHMyyhMyqfPTqpPzyvLSW
+        bLSWfPzitIx+ZDw2PAwKDCQiJGxWRPTmrPTerMyuhPzqtPz63PTWnPz6zNy+
+        nIRiVDQuLKyWbOTanPz21NS2jNS6lDQqJHRaTPzmrPTSnPzyxOTClPz2xNSu
+        hPTqxPzuvOzSpAQGDOTKnMy2jOzSrPTu1NzKnOzOnBwWHJRuXLSWdPTatPzq
+        vNzClCwmJOzSnOTOnPTuxOzKlOzerOzarOzitJR6ZNTO1IxmXPTWrNSyjPzO
+        jPTSpLSehHRqZOzirOTCjPS+fPzGhOy6bOzKhGROPMy2lPz+1PzmtKRyRHRi
+        NNTCdPz+zNzCjEQ2NKySdDQmJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAACH5BAEAAAAALAAAAAAWABYAAAj/AAEIHEiwoMGB
+        ARIqXMhQIUIBAwYQIFCggIEDCBIoULBgAYMGDgIIDEBAwMSKBRBk3NjxAciQ
+        IwdACBBBwgQKFSxcwJBBwwYMHBx0EAmA5EwPH0CEsCChoYgOQ0cSGCHhA4kS
+        S5syJGDiBNEAFVGUKKEBAwWFFM6SNJHi64gDFEKE4FBBggoKK1i0cPECxokY
+        Xw0gsECYggQZM2jAqGHjBo4cOtqOxLhDAg8ePXz8ABJEyBAWRIoYOfJipEoM
+        CZEkuaFkSAslS5jUGJKkSRAnRREo0JDwCZQoTKQAmUKlihQrVa5gKZ1lI+oA
+        K7QM2cJlSZMuU4Z4+TJEx0iNOwKAggkjZkyOFmS8kClzpcUQLRRGbjRD4MgZ
+        NEzSqKG+ZgobI2248dUbDDDwABzcxSEHEFpgEcUcdMRRhx1fFejAAx0cgcYd
+        SxiBRx566LEHH0d8QFRRNC3Uhx985CHEH0MAEkhCBxWkgiCDFEFIEYUYUmON
+        MhyCRxVH/PgjBYioYJAdAQEAIf5oQ3JlYXRlZCBieSBCTVBUb0dJRiBQcm8g
+        dmVyc2lvbiAyLjUNCqkgRGV2ZWxDb3IgMTk5NywxOTk4LiBBbGwgcmlnaHRz
+        IHJlc2VydmVkLg0KaHR0cDovL3d3dy5kZXZlbGNvci5jb20AOw==
+    }
+}
 oowidgets::widget ::paul::ImEdit {
     variable lbent
     variable txt
+    variable btn
     variable img
+    variable img2
+    variable types
+    variable lastdir 
+    variable pw
     constructor {path args} {
         # the main widget is the frame
         # add an additional label
-        my install ttk::frame $path -commandline "" -labeltext ""
-        set lbent [paul::labentry $path.lbent]
+        my install ttk::frame $path -commandline "" -labeltext "" -filename "" -statuslabel "" -pane vertical
+        set types {
+            {{Dot Files}        {.dot}        }
+            {{PlantUML Files}   {.pml}        }                
+            {{Text Files}       {.txt}        }
+            {{All Files}        *             }
+        }
+        set lastdir [pwd]
+        set tf [ttk::frame $path.tf]
+        set lbent [paul::labentry $path.tf.lbent]
+        $lbent entry configure -width 50
+        set btn [ttk::button $path.tf.btn -text " Execute " -command [mymethod execute]]
         set pw [ttk::panedwindow $path.pw]
-        set txt [tk::text $path.pw.txt]
-        set img [tk::text $path.pw.img]
+        set pw2 [ttk::panedwindow $path.pw2 -orient horizontal]
+        #set tfr1 [ttk::frame $path.pw.fr]
+        ## TODO - add scrollbars via guibaseclass autoscroll?
+        set txt [tk::text $pw.txt]
+        set peer [$txt peer create $pw2.text]
+        
+        set img [ttk::label $path.pw.img -anchor center -image ::paul::devscreen22]
+        set img2 [ttk::label $path.pw2.img2 -anchor center -image ::paul::devscreen22]        
         $pw add $txt
         $pw add $img
-        pack $lbent -side top -padx 5 -pady 5
-        pack $pw -side top -fill both -expand true -padx 5 -pady 5
+        $pw2 add $peer
+        $pw2 add $img2
+        #pack $lbent -side top -padx 5 -pady 5
+        pack $lbent -side left -fill x -padx 5 -pady 5
+        pack $btn -side left -padx 5 -pady 5
+        pack $tf -side top -fill x -expand false -anchor center -padx 20
         my configure {*}$args
+        if {[my cget -filename] ne ""} {
+            my file_open
+        }
+        if {[my cget -pane] eq "vertical"} {
+            pack $pw -side top -fill both -expand true -padx 5 -pady 5
+        } else {
+            pack $pw2 -side top -fill both -expand true -padx 5 -pady 5
+        }
+
     }
     #' 
     #' ## <a name='commands'></a>WIDGET COMMANDS
@@ -118,6 +190,97 @@ oowidgets::widget ::paul::ImEdit {
     #' *pathName labentry cmd*, *pathName text cmd*  and *pathName label* syntax 
     #' all the commands of its component widgets.
     #' 
+    #' *pathName* **button* *?args?*
+    #' 
+    #' > Delegates all given methods to the internal ttk::button, if no argument is
+    #'   given returns the widget itself
+    
+    # expose the internal widgets using subcommands
+    method button {args} {
+        if {[llength $args] == 0} {
+            return $btn
+        }
+        $btn {*}$args
+    }
+    #'
+    #' *pathName* **execute** 
+    #'
+    #' > Execute the command entered in the entry widget using the text which is written
+    #'   into text widget. The commandline entered in the entry widget should contain place holders
+    #'   for the input file (%i) and a possible output file (%o). If the command does not need an output filename
+    #'   because it creates an filename based on the input file with the png extension automatically
+    #'   added, then no output filename is required.
+    #'
+    method execute { } {
+        my configure -commandline [my labentry entry get]
+        variable types
+        variable lastdir
+        set savefile [my cget -filename]
+        if {$savefile eq ""} {
+            unset -nocomplain savefile
+            set savefile [tk_getSaveFile -filetypes $types -initialdir $lastdir]
+        }
+        if {$savefile != ""} {
+            set content [my text get 1.0 end]
+            set out [open $savefile w 0600]
+            puts $out $content
+            close $out
+            my configure -filename $savefile
+            set lastdir [file dirname $savefile]
+            set imgfile [file rootname $savefile].png
+            set optfile [file rootname $savefile].opt
+            set ocmd [my labentry entry get]
+            set cmd [regsub -all {%i} $ocmd $savefile]
+            set cmd [regsub -all {%o} $cmd $imgfile]
+            set command [split $cmd &]
+            foreach cmd $command {
+                if {[catch {
+                   eval exec $cmd
+                }]} {
+                   if {[my cget -statuslabel] ne ""} {
+                       set status [my cget -statuslabel]
+                       $status configure -text [lindex [split $::errorInfo "\n"] 0] -foreground red
+                       update idletasks
+                       after 2000
+                       $status configure -foreground black
+                       return
+                   }
+                }
+            }
+            image create photo appimg -file $imgfile
+            [my label] configure -image appimg
+            set out [open $optfile w 0600]
+            puts $out $ocmd
+            close $out
+            if {[my cget -statuslabel] ne ""} {
+                [my cget -statuslabel] configure -text "Success: file '[file tail $imgfile]' written!"
+            }
+        }
+    }
+    #' *pathName* **file_open** *?filename?*
+    #'
+    #' > Open the given file in the text widget. If no filename is given will either use the configured filename or if this
+    #'   is as well not given opens a file dialog for selecting a file.
+    #'
+    method file_open {{filename ""}} {
+        variable txt
+        variable lastdir
+        $txt delete 1.0 end
+        if {$filename eq "" && [my cget -filename] == ""} {
+            set filename [tk_getOpenFile -filetypes $types -initialdir $lastdir]
+        }
+        if {$filename != ""} {
+            if {[catch {open $filename r} infh]} {
+                return -code error "File $fielname can't be opened!"
+            } else {
+                
+                $txt insert 1.0 [read $infh]
+                close $infh
+            }
+            set lastdir [file dirname $filename]
+            my configure -filename $filename
+        }
+    }
     #' *pathName* **label* *?args?*
     #' 
     #' > Delegates all given methods to the internal ttk::label widget, if no argument is
@@ -125,10 +288,19 @@ oowidgets::widget ::paul::ImEdit {
     
     # expose the internal widgets using subcommands
     method label {args} {
-        if {[llength $args] == 0} {
-            return $img
+        variable img
+        variable img2
+        if {[my cget -pane] eq "vertical"} {
+            if {[llength $args] == 0} {
+                return $img
+            }
+            $img {*}$args
+        } else  {
+            if {[llength $args] == 0} {
+                return $img2
+            }
+            $img2 {*}$args
         }
-        $img {*}$args
     }
     #' 
     #' *pathName* **labentry* *?args?*
@@ -153,6 +325,7 @@ oowidgets::widget ::paul::ImEdit {
         }
         $txt {*}$args
     }
+    
     method configure {args} {
         next {*}$args
         my labentry configure -labeltext [my cget -labeltext]
@@ -171,11 +344,16 @@ oowidgets::widget ::paul::ImEdit {
 #' ```{.tcl eval=true results="hide"}
 #' package require paul
 #' wm title . DGApp
-#' pack [paul::imedit .ie -commandline "dot -Tpng %i -o %o"] -side top -fill both -expand yes 
+#' ttk::label .lb -text "..."
+#' pack [paul::imedit .ie -commandline "dot -Tpng %i -o %o" -statuslabel .lb -pane horizontal]  \
+#'       -side top -fill both -expand yes \
+#'  
 #' .ie labentry configure -labeltext "Command Line: "
 #' .ie text insert 1.0 "digraph g { A -> B } \n"
+#' pack .lb -side top -fill x -padx 5 -pady 5
 #' update idletasks
-#' after 3000 exit
+#' 
+#' #after 10000 exit
 #' ```
 #' 
 #' ## <a name='see'></a>SEE ALSO

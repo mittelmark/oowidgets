@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="title" content="paul::labentry documentation">
+<meta name="title" content="paul::imedit documentation">
 <meta name="author" content="Detlef Groth, University of Potsdam, Germany">
     
-<title>paul::labentry documentation</title>
+<title>paul::imedit documentation</title>
     
     
 
@@ -21,7 +21,7 @@
 
 
 
-<h1 class="title">paul::labentry documentation</h1>
+<h1 class="title">paul::imedit documentation</h1>
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
 <h2 class="date">2025-02-03</h2>
 
@@ -35,8 +35,9 @@ href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> -
 
 <h2>NAME</h2>
 
-<p><strong>paul::labentry</strong> - labendtry widget for Tk applications based on a ttk::label and a ttk::entryr widget.
-This is a proof of principle example widget, kept as easy as possible.</p>
+<p><strong>paul::imedit</strong> - imedit widget for Tk applications based on a paul::labentry for entering
+a command line to create an image, tk::text to write the image cde commands and ttk::label
+to display the image.</p>
 
 <h2><a name='toc'></a>Table of Contents</h2>
 
@@ -56,47 +57,96 @@ This is a proof of principle example widget, kept as easy as possible.</p>
 <h2><a name='synopsis'></a>SYNOPSIS</h2>
 
 <pre class='code'><code>package require paul
-paul::labentry pathName options
-pathName label configure -textvariable varname
-pathName entry configure -textvariable varname</code></pre>
+paul::imedit pathName options
+pathName labentry entry configure options
+pathName labentry label configure options
+pathName text configure options
+pathName label configure options</code></pre>
 
 <h2><a name='description'></a>DESCRIPTION</h2>
 
-<p><strong>paul::labentry</strong> - is a composite widget consisiting of a ttk::label and a ttk::entry.
-It should serve as an illustration for a simple composite widget based on two widgets packed
-into a ttk::frame. It as well illustrated create new configure options, here --labeltext.
-which are delegated to one of the widgets and adding subwidget commands, here <em>label</em> abd <em>entry</em>.
-One of  the widgets is the main widget where all methods are delegated to.</p>
+<p><strong>paul::imedit</strong> - is a composite widget consisting of a <a href="labentry.html">paul::labentry</a> to 
+allow the user to enter a command line command to create an image using a terminal tool like
+GraphViz dot, PlantUML etc, a <a href="https://www.tcl-lang.org/man/tcl8.6/TkCmd/text.htm">tk::text</a> 
+widget to enter the graphics creation code and a <a href="https://www.tcl-lang.org/man/tcl8.6/TkCmd/ttk_label.htm">[ttk::label</a>
+widget to display that image. It is a proof of principle widget that paul widgets can be used as
+component of megawidgets, so that we can build megawidgets based on other megawidgets.</p>
+
+<p>This is a proof of principle example widget, to demonstrate the composition of a megawidget
+based on a paul package megawidget and standard Tk widgets. The UML schema for this widget is
+shown below:</p>
+
+<p><img src="https://kroki.io/plantuml/svg/eNp1UFsOwiAQ_OcUG7_Uphfgw1N4AdqSpgHbRrZR03B3eacg8sXM7M7O7sp6wUYOJ1iW1zSMHJX57wTM6yVTKvGwgyaarKlhZZt0tb7OQkqnBx8mDAYNIH_j-RKAZB2XGZrx-TGEsT16RMW7NBDLMpM8y10ckqCg1A52iQNlOddakt2GuMywaziyYb4dkvZv21sRsKb5A5DsGu21bMxlo8fMFSVF_6P5DUhxu2rrr-rgFwpap6o="></img></p>
 
 <h2><a name='command'></a>COMMAND</h2>
 
-<p><strong>paul::labentry</strong> <em>pathName ?options?</em></p>
+<p><strong>paul::imedit</strong> <em>pathName ?options?</em></p>
 
 <blockquote>
-<p>Creates and configures a new paul::labentry widget  using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
+<p>Creates and configures a new <code>paul::imedit</code> widget  using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
 </blockquote>
 
 <h2><a name='options'></a>WIDGET OPTIONS</h2>
 
-<p>The <strong>paul::labentry</strong> widget is a composite widget where the options 
+<p>The <strong>paul::imedit</strong> widget is a composite widget where the options 
 are delegated to the original widgets. In addition to the default options the following option(s)
-are added:</p>
+are added :</p>
 
-<p><strong>-labeltext</strong> - the text which should be displayed on the label:</p>
+<ul>
+<li><strong>-commandline</strong> - the text which should be aded to the entry widget as the command line and which is executed if the 
+  code in the text widget is saved</li>
+<li><strong>-filename</strong> - the file which should be opened into the text widget to be edited by the user</li>
+<li><strong>-labeltext</strong> - the text which should be displayed in the label widget left from the command line entry widget</li>
+<li><strong>pane</strong> - orientation of the paned window widget, either horizontal or vertical, default: vertical</li>
+<li><strong>-statuslabel</strong> - an optional label widget to display status messages
+
+</li></ul>
 
 <h2><a name='commands'></a>WIDGET COMMANDS</h2>
 
-<p>Each <strong>paul::labentry</strong> widget supports its own as well via the 
-<em>pathName label cmd</em> and <em>pathName entry cmd</em> syntax all the commands of its component widgets.</p>
+<p>Each <strong>paul::imedit</strong> widget supports its own as well via the 
+<em>pathName labentry cmd</em>, <em>pathName text cmd</em>  and <em>pathName label</em> syntax 
+all the commands of its component widgets.</p>
 
-<p><em>pathName</em> <strong>label</strong> <em>?args?</em></p>
+<p><em>pathName</em> <em></em>button<em> </em>?args?*</p>
 
 <blockquote>
-<p>Delegates all given methods to the internal label widget, if no argument is
-  given returns the widget itself
-<em>pathName</em> <strong>entry</strong> <em>?args?</em></p>
+<p>Delegates all given methods to the internal ttk::button, if no argument is
+  given returns the widget itself</p>
+</blockquote>
 
-<p>Delegates all given methods to the internal entry widget, if no argument is
+<p><em>pathName</em> <strong>execute</strong></p>
+
+<blockquote>
+<p>Execute the command entered in the entry widget using the text which is written
+  into text widget. The commandline entered in the entry widget should contain place holders
+  for the input file (%i) and a possible output file (%o). If the command does not need an output filename
+  because it creates an filename based on the input file with the png extension automatically
+  added, then no output filename is required.</p>
+</blockquote>
+
+<p><em>pathName</em> <strong>file_open</strong> <em>?filename?</em></p>
+
+<blockquote>
+<p>Open the given file in the text widget. If no filename is given will either use the configured filename or if this
+  is as well not given opens a file dialog for selecting a file.</p>
+</blockquote>
+
+<p><em>pathName</em> <em></em>label<em> </em>?args?*</p>
+
+<blockquote>
+<p>Delegates all given methods to the internal ttk::label widget, if no argument is
+  given returns the widget itself</p>
+</blockquote>
+
+<p><em>pathName</em> <em></em>labentry<em> </em>?args?*</p>
+
+<blockquote>
+<p>Delegates all given methods to the internal pauL::labentry widget, if no argument is
+  given returns the widget itself
+<em>pathName</em> <strong>text</strong> <em>?args?</em></p>
+
+<p>Delegates all given methods to the internal tk::text widget, if no argument is
   given returns the widget itself</p>
 </blockquote>
 
@@ -104,27 +154,34 @@ are added:</p>
 
 <pre class='code'><code class='tclinn'>package require paul
 wm title . DGApp
-pack [paul::labentry .le] -side top -fill both -expand yes
-.le label configure -text &quot;Label: &quot;
-.le entry insert 0 hello
+ttk::label .lb -text &quot;...&quot;
+pack [paul::imedit .ie -commandline &quot;dot -Tpng %i -o %o&quot; -statuslabel .lb -pane horizontal]  \
+      -side top -fill both -expand yes \
+ 
+.ie labentry configure -labeltext &quot;Command Line: &quot;
+.ie text insert 1.0 &quot;digraph g { A -&gt; B } \n&quot;
+pack .lb -side top -fill x -padx 5 -pady 5
 update idletasks
-after 3000 exit</code></pre>
+
+#after 10000 exit</code></pre>
 
 <h2><a name='see'></a>SEE ALSO</h2>
 
 <ul>
 <li><a href="../oowidgets/oowidgets.html">oowidgets</a></li>
+<li><a href="labentry.html">paul::labentry</a></li>
 <li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm">ttk::entry</a></li>
-<li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm">ttk::label</a>
+<li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm">ttk::label</a></li>
+<li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/text.htm">ttk::text</a>
 </li></ul>
 
 <h2><a name='authors'></a>AUTHOR</h2>
 
-<p>The <strong>paul::labentry</strong> widget was written by Detlef Groth, University of Potsdam, Germany.</p>
+<p>The <strong>paul::imedit</strong> widget was written by Detlef Groth, University of Potsdam, Germany.</p>
 
 <h2><a name='copyright'></a>COPYRIGHT</h2>
 
-<p>Copyright (c) 2019-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<p>Copyright (c) 2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
 
 <h2><a name='license'></a>LICENSE</h2>
 
