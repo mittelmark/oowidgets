@@ -23,7 +23,7 @@
 
 <h1 class="title">paul::basegui base class for building Tk applications</h1>
 <h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
-<h2 class="date">2025-02-03</h2>
+<h2 class="date">2025-02-06</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> -
@@ -235,7 +235,7 @@ destroy .app</code></pre>
   Tk application. Default key bindings are Control-plus and Control-minus.</p>
 </blockquote>
 
-<p><em>cmdName</em> <strong>getFrame</strong></p>
+<p><a name="getFrame" /><em>cmdName</em> <strong>getFrame</strong></p>
 
 <blockquote>
 <p>Returns the mainframe of the application.
@@ -255,11 +255,13 @@ destroy .app</code></pre>
 set fmenu [$app getMenu &quot;File&quot;]
 $fmenu insert 0 command -label Open -underline 0 -command { puts Opening }</code></pre>
 
-<p><em>cmdName</em> <strong>message</strong>  <em>msg</em></p>
+<p><em>cmdName</em> <strong>message</strong>  <em>?msg?</em></p>
 
 <blockquote>
-<p>Displays the text of <em>msg</em> in the statusbar. 
-   Only useful if statusbar is displayed using the <em>addStatusBar</em> command.</p>
+<p>Displays the text of <em>msg</em> in the statusbar. If argument <em>msg</em>
+  is not given, returns the path to the ttk::label widget. To clean any message
+  use the method with a single whitespace character.
+  Only useful if statusbar is displayed using the <em>addStatusBar</em> command.</p>
 </blockquote>
 
 <p><em>cmdName</em> <strong>progress</strong>  <em>value</em></p>

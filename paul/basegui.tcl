@@ -461,7 +461,7 @@ oo::class create ::paul::basegui {
         bind all <${minus}> [list [self] fontDecrease]
     }
     #'
-    #' *cmdName* **getFrame**  
+    #' <a name="getFrame" />*cmdName* **getFrame**  
     #' 
     #' > Returns the mainframe of the application.
     #'   This function allows adding more widgets to the interior of the application in inheriting applications or at a later point.
