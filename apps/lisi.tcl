@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250206.0955>
+#  Last Modified : <250206.1055>
 #
 #  Description	 :
 #
@@ -102,6 +102,7 @@ proc ::lisi::main {argv} {
     }
     if {![winfo exists .f]} {
         gui -filename $filename -commandline $cmd
+        ## \u262F Yin Yang
         wm title . "Lisi - graphics made easy"
     }
 }

@@ -42,6 +42,7 @@ href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> -
 
 <ul>
 <li><a href="#txautorep">paul::txautorep</a> - abbreviation tool for text widgets</li>
+<li><a href="#txfileproc">paul::txfileproc</a> - file-save, file-new, file-open etc procedures for the text widget</li>
 <li><a href="#txindent">paul::txindent</a> - automatic indentation for text widgets</li>
 <li><a href="#txmatching">paul::txmatching</a> - hilight matching parenthesis, brackets or braces</li>
 <li><a href="#txunicode">paul::txunicode</a> - entering Unicode characters</li></ul>
@@ -100,6 +101,98 @@ foreach col [list A B C] {
 }
 $txt insert end &quot;  * item 1\n  * item 2\n  * Write (DG) and press enter\n  * &quot;
 pack $txt -side top -fill both -expand yes</code></pre>
+
+<p><a name="txfileproc"></a><strong>paul::txfileproc</strong> -  <em>oo::objdefine pathName mixin paul::txfileproc</em></p>
+
+<p>Adds methods to load and save the content of the text widget from and to files. The following methods are available</p>
+
+<ul>
+<li><em>cmdName</em> - <strong>fileproc</strong> <em>?args?</em> 
+</li></ul>
+
+<blockquote>
+<p>initialize the fileproc mixin with the given arguments the following arguments are supported:</p>
+
+<ul>
+<li><em>filecallback</em> - the command  executed if a file is loaded or saved, default: empty string</li>
+<li><em>filetypes</em> - the default file type list for opening and saving files</li>
+<li><em>filename</em> - the file to load per default, if the string new is given, will create a new empty file</li></ul>
+
+
+</blockquote>
+
+<p>Example:</p>
+
+<pre class='code'><code class='tclinn'>package require paul
+set txt [tkoo::text .txtfp -background salmon]
+oo::objdefine $txt mixin ::paul::txfileproc
+$txt fileproc
+$txt file_open
+pack $txt -side top -fill both -expand yes</code></pre>
+
+<ul>
+<li><em>cmdName</em> - <strong>file_exit</strong> 
+</li></ul>
+
+<blockquote>
+<p>Asks the user to save the file if it was modified in the text widget.
+  then exits the application.
+  If there is no file name set until now, a file dialog will be displayed
+  to allow the user to select its file.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <strong>file_get</strong>
+</li></ul>
+
+<blockquote>
+<p>Returns the  filename of the currently loaded file.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <strong>file_new</strong>
+</li></ul>
+
+<blockquote>
+<p>Creates a new emtpy file. If the current file was modified the 
+  uuser is asked to save the file before loading a new file.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <strong>file_open</strong> <em>?filename?</em>
+</li></ul>
+
+<blockquote>
+<p>Opens a new file which is selected by the user. If the current file was modified the 
+  user is asked to save the file before loading the file. If there is no file name given
+  the a file dialog will be displayed to allow the user to select its file.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <strong>file_recent</strong> 
+</li></ul>
+
+<blockquote>
+<p>Returns a list of the recently edited files.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <strong>file_save</strong>
+</li></ul>
+
+<blockquote>
+<p>Saves  the content of the text widget into the currently loaded file.
+  If there is no file name set until now, a file dialog will be displayed
+  to allow the user to select its file.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <b>file_save_as</b>
+</li></ul>
+
+<blockquote>
+<p>Saves  the content of the text widget into the file selected by the user.</p>
+</blockquote>
 
 <p><a name="txindent"></a><strong>paul::txindent</strong> -  <em>oo::objdefine pathName mixin paul::txindent</em></p>
 

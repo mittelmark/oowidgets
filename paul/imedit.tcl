@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250206.0722>
+#' Date : <250206.1639>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -207,7 +207,9 @@ oowidgets::widget ::paul::ImEdit {
     #'
     #' > Execute the command entered in the entry widget using the text which is written
     #'   into text widget. The commandline entered in the entry widget should contain place holders
-    #'   for the input file (%i) and a possible output file (%o). If the command does not need an output filename
+    #'   for the input file (%i) and a possible output file (%o). 
+    #'   If you need the filename without the file extension you can use %b. 
+    #'   If the command does not need an output filename
     #'   because it creates an filename based on the input file with the png extension automatically
     #'   added, then no output filename is required.
     #'
@@ -232,6 +234,7 @@ oowidgets::widget ::paul::ImEdit {
             set ocmd [my labentry entry get]
             set cmd [regsub -all {%i} $ocmd $savefile]
             set cmd [regsub -all {%o} $cmd $imgfile]
+            set cmd [regsub -all {%b} $cmd [file rootname $imgfile]]
             set command [split $cmd &]
             foreach cmd $command {
                 if {[catch {

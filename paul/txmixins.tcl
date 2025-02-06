@@ -32,6 +32,7 @@
 #' > The following mixins are implemented:
 #' 
 #' > - [paul::txautorep](#txautorep) - abbreviation tool for text widgets
+#'   - [paul::txfileproc](#txfileproc) - file-save, file-new, file-open etc procedures for the text widget
 #'   - [paul::txindent](#txindent) - automatic indentation for text widgets
 #'   - [paul::txmatching](#txmatching) - hilight matching parenthesis, brackets or braces
 #'   - [paul::txunicode](#txunicode) - entering Unicode characters
@@ -127,6 +128,13 @@ catch { rename ::paul::txautorep {} }
         }
     }
 }
+
+#' <a name="txfileproc"></a>**paul::txfileproc** -  *oo::objdefine pathName mixin paul::txfileproc*
+#' 
+#' Adds methods to load and save the content of the text widget from and to files. The following methods are available
+#' 
+
+
 catch { rename ::paul::txfileproc {} }
 ::oo::class create ::paul::txfileproc {
     variable lastfile
@@ -134,20 +142,76 @@ catch { rename ::paul::txfileproc {} }
     variable lastdir
     variable options
     variable win
+    #' - _cmdName_ - __fileproc__ _?args?_ 
+    #' 
+    #' > initialize the fileproc mixin with the given arguments the following arguments are supported:
+    #'
+    #' > - _filecallback_ - the command  executed if a file is loaded or saved, default: empty string
+    #'   - _filetypes_ - the default file type list for opening and saving files
+    #'   - _filename_ - the file to load per default, if the string new is given, will create a new empty file 
+    #'
+    #' Example:
+    #' 
+    #' ```{.tcl eval=true}
+    #' package require paul
+    #' set txt [tkoo::text .txtfp -background salmon]
+    #' oo::objdefine $txt mixin ::paul::txfileproc
+    #' $txt fileproc
+    #' $txt file_open
+    #' pack $txt -side top -fill both -expand yes
+    #' ```
+    #' 
     method fileproc {args} {
         set win [my widget]
         array set options [list -filecallback "" -filetypes { {{Text Files} {.txt}} {{All Files} {*.*}} } \
-                     -filename new]
+                           -filename new]
         foreach {key val} $args {
             set options($key) $val
         }
         set lastfile $options(-filename)
-        set lastdir [file dirname $lastfile]
-        set lastfiles [list]
+        if {$lastfile eq "new"} {
+            set lastdir [pwd]
+        } else {
+            set lastdir [file dirname $lastfile]
+            set lastfiles [list]
+        }
+        bind $win <Destroy> [mymethod file_exit]
     }
+    #' - _cmdName_ - **file_exit** 
+    #' 
+    #' > Asks the user to save the file if it was modified in the text widget.
+    #'   then exits the application.
+    #'   If there is no file name set until now, a file dialog will be displayed
+    #'   to allow the user to select its file.
+    #'
+    method file_exit {} {
+        my variable win
+        if {$lastfile in [list "*new*" "new"]} {
+            my file_save_as
+        }
+        if {[$win edit modified]} {
+            set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
+            switch -- $answer  {
+                yes  {
+                    my file_save
+                }
+                cancel { return }
+            }
+        } 
+        #exit 0
+    }
+    #' - _cmdName_ - **file_get**
+    #' 
+    #' > Returns the  filename of the currently loaded file.
+    #'
     method file_get {} {
         return $lastfile
     }
+    #' - _cmdName_ - **file_new**
+    #' 
+    #' > Creates a new emtpy file. If the current file was modified the 
+    #'   uuser is asked to save the file before loading a new file.
+    #'
     method file_new {} {
         if {[$win edit modified]} {
             set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
@@ -166,6 +230,12 @@ catch { rename ::paul::txfileproc {} }
         event generate $win <<FileChanged>>
         return "*new*"
     }
+    #' - _cmdName_ - **file_open** *?filename?*
+    #' 
+    #' > Opens a new file which is selected by the user. If the current file was modified the 
+    #'   user is asked to save the file before loading the file. If there is no file name given
+    #'   the a file dialog will be displayed to allow the user to select its file.
+    #'
     method file_open {{filename ""}} {
         if {[$win edit modified]} {
             set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
@@ -201,12 +271,30 @@ catch { rename ::paul::txfileproc {} }
         }
         return $filename
     }
-    method fileSave {} {
+    #' - _cmdName_ - **file_recent** 
+    #' 
+    #' > Returns a list of the recently edited files.
+    #'
+    method file_recent {} {
+        my variable lastfiles
+        set t {}
+        foreach i $lastfiles {if {[lsearch -exact $t $i]==-1} {lappend t $i}}
+        set lastfiles $t
+        return $t
+    }
+    
+    #' - _cmdName_ - **file_save**
+    #' 
+    #' > Saves  the content of the text widget into the currently loaded file.
+    #'   If there is no file name set until now, a file dialog will be displayed
+    #'   to allow the user to select its file.
+    #'
+    method file_save {} {
         my variable lastfile
         my variable lastdir
         my variable options
         my variable win
-        if {$lastfile eq "*new*"} {
+        if {$lastfile in [list "*new*" "new"]} {
             unset -nocomplain savefile
             set file [tk_getSaveFile -filetypes $options(-filetypes) \
                       -initialdir $lastdir]
@@ -228,6 +316,10 @@ catch { rename ::paul::txfileproc {} }
         }
         return $file
     }
+    #' - _cmdName_ - <b>file\_save\_as</b>
+    #' 
+    #' > Saves  the content of the text widget into the file selected by the user.
+    #'
     method file_save_as {} {
         my variable lastdir
         my variable lastfile
@@ -250,36 +342,12 @@ catch { rename ::paul::txfileproc {} }
         }
         return $filename
     }
-
-    method file_exit {} {
-        my variable win
-        if {[$win edit modified]} {
-            set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
-            switch -- $answer  {
-                yes  {
-                    my file_save
-                }
-                cancel { return }
-            }
-        } 
-        exit 0
-    }
-
-    method file_recent {} {
-        my variable lastfiles
-        set t {}
-        foreach i $lastfiles {if {[lsearch -exact $t $i]==-1} {lappend t $i}}
-        set lastfiles $t
-        return $t
-    }
-    
     method PushFile {} {
         my variable lastfiles
         my variable lastfile
         set lastfiles [linsert $lastfiles 0 $lastfile]
     }
 }
-
 #'
 #' <a name="txindent"></a>**paul::txindent** -  *oo::objdefine pathName mixin paul::txindent*
 #' 
@@ -607,11 +675,11 @@ if {false} {
 #'
 #' ## <a name='authors'></a> AUTHOR
 #'
-#' The **paul::tx** mixins were written by Detlef Groth, Schwielowsee, Germany.
+#' The **paul::tx** mixins were written by Detlef Groth, University of Potsdam, Germany.
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
-#' Copyright (c) 2021-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2021-2025  Detlef Groth, E-mail: dgroth(at)uni(minus)potsdam(dot)de
 #' 
 #' ## <a name='license'></a>LICENSE 
 #'
