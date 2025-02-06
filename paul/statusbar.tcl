@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::statusbar documentation
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <250202.0632>
+#' Date : <250206.0731>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -101,7 +101,7 @@ oowidgets::widget ::paul::Statusbar {
     variable pbar
     variable lab
     constructor {path args} {
-        my install ttk::frame $path -maximum 100 -textvariable "" -variable ""
+        my install ttk::frame $path -maximum 100 -textvariable "" -variable "" -text ""
         set lab [::ttk::label $path.lab -relief sunken -anchor w -width 50 -padding 4]
         set pbar [::ttk::progressbar $path.pb -length 60 -mode determinate]
         pack $lab -side left -fill x -expand false -padx 4 -pady 2
@@ -154,8 +154,8 @@ oowidgets::widget ::paul::Statusbar {
             next {*}$args
             array set opts $args
             foreach key [array names opts] {
-                if {$key eq "-textvariable"} {
-                    $lab configure -textvariable $opts($key)
+                if {$key in [list "-textvariable" "-text"]} {
+                    $lab configure $key $opts($key)
                 } elseif {$key in [list "-maximum" "-variable"]} {
                     $pbar configure $key $opts($key)
                 }

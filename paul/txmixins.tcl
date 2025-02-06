@@ -69,8 +69,10 @@
 #'    $txt insert  end "# Header $col\n\n## Indent example\n\n"
 #' }
 #' $txt insert end "  * item 1\n  * item 2 (press return here)"
-#' oo::objdefine $txt mixin paul::txindent
+#' oo::objdefine $txt mixin paul::txindent paul::txfileproc
 #' $txt indent
+#' $txt fileproc 
+#' $txt file_open
 #' pack $txt -side top -fill both -expand yes
 #' ```
 #'
@@ -99,6 +101,7 @@
 #' 
 
 catch { rename ::paul::txautorep {} }
+
 ::oo::class create ::paul::txautorep {
     variable automap 
     method autorep {{abbrev ""}} {
@@ -124,6 +127,159 @@ catch { rename ::paul::txautorep {} }
         }
     }
 }
+catch { rename ::paul::txfileproc {} }
+::oo::class create ::paul::txfileproc {
+    variable lastfile
+    variable lastfiles
+    variable lastdir
+    variable options
+    variable win
+    method fileproc {args} {
+        set win [my widget]
+        array set options [list -filecallback "" -filetypes { {{Text Files} {.txt}} {{All Files} {*.*}} } \
+                     -filename new]
+        foreach {key val} $args {
+            set options($key) $val
+        }
+        set lastfile $options(-filename)
+        set lastdir [file dirname $lastfile]
+        set lastfiles [list]
+    }
+    method file_get {} {
+        return $lastfile
+    }
+    method file_new {} {
+        if {[$win edit modified]} {
+            set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
+            switch -- $answer  {
+                yes  {
+                    my file_save
+                }
+                cancel { return }
+            }
+        } 
+        $win delete 1.0 end       
+        set lastfile "*new*"
+        if {$options(-filecallback) ne ""} {
+            eval $options(-filecallback) new $lastfile
+        }
+        event generate $win <<FileChanged>>
+        return "*new*"
+    }
+    method file_open {{filename ""}} {
+        if {[$win edit modified]} {
+            set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
+            switch -- $answer  {
+                yes  {
+                    $self file_save
+                }
+                cancel { return }
+            }
+        } 
+        if {$filename eq ""} {
+            set filename [tk_getOpenFile -filetypes $options(-filetypes) -initialdir $lastdir]
+            
+        }
+        if {$filename ne ""} {
+            if [catch {open $filename r} infh] {
+                tk_messageBox -title "Info!" -icon info -message "Cannot open $filename: $infh" -type ok
+            } else {
+                $win delete 1.0 end
+                while {[gets $infh line] >= 0} {
+                    $win insert end "$line\n"
+                }
+                close $infh
+                set lastfile $filename
+                set lastdir [file dirname $filename]
+                $win edit modified false
+                if {$options(-filecallback) ne ""} {
+                    eval $options(-filecallback) open $lastfile
+                }
+                my PushFile
+                event generate $win <<FileChanged>>
+            }
+        }
+        return $filename
+    }
+    method fileSave {} {
+        my variable lastfile
+        my variable lastdir
+        my variable options
+        my variable win
+        if {$lastfile eq "*new*"} {
+            unset -nocomplain savefile
+            set file [tk_getSaveFile -filetypes $options(-filetypes) \
+                      -initialdir $lastdir]
+        } else {
+            set file $lastfile
+        }
+        if {$file != ""} {
+            set out [open $file w 0600]
+            puts $out [$win get 1.0 end]
+            close $out
+            set lastfile $file
+            set lastdir [file dirname $lastfile]
+            $win edit modified false
+            if {$options(-filecallback) ne ""} {
+                eval $options(-filecallback) save $lastfile
+            }
+            my  PushFile
+            event generate $win <<FileSaved>> 
+        }
+        return $file
+    }
+    method file_save_as {} {
+        my variable lastdir
+        my variable lastfile
+        my variable options
+        unset -nocomplain savefile
+        set filename [tk_getSaveFile -filetypes $options(-filetypes) -initialdir $lastdir]
+        if {$filename != ""} {
+            set out [open $filename w 0600]
+            puts $out [$text get 1.0 end]
+            close $out
+            set lastfile $filename
+            set lastdir [file dirname $file]
+            $win edit modified false
+            if {$options(-filecallback) ne ""} {
+                eval $options(-filecallback) saveas $lastfile
+            }
+            my PushFile
+            event generate $win <<FileChanged>>
+            event generate $win <<FileSaved>>
+        }
+        return $filename
+    }
+
+    method file_exit {} {
+        my variable win
+        if {[$win edit modified]} {
+            set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
+            switch -- $answer  {
+                yes  {
+                    my file_save
+                }
+                cancel { return }
+            }
+        } 
+        exit 0
+    }
+
+    method file_recent {} {
+        my variable lastfiles
+        set t {}
+        foreach i $lastfiles {if {[lsearch -exact $t $i]==-1} {lappend t $i}}
+        set lastfiles $t
+        return $t
+    }
+    
+    method PushFile {} {
+        my variable lastfiles
+        my variable lastfile
+        set lastfiles [linsert $lastfiles 0 $lastfile]
+    }
+}
+
 #'
 #' <a name="txindent"></a>**paul::txindent** -  *oo::objdefine pathName mixin paul::txindent*
 #' 
@@ -455,7 +611,7 @@ if {false} {
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
-#' Copyright (c) 2021-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2021-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
 #' 
 #' ## <a name='license'></a>LICENSE 
 #'

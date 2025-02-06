@@ -518,13 +518,19 @@ oo::class create ::paul::basegui {
     }
     
     #'
-    #' *cmdName* **message**  *msg*
+    #' *cmdName* **message**  *?msg?*
     #' 
-    #' > Displays the text of *msg* in the statusbar. 
-    #'    Only useful if statusbar is displayed using the *addStatusBar* command.
+    #' > Displays the text of *msg* in the statusbar. If argument *msg*
+    #'   is not given, returns the path to the ttk::label widget. To clean any message
+    #'   use the method with a single whitespace character.
+    #'   Only useful if statusbar is displayed using the *addStatusBar* command.
     
-    method message {msg} {
-        $gui(statusbar) set $msg
+    method message {{msg ""}} {
+        if {$msg eq ""} {
+            return $gui(statusbar)
+        } else {
+            $gui(statusbar) set $msg
+        }
     }
     #'
     #' *cmdName* **progress**  *value* 

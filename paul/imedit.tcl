@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250206.0547>
+#' Date : <250206.0722>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -159,7 +159,7 @@ oowidgets::widget ::paul::ImEdit {
         set pw2 [ttk::panedwindow $path.pw2 -orient horizontal]
         #set tfr1 [ttk::frame $path.pw.fr]
         ## TODO - add scrollbars via guibaseclass autoscroll?
-        set txt [tk::text $pw.txt]
+        set txt [tkoo::text $pw.txt]
         set peer [$txt peer create $pw2.text]
         
         set img [ttk::label $path.pw.img -anchor center -image ::paul::devscreen22]
