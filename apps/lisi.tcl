@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250206.1055>
+#  Last Modified : <250207.0622>
 #
 #  Description	 :
 #
@@ -57,28 +57,31 @@ proc ::lisi::gui {args} {
     array set opts [list -commandline "dot -Tpng %i -o %o" -filename ""]
     array set opts $args
     parray opts
-    if {$opts(-filename) eq ""} {
-        set content "digraph g { A -> B } \n"
-    } else {
-        set filename $opts(-filename)
-        if [catch {open $filename r} infh] {
-            return error -code "Cannot open $filename: $infh"
-        } else {
-            set content [read $infh]
-            close $infh
-        }
-    }
     set f [$app getFrame]
     set ie [paul::imedit $f.ie -commandline $opts(-commandline)  \
             -statuslabel [$app message] -pane horizontal]
     $ie labentry configure -labeltext "Command Line: "
     set txt [$ie text] 
     $txt configure -background skyblue
-    $txt insert 1.0 $content
     oo::objdefine  $txt mixin paul::txindent paul::txfileproc
     pack $ie -side top -fill both -expand true -padx 5 -pady 5
     $txt fileproc -filetypes $::lisi::types
+    set mfile [$app getMenu File]
+    $mfile insert 0 command -command [list $txt file_new] -label "New" -underline 0
+    $mfile insert 1 separator
+    $mfile insert 2 command -command [list $txt file_open] -label "Open ..." -underline 0
+    $mfile insert 3 separator    
+    $mfile insert 4 command -command [list $txt file_save] -label "Save" -underline 0
+    $mfile insert 5 command -command [list $txt file_save_as] -label "Save As ..." -underline 1    
     $app addStatusBar
+    if {$opts(-filename) eq ""} {
+        set content "digraph g { A -> B } \n"
+        $txt insert 1.0 $content
+    } else {
+        $txt file_open $opts(-filename)
+    }
+
+
 }
 
 proc ::lisi::main {argv} {

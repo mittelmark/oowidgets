@@ -173,8 +173,8 @@ catch { rename ::paul::txfileproc {} }
             set lastdir [pwd]
         } else {
             set lastdir [file dirname $lastfile]
-            set lastfiles [list]
         }
+        set lastfiles [list]
         bind $win <Destroy> [mymethod file_exit]
     }
     #' - _cmdName_ - **file_exit** 
