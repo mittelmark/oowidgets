@@ -75,7 +75,11 @@ if {![package vsatisfies [package provide Tcl] 8.7]} {
         return [uplevel 1 {namespace qualifiers [namespace which my]}]::$varname
     }
 }
-
+proc ::oo::Helpers::option {option value} {
+    return [uplevel 1 {
+            set  [namespace qualifiers [namespace which my]]::widgetOptions($option) $value
+        }]
+}
 
 namespace eval ::oowidgets { 
     variable tmp
@@ -156,7 +160,6 @@ oo::class create ::oowidgets::BaseWidget {
       method tkclass {} {
           return [winfo class [string range [self] 2 end]]
       }
-      unexport tkclass
       method configure { args } {
           my variable widget
           my variable widgetOptions
@@ -203,6 +206,10 @@ oo::class create ::oowidgets::BaseWidget {
           my variable widgetpath
           return $widgetpath
       }
+      method option {key val} {
+          my variable widgetOptions
+          set widgetOptions($key) $val
+      }
       # delegate all other methods to the widget
       method unknown {method args} {
           my variable widget
@@ -212,7 +219,8 @@ oo::class create ::oowidgets::BaseWidget {
               return $result
           }
       }
-      unexport unkown install
+      unexport unkown option install tkclass
+
 }
 
 #' **oowidgets::widget** _classname_ _code_ 
@@ -250,6 +258,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' > The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:
 #' 
 #' > - __install__ _basewidget path ?-option value ...?_ - the way to install a default widget with standard and new options
+#' > - __option__ _--option value_ - used in the constructor to create public accesible options
 #'   - __tkclass__  - returns the value of _[winfo class widgetPath]_ for the internal default widget, should be used inside mixins which should be working for different widget types
 #' 
 #' >  Example:
@@ -263,11 +272,15 @@ oo::class create ::oowidgets::BaseWidget {
 #' namespace eval ::test { }
 #' oowidgets::widget ::test::Button {
 #'     constructor {path args} {
+#'        my option -hello "Hello World"
 #'        my install ttk::button $path -message testmessage
 #'        my configure {*}$args
 #'     }
 #'     method test {} {
 #'         puts [my cget -message]
+#'     }
+#'     method hello {} {
+#'         puts [my cget -hello]
 #'     }
 #' }  
 #' puts "available commands: [info commands ::test::*]"
@@ -279,6 +292,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' $btn configure -message newmessage
 #' $btn test
 #' $btn2 invoke
+#' $btn hello
 #' after 3000 [list $btn invoke]
 #' ```
 #' 

@@ -94,6 +94,7 @@ proc ::paul::getExampleCode {filename} {
 source [file join [file dirname [info script]] statusbar.tcl] 
 source [file join [file dirname [info script]] basegui.tcl] 
 source [file join [file dirname [info script]] dlabel.tcl] 
+source [file join [file dirname [info script]] images.tcl] 
 source [file join [file dirname [info script]] imedit.tcl] 
 source [file join [file dirname [info script]] labentry.tcl] 
 source [file join [file dirname [info script]] rotext.tcl] 

@@ -4,7 +4,7 @@ package require tcltest
 tcltest::test basegui-1.1 {package load} {
     lappend auto_path .
     package require paul
-} {0.4.0}
+} {0.5.0}
 
 tcltest::test basegui-1.2 {basegui test} {
     package require paul

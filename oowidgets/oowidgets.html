@@ -79,6 +79,7 @@ the given <em>classname</em> will be then automatically capitalized at the first
 
 <ul>
 <li><strong>install</strong> <em>basewidget path ?-option value ...?</em> - the way to install a default widget with standard and new options</li>
+<li><strong>option</strong> <em>--option value</em> - used in the constructor to create public accesible options</li>
 <li><strong>tkclass</strong>  - returns the value of <em>[winfo class widgetPath]</em> for the internal default widget, should be used inside mixins which should be working for different widget types
 </li></ul>
 
@@ -89,11 +90,15 @@ the given <em>classname</em> will be then automatically capitalized at the first
 namespace eval ::test { }
 oowidgets::widget ::test::Button {
     constructor {path args} {
+       my option -hello &quot;Hello World&quot;
        my install ttk::button $path -message testmessage
        my configure {*}$args
     }
     method test {} {
         puts [my cget -message]
+    }
+    method hello {} {
+        puts [my cget -hello]
     }
 }  
 puts &quot;available commands: [info commands ::test::*]&quot;
@@ -105,12 +110,14 @@ $btn test
 $btn configure -message newmessage
 $btn test
 $btn2 invoke
+$btn hello
 after 3000 [list $btn invoke]</code></pre>
 
 <pre class='code'><code class='tclout'>available commands: ::test::Button ::test::button
 testmessage
 newmessage
 Hello
+Hello World
 after#0</code></pre>
 
 <h2>SEE ALSO</h2>
