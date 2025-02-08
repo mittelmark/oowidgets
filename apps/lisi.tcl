@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250208.0906>
+#  Last Modified : <250208.0917>
 #
 #  Description	 :
 #
@@ -38,6 +38,7 @@ namespace eval ::lisi {
         {{GraphViz Dot Files} {.dot} }                
         {{Pikchr Files}       {.pik} }                
         {{Plantuml Files}     {.pml} }        
+        {{R        Files}     {.R .r}}                
         {{GO SGF Files}       {.sgf} }                
         {{Text Files}         {.txt} }
         {{All Files}          *      }
@@ -48,11 +49,13 @@ namespace eval ::lisi {
         file mkdir $configfolder
     }
     array set defaults [list \
-                        sgf {sgf-render sgf-render %s --format png --outfile %s --width 600} \
-                        pml {plantuml -tpng %i} \
-                        dot {dot -Tpng %i -o%o} \
                         abc {abcm2ps ...} \
-                        pik {fossil pikchr %i  %b.svg&cairosvg -f png -o %o -%b.svg}]
+                        dot {dot -Tpng %i -o%o} \
+                        pik {fossil pikchr %i  %b.svg&cairosvg -f png -o %o -%b.svg} \
+                        pml {plantuml -tpng %i} \
+                        r {Rscript %i %o} \
+                        sgf {sgf-render sgf-render %s --format png --outfile %s --width 600} \
+                        ]
     foreach key [array names defaults] {
         if {![file exists [file join $configfolder $key.opt]]} {
             set out [open [file join $configfolder $key.opt] w 0600]
@@ -68,7 +71,6 @@ namespace eval ::lisi {
                 set cmd [string trim [read $infh]]
                 close $infh
                 set ext [file rootname [file tail $file]]
-                puts "$file - ext: $ext - cmd: '$cmd'"
                 set defaults($ext) $cmd
             }
         }
