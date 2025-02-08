@@ -75,11 +75,6 @@ if {![package vsatisfies [package provide Tcl] 8.7]} {
         return [uplevel 1 {namespace qualifiers [namespace which my]}]::$varname
     }
 }
-proc ::oo::Helpers::option {option value} {
-    return [uplevel 1 {
-            set  [namespace qualifiers [namespace which my]]::widgetOptions($option) $value
-        }]
-}
 
 namespace eval ::oowidgets { 
     variable tmp

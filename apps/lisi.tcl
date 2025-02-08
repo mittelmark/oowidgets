@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250208.0917>
+#  Last Modified : <250208.0922>
 #
 #  Description	 :
 #
@@ -34,12 +34,12 @@ namespace eval ::lisi {
     set lisi [info script]
     set lastdir [pwd]
     set types {
-        {{Music ABC Files}    {.abc} } 
-        {{GraphViz Dot Files} {.dot} }                
-        {{Pikchr Files}       {.pik} }                
-        {{Plantuml Files}     {.pml} }        
-        {{R        Files}     {.R .r}}                
-        {{GO SGF Files}       {.sgf} }                
+        {{Music ABC Files}    {.abc} }
+        {{GraphViz Dot Files} {.dot} }
+        {{Pikchr Files}       {.pik} }
+        {{Plantuml Files}     {.pml} }
+        {{R Files}            {.R .r}}
+        {{GO SGF Files}       {.sgf} }
         {{Text Files}         {.txt} }
         {{All Files}          *      }
     }
@@ -119,13 +119,17 @@ proc ::lisi::gui {args} {
 
 proc ::lisi::main {argv} {
     variable defaults
+    if {[llength $argv] == 0} {
+        gui
+        return
+    }
     set filename [lindex $argv 0]
     if {![file exists $filename]} {
         puts "Error: File '$filename' does not exists!"
         usage $::argv0
     }
     set optfile [file rootname $filename].opt
-    set ext [substr [file extension $filename] 1 end]
+    set ext [string lower [substr [file extension $filename] 1 end]]
     if {[llength $argv] == 1 && ![file exists $optfile]} {
         if {[info exists defaults($ext)]} {
             set cmd $defaults($ext)
@@ -151,8 +155,6 @@ proc ::lisi::main {argv} {
 if {[info exists argv0] && $argv0 eq [info script]} {
     if {[lsearch -regex $argv {(-h|--help)}] > -1} {
         ::lisi::help $argv0 $argv
-    } elseif {[llength $argv] < 1} {
-        ::lisi::usage $argv0
     } else {
         ::lisi::main $argv
     }
