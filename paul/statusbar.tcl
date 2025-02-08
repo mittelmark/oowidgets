@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::statusbar documentation
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <250206.0731>
+#' Date : <250208.1003>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -151,12 +151,12 @@ oowidgets::widget ::paul::Statusbar {
         if {[llength $args] < 2} {
             return [next {*}$args]
         } else {
-            next {*}$args
+            #next {*}$args
             array set opts $args
             foreach key [array names opts] {
-                if {$key in [list "-textvariable" "-text"]} {
+                if {$key in [list "-foreground" "-textvariable" "-text"]} {
                     $lab configure $key $opts($key)
-                } elseif {$key in [list "-maximum" "-variable"]} {
+                } elseif {$key in [list "length" "-mode" "-value" "-maximum" "-variable"]} {
                     $pbar configure $key $opts($key)
                 }
             }

@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250207.0706>
+#' Date : <250208.0953>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -96,6 +96,7 @@
 #' - __-labeltext__ - the text which should be displayed in the label widget left from the command line entry widget
 #' - __pane__ - orientation of the paned window widget, either horizontal or vertical, default: vertical
 #' - __-statuslabel__ - an optional label widget to display status messages
+#' - __filetypes_ - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
 #' 
 package require oowidgets
 namespace eval ::paul { }
@@ -105,19 +106,18 @@ oowidgets::widget ::paul::ImEdit {
     variable btn
     variable img
     variable img2
-    variable types
     variable lastdir 
     variable pw
     constructor {path args} {
         # the main widget is the frame
         # add an additional label
-        my install ttk::frame $path -commandline "" -labeltext "" -filename "" -statuslabel "" -pane vertical
-        set types {
+        my option -filetypes {
             {{Dot Files}        {.dot}        }
             {{PlantUML Files}   {.pml}        }                
             {{Text Files}       {.txt}        }
             {{All Files}        *             }
         }
+        my install ttk::frame $path -commandline "" -labeltext "" -filename "" -statuslabel "" -pane vertical
         set lastdir [pwd]
         set tf [ttk::frame $path.tf]
         set lbent [paul::labentry $path.tf.lbent]
@@ -183,7 +183,7 @@ oowidgets::widget ::paul::ImEdit {
     #'
     method execute { } {
         my configure -commandline [my labentry entry get]
-        variable types
+        set types [my cget -filetypes]
         variable lastdir
         set savefile [my cget -filename]
         if {$savefile eq ""} {
@@ -236,6 +236,7 @@ oowidgets::widget ::paul::ImEdit {
     method file_open {{filename ""}} {
         variable txt
         variable lastdir
+        set types [my cget -filetypes]
         $txt delete 1.0 end
         if {$filename eq "" && [my cget -filename] == ""} {
             set filename [tk_getOpenFile -filetypes $types -initialdir $lastdir]
@@ -252,11 +253,23 @@ oowidgets::widget ::paul::ImEdit {
             my configure -filename $filename
         }
     }
+    
+    #'
+    #' *pathName* **image_display* *imgfile*
+    #' 
+    #' > Displays the given image file in the label.
+    method image_display {imgfile} {
+        variable img
+        variable img2
+        image create photo appimg -file $imgfile
+        $img configure -image appimg
+        $img2 configure -image appimg
+    }
+    #'
     #' *pathName* **label* *?args?*
     #' 
     #' > Delegates all given methods to the internal ttk::label widget, if no argument is
     #'   given returns the widget itself
-    
     # expose the internal widgets using subcommands
     method label {args} {
         variable img

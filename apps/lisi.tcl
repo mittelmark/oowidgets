@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250208.0922>
+#  Last Modified : <250208.0953>
 #
 #  Description	 :
 #
@@ -87,12 +87,13 @@ proc ::lisi::help {app argv} {
 }
 proc ::lisi::gui {args} { 
     set app [::paul::basegui new -style clam]
+    $app fontSizeBind ;# for Ctrl-plus / Ctrl-minus for fontsize"
     array set opts [list -commandline "dot -Tpng %i -o %o" -filename ""]
     array set opts $args
     parray opts
     set f [$app getFrame]
     set ie [paul::imedit $f.ie -commandline $opts(-commandline)  \
-            -statuslabel [$app message] -pane horizontal]
+            -statuslabel [$app message] -pane horizontal -filetypes $::lisi::types]
     $ie labentry configure -labeltext "Command Line: "
     set txt [$ie text] 
     $txt configure -background skyblue
@@ -112,6 +113,9 @@ proc ::lisi::gui {args} {
         $txt insert 1.0 $content
     } else {
         $txt file_open $opts(-filename)
+        if {[file exists [file rootname $opts(-filename)].png]} {
+            $ie image_display [file rootname $opts(-filename)].png
+        }
     }
 
 
@@ -129,7 +133,7 @@ proc ::lisi::main {argv} {
         usage $::argv0
     }
     set optfile [file rootname $filename].opt
-    set ext [string lower [substr [file extension $filename] 1 end]]
+    set ext [string tolower [string range [file extension $filename] 1 end]]
     if {[llength $argv] == 1 && ![file exists $optfile]} {
         if {[info exists defaults($ext)]} {
             set cmd $defaults($ext)
