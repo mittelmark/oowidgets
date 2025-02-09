@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250208.0953>
+#  Last Modified : <250208.1243>
 #
 #  Description	 :
 #
@@ -95,24 +95,22 @@ proc ::lisi::gui {args} {
     set ie [paul::imedit $f.ie -commandline $opts(-commandline)  \
             -statuslabel [$app message] -pane horizontal -filetypes $::lisi::types]
     $ie labentry configure -labeltext "Command Line: "
-    set txt [$ie text] 
-    $txt configure -background skyblue
-    oo::objdefine  $txt mixin paul::txindent paul::txfileproc
     pack $ie -side top -fill both -expand true -padx 5 -pady 5
-    $txt fileproc -filetypes $::lisi::types
+    #$txt fileproc -filetypes $::lisi::types
     set mfile [$app getMenu File]
-    $mfile insert 0 command -command [list $txt file_new] -label "New" -underline 0
+    $mfile insert 0 command -command [list $ie file_new] -label "New" -underline 0
     $mfile insert 1 separator
-    $mfile insert 2 command -command [list $txt file_open] -label "Open ..." -underline 0
+    $mfile insert 2 command -command [list $ie file_open] -label "Open ..." -underline 0
     $mfile insert 3 separator    
-    $mfile insert 4 command -command [list $txt file_save] -label "Save" -underline 0
-    $mfile insert 5 command -command [list $txt file_save_as] -label "Save As ..." -underline 1    
+    $mfile insert 4 command -command [list $ie file_save] -label "Save" -underline 0
+    $mfile insert 5 command -command [list $ie file_save_as] -label "Save As ..." -underline 1    
     $app addStatusBar
+    set txt [$ie text]
     if {$opts(-filename) eq ""} {
         set content "digraph g { A -> B } \n"
         $txt insert 1.0 $content
     } else {
-        $txt file_open $opts(-filename)
+        $ie file_open $opts(-filename)
         if {[file exists [file rootname $opts(-filename)].png]} {
             $ie image_display [file rootname $opts(-filename)].png
         }

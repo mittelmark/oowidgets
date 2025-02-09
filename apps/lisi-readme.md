@@ -42,7 +42,7 @@ a single(!) ampersand. See pikchr for an example:
     - [fen2pgn](https://fen2png.com/) - example on how to use a webservice using a wrapper script
 
 - Music tools
-    - [abcm2ps](https://github.com/lewdlime/abcm2ps/) - convert ABC music into svg or postscript, cairosvg required to convert the output to png
+    - [abcm2ps](https://github.com/lewdlime/abcm2ps/) - convert ABC music into svg or postscript, cairosvg required to convert the output to png - `abcm2ps -g %i&cairosvg Out001.svg -f png -o %b.png`
 
 - Math tools:
     - [latex](https://editor.codecogs.com/) - convert equations using a web services this as well requires a wrapper script

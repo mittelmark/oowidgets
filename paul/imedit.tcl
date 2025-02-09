@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250208.0953>
+#' Date : <250208.1254>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -128,8 +128,10 @@ oowidgets::widget ::paul::ImEdit {
         #set tfr1 [ttk::frame $path.pw.fr]
         ## TODO - add scrollbars via guibaseclass autoscroll?
         set txt [tkoo::text $pw.txt]
+        $txt configure -background skyblue
+        oo::objdefine  $txt mixin paul::txindent paul::txfileproc
+
         set peer [$txt peer create $pw2.text]
-        
         set img [ttk::label $path.pw.img -anchor center -image ::paul::devscreen22]
         set img2 [ttk::label $path.pw2.img2 -anchor center -image ::paul::devscreen22]        
         $pw add $txt
@@ -141,6 +143,7 @@ oowidgets::widget ::paul::ImEdit {
         pack $btn -side left -padx 5 -pady 5
         pack $tf -side top -fill x -expand false -anchor center -padx 20
         my configure {*}$args
+        $txt fileproc -filetypes [my cget -filetypes]
         if {[my cget -filename] ne ""} {
             my file_open
         }
@@ -238,7 +241,7 @@ oowidgets::widget ::paul::ImEdit {
         variable lastdir
         set types [my cget -filetypes]
         $txt delete 1.0 end
-        if {$filename eq "" && [my cget -filename] == ""} {
+        if {$filename eq ""} {
             set filename [tk_getOpenFile -filetypes $types -initialdir $lastdir]
         }
         if {$filename != ""} {

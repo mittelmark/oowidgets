@@ -162,6 +162,8 @@ catch { rename ::paul::txfileproc {} }
     #' ```
     #' 
     method fileproc {args} {
+        variable lastfile
+        variable win
         set win [my widget]
         array set options [list -filecallback "" -filetypes { {{Text Files} {.txt}} {{All Files} {*.*}} } \
                            -filename new]
@@ -185,7 +187,8 @@ catch { rename ::paul::txfileproc {} }
     #'   to allow the user to select its file.
     #'
     method file_exit {} {
-        my variable win
+        variable win
+        variable lastfile
         if {$lastfile in [list "*new*" "new"]} {
             my file_save_as
         }
@@ -290,7 +293,7 @@ catch { rename ::paul::txfileproc {} }
     #'   to allow the user to select its file.
     #'
     method file_save {} {
-        my variable lastfile
+        variable lastfile
         my variable lastdir
         my variable options
         my variable win
@@ -324,14 +327,15 @@ catch { rename ::paul::txfileproc {} }
         my variable lastdir
         my variable lastfile
         my variable options
+        my variable win
         unset -nocomplain savefile
         set filename [tk_getSaveFile -filetypes $options(-filetypes) -initialdir $lastdir]
         if {$filename != ""} {
             set out [open $filename w 0600]
-            puts $out [$text get 1.0 end]
+            puts $out [$win get 1.0 end]
             close $out
             set lastfile $filename
-            set lastdir [file dirname $file]
+            set lastdir [file dirname $filename]
             $win edit modified false
             if {$options(-filecallback) ne ""} {
                 eval $options(-filecallback) saveas $lastfile
