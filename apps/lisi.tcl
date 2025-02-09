@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250208.1243>
+#  Last Modified : <250209.1314>
 #
 #  Description	 :
 #
@@ -49,7 +49,7 @@ namespace eval ::lisi {
         file mkdir $configfolder
     }
     array set defaults [list \
-                        abc {abcm2ps ...} \
+                        abc {abcm2ps -g %i&cairosvg Out001.svg -f png -o %b.png} \
                         dot {dot -Tpng %i -o%o} \
                         pik {fossil pikchr %i  %b.svg&cairosvg -f png -o %o -%b.svg} \
                         pml {plantuml -tpng %i} \
