@@ -96,10 +96,10 @@ are added :</p>
 <li><strong>-commandline</strong> - the text which should be aded to the entry widget as the command line and which is executed if the 
   code in the text widget is saved</li>
 <li><strong>-filename</strong> - the file which should be opened into the text widget to be edited by the user</li>
+<li><strong>-filetypes</strong> - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.</li>
 <li><strong>-labeltext</strong> - the text which should be displayed in the label widget left from the command line entry widget</li>
 <li><strong>-pane</strong> - orientation of the paned window widget, either horizontal or vertical, default: vertical</li>
-<li><strong>-statuslabel</strong> - an optional label widget to display status messages</li>
-<li><strong>filetypes</strong> - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
+<li><strong>-statuslabel</strong> - an optional label widget to display status messages
 
 </li></ul>
 
@@ -147,14 +147,14 @@ all the commands of its component widgets.</p>
 <p>Saves the current file.</p>
 </blockquote>
 
-<p><em>pathName</em> <em></em>file_save_as<em></em></p>
+<p><em>pathName</em> <strong>file_save_as</strong> <em>?intialfile?</em></p>
 
 <blockquote>
-<p>Ak for a new filename and save the content of the text widget to it.
-  is as well not given opens a file dialog for selecting a file.</p>
+<p>Ask for a new filename and save the content of the text widget to it.
+  If intialfile argument is given sets this as the default for saving.</p>
 </blockquote>
 
-<p><em>pathName</em> <em></em>image_display<em> </em>imgfile*</p>
+<p><em>pathName</em> <strong>image_display</strong> <em>imgfile</em></p>
 
 <blockquote>
 <p>Displays the given image file in the label.</p>
