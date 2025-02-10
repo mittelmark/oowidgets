@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250210.0911>
+#' Date : <250210.0912>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -303,7 +303,7 @@ oowidgets::widget ::paul::ImEdit {
     }
     #'
     #'
-    #' *pathName* **image_display* *imgfile*
+    #' *pathName* **image_display** *imgfile*
     #' 
     #' > Displays the given image file in the label.
     method image_display {imgfile} {
