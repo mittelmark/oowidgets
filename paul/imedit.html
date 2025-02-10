@@ -97,9 +97,9 @@ are added :</p>
   code in the text widget is saved</li>
 <li><strong>-filename</strong> - the file which should be opened into the text widget to be edited by the user</li>
 <li><strong>-labeltext</strong> - the text which should be displayed in the label widget left from the command line entry widget</li>
-<li><strong>pane</strong> - orientation of the paned window widget, either horizontal or vertical, default: vertical</li>
+<li><strong>-pane</strong> - orientation of the paned window widget, either horizontal or vertical, default: vertical</li>
 <li><strong>-statuslabel</strong> - an optional label widget to display status messages</li>
-<li><em></em>filetypes_ - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
+<li><strong>filetypes</strong> - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
 
 </li></ul>
 
@@ -109,7 +109,7 @@ are added :</p>
 <em>pathName labentry cmd</em>, <em>pathName text cmd</em>  and <em>pathName label</em> syntax 
 all the commands of its component widgets.</p>
 
-<p><em>pathName</em> <em></em>button<em> </em>?args?*</p>
+<p><em>pathName</em> <strong>button</strong> <em>?args?</em></p>
 
 <blockquote>
 <p>Delegates all given methods to the internal ttk::button, if no argument is
@@ -160,14 +160,14 @@ all the commands of its component widgets.</p>
 <p>Displays the given image file in the label.</p>
 </blockquote>
 
-<p><em>pathName</em> <em></em>label<em> </em>?args?*</p>
+<p><em>pathName</em> <strong>label</strong> <em>?args?</em></p>
 
 <blockquote>
 <p>Delegates all given methods to the internal ttk::label widget, if no argument is
   given returns the widget itself</p>
 </blockquote>
 
-<p><em>pathName</em> <em></em>labentry<em> </em>?args?*</p>
+<p><em>pathName</em> <strong>labentry</strong> <em>?args?</em></p>
 
 <blockquote>
 <p>Delegates all given methods to the internal pauL::labentry widget, if no argument is
@@ -183,7 +183,7 @@ all the commands of its component widgets.</p>
  file type. Users can place there own defaults in this folder.</p>
 </blockquote>
 
-<p><em>pathName</em> <strong>optfile_read</strong> *?ext?&quot;</p>
+<p><em>pathName</em> <strong>optfile_read</strong> <em>?ext?</em></p>
 
 <blockquote>
 <p>Reads for the current loaded file or for the given extension <em>ext</em> the default command line

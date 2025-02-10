@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250210.0905>
+#' Date : <250210.0908>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -94,9 +94,9 @@
 #'   code in the text widget is saved
 #' - __-filename__ - the file which should be opened into the text widget to be edited by the user
 #' - __-labeltext__ - the text which should be displayed in the label widget left from the command line entry widget
-#' - __pane__ - orientation of the paned window widget, either horizontal or vertical, default: vertical
+#' - __-pane__ - orientation of the paned window widget, either horizontal or vertical, default: vertical
 #' - __-statuslabel__ - an optional label widget to display status messages
-#' - __filetypes_ - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
+#' - __filetypes__ - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
 #' 
 package require oowidgets
 namespace eval ::paul { }
@@ -176,7 +176,7 @@ oowidgets::widget ::paul::ImEdit {
     #' *pathName labentry cmd*, *pathName text cmd*  and *pathName label* syntax 
     #' all the commands of its component widgets.
     #' 
-    #' *pathName* **button* *?args?*
+    #' *pathName* **button** *?args?*
     #' 
     #' > Delegates all given methods to the internal ttk::button, if no argument is
     #'   given returns the widget itself
@@ -313,7 +313,7 @@ oowidgets::widget ::paul::ImEdit {
         $img2 configure -image appimg
     }
     #'
-    #' *pathName* **label* *?args?*
+    #' *pathName* **label** *?args?*
     #' 
     #' > Delegates all given methods to the internal ttk::label widget, if no argument is
     #'   given returns the widget itself
@@ -334,7 +334,7 @@ oowidgets::widget ::paul::ImEdit {
         }
     }
     #' 
-    #' *pathName* **labentry* *?args?*
+    #' *pathName* **labentry** *?args?*
     #' 
     #' > Delegates all given methods to the internal pauL::labentry widget, if no argument is
     #'   given returns the widget itself
@@ -379,7 +379,7 @@ oowidgets::widget ::paul::ImEdit {
             }
         }
     }
-    #' *pathName* **optfile_read** *?ext?"
+    #' *pathName* **optfile_read** *?ext?*
     #'
     #' > Reads for the current loaded file or for the given extension *ext* the default command line
     #'   arguments and fills with this the entry widget. If no defaults are found for the current
