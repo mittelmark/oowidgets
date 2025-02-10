@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250210.0908>
+#' Date : <250210.0911>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -93,10 +93,10 @@
 #' - __-commandline__ - the text which should be aded to the entry widget as the command line and which is executed if the 
 #'   code in the text widget is saved
 #' - __-filename__ - the file which should be opened into the text widget to be edited by the user
+#' - __-filetypes__ - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
 #' - __-labeltext__ - the text which should be displayed in the label widget left from the command line entry widget
 #' - __-pane__ - orientation of the paned window widget, either horizontal or vertical, default: vertical
 #' - __-statuslabel__ - an optional label widget to display status messages
-#' - __filetypes__ - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
 #' 
 package require oowidgets
 namespace eval ::paul { }
@@ -286,10 +286,11 @@ oowidgets::widget ::paul::ImEdit {
         return $filename
     }
     #' 
-    #' *pathName* **file\_save\_as**
+    #' *pathName* __file\_save\_as__ *?intialfile?*
     #'
-    #' > Ak for a new filename and save the content of the text widget to it.
-    #'   is as well not given opens a file dialog for selecting a file.
+    #' > Ask for a new filename and save the content of the text widget to it.
+    #'   If intialfile argument is given sets this as the default for saving.
+    #'
     method file_save_as {{initialfile ""}} {
         set filename [$txt file_save_as $initialfile]
         my configure -filename $filename
