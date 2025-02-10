@@ -23,7 +23,7 @@
 
 <h1 class="title">paul::imedit documentation</h1>
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
-<h2 class="date">2025-02-07</h2>
+<h2 class="date">2025-02-10</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> -
@@ -98,7 +98,8 @@ are added :</p>
 <li><strong>-filename</strong> - the file which should be opened into the text widget to be edited by the user</li>
 <li><strong>-labeltext</strong> - the text which should be displayed in the label widget left from the command line entry widget</li>
 <li><strong>pane</strong> - orientation of the paned window widget, either horizontal or vertical, default: vertical</li>
-<li><strong>-statuslabel</strong> - an optional label widget to display status messages
+<li><strong>-statuslabel</strong> - an optional label widget to display status messages</li>
+<li><em></em>filetypes_ - the filetypes used for the file open and file save dialogs, default to dot, pml, txt and all files.
 
 </li></ul>
 
@@ -127,11 +128,36 @@ all the commands of its component widgets.</p>
   added, then no output filename is required.</p>
 </blockquote>
 
+<p><em>pathName</em> <strong>file_new</strong></p>
+
+<blockquote>
+<p>Creates a new emtpy file, the internal filename will be configured to new.</p>
+</blockquote>
+
 <p><em>pathName</em> <strong>file_open</strong> <em>?filename?</em></p>
 
 <blockquote>
 <p>Open the given file in the text widget. If no filename is given will either use the configured filename or if this
   is as well not given opens a file dialog for selecting a file.</p>
+</blockquote>
+
+<p><em>pathName</em> <strong>file_save</strong>  <em>?filename?</em></p>
+
+<blockquote>
+<p>Saves the current file.</p>
+</blockquote>
+
+<p><em>pathName</em> <strong>file<em>save</em>as</strong></p>
+
+<blockquote>
+<p>Ak for a new filename and save the content of the text widget to it.
+  is as well not given opens a file dialog for selecting a file.</p>
+</blockquote>
+
+<p><em>pathName</em> <em></em>image_display<em> </em>imgfile*</p>
+
+<blockquote>
+<p>Displays the given image file in the label.</p>
 </blockquote>
 
 <p><em>pathName</em> <em></em>label<em> </em>?args?*</p>
@@ -146,8 +172,25 @@ all the commands of its component widgets.</p>
 <blockquote>
 <p>Delegates all given methods to the internal pauL::labentry widget, if no argument is
   given returns the widget itself
-<em>pathName</em> <strong>text</strong> <em>?args?</em></p>
+<em>pathName</em> <strong>optfile_init</strong></p>
 
+<p>Initializes a folder imedit into the user configuation folder, on Unix usually .config
+  where for every file extension .dot, .pml, .r, .pik, .sgf etc an file with the extension
+ opt is created. These files contain the default command line argument for the given
+ file type. Users can place there own defaults in this folder.</p>
+</blockquote>
+
+<p><em>pathName</em> <strong>optfile_read</strong> *?ext?&quot;</p>
+
+<blockquote>
+<p>Reads for the current loaded file or for the given extension <em>ext</em> the default command line
+  arguments and fills with this the entry widget. If no defaults are found for the current
+  file type it intializes to `your-command %i %o&quot;.</p>
+</blockquote>
+
+<p><em>pathName</em> <strong>text</strong> <em>?args?</em></p>
+
+<blockquote>
 <p>Delegates all given methods to the internal tk::text widget, if no argument is
   given returns the widget itself</p>
 </blockquote>

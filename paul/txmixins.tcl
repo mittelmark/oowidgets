@@ -164,6 +164,7 @@ catch { rename ::paul::txfileproc {} }
     method fileproc {args} {
         variable lastfile
         variable win
+        variable lastdir
         set win [my widget]
         array set options [list -filecallback "" -filetypes { {{Text Files} {.txt}} {{All Files} {*.*}} } \
                            -filename new]
@@ -240,6 +241,7 @@ catch { rename ::paul::txfileproc {} }
     #'   the a file dialog will be displayed to allow the user to select its file.
     #'
     method file_open {{filename ""}} {
+        variable lastdir
         if {[$win edit modified]} {
             set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
             switch -- $answer  {
@@ -292,19 +294,19 @@ catch { rename ::paul::txfileproc {} }
     #'   If there is no file name set until now, a file dialog will be displayed
     #'   to allow the user to select its file.
     #'
-    method file_save {} {
+    method file_save {{filename ""}} {
         variable lastfile
         my variable lastdir
         my variable options
         my variable win
         if {$lastfile in [list "*new*" "new"]} {
-            unset -nocomplain savefile
-            set file [tk_getSaveFile -filetypes $options(-filetypes) \
-                      -initialdir $lastdir]
-        } else {
+            set file [my file_save_as]
+        } elseif {$filename eq ""} {
             set file $lastfile
+        } else {
+            set file $filename
         }
-        if {$file != ""} {
+        if {$file ne ""} {
             set out [open $file w 0600]
             puts $out [$win get 1.0 end]
             close $out
@@ -323,13 +325,13 @@ catch { rename ::paul::txfileproc {} }
     #' 
     #' > Saves  the content of the text widget into the file selected by the user.
     #'
-    method file_save_as {} {
+    method file_save_as {{initialfile ""}} {
         my variable lastdir
         my variable lastfile
         my variable options
         my variable win
         unset -nocomplain savefile
-        set filename [tk_getSaveFile -filetypes $options(-filetypes) -initialdir $lastdir]
+        set filename [tk_getSaveFile -filetypes $options(-filetypes) -initialdir $lastdir -initialfile $initialfile]
         if {$filename != ""} {
             set out [open $filename w 0600]
             puts $out [$win get 1.0 end]

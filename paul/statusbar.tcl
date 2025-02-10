@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::statusbar documentation
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <250208.1003>
+#' Date : <250210.0849>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -104,7 +104,7 @@ oowidgets::widget ::paul::Statusbar {
         my install ttk::frame $path -maximum 100 -textvariable "" -variable "" -text ""
         set lab [::ttk::label $path.lab -relief sunken -anchor w -width 50 -padding 4]
         set pbar [::ttk::progressbar $path.pb -length 60 -mode determinate]
-        pack $lab -side left -fill x -expand false -padx 4 -pady 2
+        pack $lab -side left -fill x -expand true -padx 4 -pady 2
         pack $pbar -side right -fill none -expand false -padx 4 -pady 2
         my configure {*}$args
     }

@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250208.1254>
+#' Date : <250210.0852>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -108,16 +108,31 @@ oowidgets::widget ::paul::ImEdit {
     variable img2
     variable lastdir 
     variable pw
+    variable defaults 
     constructor {path args} {
         # the main widget is the frame
         # add an additional label
         my option -filetypes {
+            {{ABC Music Files}  {.abc}        }
             {{Dot Files}        {.dot}        }
-            {{PlantUML Files}   {.pml}        }                
+            {{Pikchr   Files}   {.pik}        }
+            {{PlantUML Files}   {.pml}        }
+            {{R/Rscript Files}  {.R .r}       }
+            {{Go SGF  Files}    {.sgf}        }
             {{Text Files}       {.txt}        }
             {{All Files}        *             }
         }
-        my install ttk::frame $path -commandline "" -labeltext "" -filename "" -statuslabel "" -pane vertical
+        my option -labeltext " Command line: "
+        array set defaults [list \
+                            abc {abcm2ps -g %i&cairosvg Out001.svg -f png -o %b.png} \
+                            dot {dot -Tpng %i -o%o} \
+                            pik {fossil pikchr %i  %b.svg&cairosvg -f png -o %o -%b.svg} \
+                            pml {plantuml -tpng %i} \
+                            r {Rscript %i %o} \
+                            sgf {sgf-render sgf-render %s --format png --outfile %s --width 600} \
+                            ]
+
+        my install ttk::frame $path -commandline "" -filename "" -statuslabel "" -pane vertical
         set lastdir [pwd]
         set tf [ttk::frame $path.tf]
         set lbent [paul::labentry $path.tf.lbent]
@@ -145,7 +160,7 @@ oowidgets::widget ::paul::ImEdit {
         my configure {*}$args
         $txt fileproc -filetypes [my cget -filetypes]
         if {[my cget -filename] ne ""} {
-            my file_open
+            my file_open [my cget -filename]
         }
         if {[my cget -pane] eq "vertical"} {
             pack $pw -side top -fill both -expand true -padx 5 -pady 5
@@ -185,21 +200,11 @@ oowidgets::widget ::paul::ImEdit {
     #'   added, then no output filename is required.
     #'
     method execute { } {
-        my configure -commandline [my labentry entry get]
-        set types [my cget -filetypes]
         variable lastdir
+        my configure -commandline [my labentry entry get]
+        my file_save
         set savefile [my cget -filename]
-        if {$savefile eq ""} {
-            unset -nocomplain savefile
-            set savefile [tk_getSaveFile -filetypes $types -initialdir $lastdir]
-        }
-        if {$savefile != ""} {
-            set content [my text get 1.0 end]
-            set out [open $savefile w 0600]
-            puts $out $content
-            close $out
-            my configure -filename $savefile
-            set lastdir [file dirname $savefile]
+        if {$savefile ne ""} {
             set imgfile [file rootname $savefile].png
             set optfile [file rootname $savefile].opt
             set ocmd [my labentry entry get]
@@ -209,8 +214,8 @@ oowidgets::widget ::paul::ImEdit {
             set command [split $cmd &]
             foreach cmd $command {
                 if {[catch {
-                   eval exec $cmd
-                }]} {
+                     eval exec $cmd
+                 }]} {
                    if {[my cget -statuslabel] ne ""} {
                        set status [my cget -statuslabel]
                        $status configure -text [lindex [split $::errorInfo "\n"] 0] -foreground red
@@ -229,7 +234,17 @@ oowidgets::widget ::paul::ImEdit {
             if {[my cget -statuslabel] ne ""} {
                 [my cget -statuslabel] configure -text "Success: file '[file tail $imgfile]' written!"
             }
+            return $imgfile
         }
+        return ""
+    }
+    #' *pathName* **file_new**
+    #'
+    #' > Creates a new emtpy file, the internal filename will be configured to new.
+    #'
+    method file_new {} {
+        $txt file_new
+        my configure -filename new
     }
     #' *pathName* **file_open** *?filename?*
     #'
@@ -237,26 +252,55 @@ oowidgets::widget ::paul::ImEdit {
     #'   is as well not given opens a file dialog for selecting a file.
     #'
     method file_open {{filename ""}} {
-        variable txt
-        variable lastdir
-        set types [my cget -filetypes]
-        $txt delete 1.0 end
         if {$filename eq ""} {
-            set filename [tk_getOpenFile -filetypes $types -initialdir $lastdir]
+            set filename [$txt file_open]
+        } else {
+            set filename [$txt file_open $filename]
         }
-        if {$filename != ""} {
-            if {[catch {open $filename r} infh]} {
-                return -code error "File $fielname can't be opened!"
-            } else {
-                
-                $txt insert 1.0 [read $infh]
-                close $infh
-            }
-            set lastdir [file dirname $filename]
-            my configure -filename $filename
+        my configure -filename $filename
+        my optfile_read
+        if {[my cget -statuslabel] ne ""} {
+            [my cget -statuslabel] configure -text "File: '[file tail $filename]' opened!"                   
         }
+        if {[file exists [file rootname $filename].png]} {
+            my image_display [file rootname $filename].png
+        }
+        return $filename
     }
-    
+    #' 
+    #' *pathName* **file_save**  *?filename?*
+    #'
+    #' > Saves the current file.
+    method file_save {{filename ""}} {
+        if {($filename eq "" && [my cget -filename] eq "") || [my cget -filename] eq "new"} {
+            set filename [$txt file_save_as]
+        } elseif {$filename eq ""} {
+            set filename [$txt file_save [my cget -filename]]
+        } else {
+            set filename [$txt file_save $filename]
+        }
+        my configure -filename $filename
+        if {[my cget -statuslabel] ne ""} {
+            [my cget -statuslabel] configure -text "File: '[file tail $filename]' saved!"                   
+        }
+        return $filename
+    }
+    #' 
+    #' *pathName* **file_save_as**
+    #'
+    #' > Ak for a new filename and save the content of the text widget to it.
+    #'   is as well not given opens a file dialog for selecting a file.
+    method file_save_as {{initialfile ""}} {
+        set filename [$txt file_save_as $initialfile]
+        my configure -filename $filename
+        my optfile_read [file extension $filename]
+        if {[my cget -statuslabel] ne ""} {
+            [my cget -statuslabel] configure -text "File: '[file tail $filename]' saved!"                   
+        }
+
+        return $filename
+    }
+    #'
     #'
     #' *pathName* **image_display* *imgfile*
     #' 
@@ -301,6 +345,74 @@ oowidgets::widget ::paul::ImEdit {
             return $lbent
         }
         $lbent {*}$args
+    }
+    #' *pathName* **optfile_init**
+    #'
+    #' > Initializes a folder imedit into the user configuation folder, on Unix usually .config
+    #'   where for every file extension .dot, .pml, .r, .pik, .sgf etc an file with the extension
+    #'  opt is created. These files contain the default command line argument for the given
+    #'  file type. Users can place there own defaults in this folder.
+    #'
+    method optfile_init {} {
+        set configfolder [file join $::env(HOME) .config imedit]
+        if {![file isdir $configfolder]} {
+            file mkdir $configfolder
+        }
+        foreach key [array names defaults] {
+            if {![file exists [file join $configfolder $key.opt]]} {
+                set out [open [file join $configfolder $key.opt] w 0600]
+                puts $out $defaults($key)
+                close $out
+            }
+        }
+        foreach file [glob -nocomplain $configfolder/*] {
+            if  {[file extension $file] eq ".opt"} {
+                if [catch {open $file r} infh] {
+                    return error -code "Cannot open $file: $infh"
+                } else {
+                    set cmd [string trim [read $infh]]
+                    close $infh
+                    set ext [file rootname [file tail $file]]
+                    set defaults($ext) $cmd
+                }
+            }
+        }
+    }
+    #' *pathName* **optfile_read** *?ext?"
+    #'
+    #' > Reads for the current loaded file or for the given extension *ext* the default command line
+    #'   arguments and fills with this the entry widget. If no defaults are found for the current
+    #'   file type it intializes to `your-command %i %o".
+    #'
+    method optfile_read {{ext ""}} {
+        set opt "your-command %i %o"
+        if {$ext ne ""} {
+            if {[string range $ext 0 0] eq "."} {
+                set ext [string range $ext 1 end]
+            }
+            if {[info exists defaults($ext)]} {
+                set opt $defaults($ext)
+            }  
+        } else {
+            set filename [my cget -filename] 
+            if {$filename ne ""} {
+                set optfile [file rootname $filename].opt
+                set extension [string range [file extension $filename] 1 end]
+                if {[file exists $optfile]} {
+                    if [catch {open $optfile r} infh] {
+                        return error -code "Cannot open $optfile: $infh"
+                    } else {
+                        set opt [string trim [read $infh]]
+                        close $infh
+                    }
+                } elseif {[info exists defaults($extension)]} {
+                    set opt $defaults($extension)
+                }
+            }
+        }
+        my labentry entry delete 0 end
+        my labentry entry insert 0 $opt
+        return $opt
     }
     #' *pathName* **text** *?args?*
     #' 
