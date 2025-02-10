@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250210.0852>
+#' Date : <250210.0905>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -286,7 +286,7 @@ oowidgets::widget ::paul::ImEdit {
         return $filename
     }
     #' 
-    #' *pathName* **file_save_as**
+    #' *pathName* **file\_save\_as**
     #'
     #' > Ak for a new filename and save the content of the text widget to it.
     #'   is as well not given opens a file dialog for selecting a file.
@@ -346,6 +346,7 @@ oowidgets::widget ::paul::ImEdit {
         }
         $lbent {*}$args
     }
+    #'
     #' *pathName* **optfile_init**
     #'
     #' > Initializes a folder imedit into the user configuation folder, on Unix usually .config
