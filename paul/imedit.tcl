@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250210.0912>
+#' Date : <250214.1122>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -115,6 +115,7 @@ oowidgets::widget ::paul::ImEdit {
         my option -filetypes {
             {{ABC Music Files}  {.abc}        }
             {{Dot Files}        {.dot}        }
+            {{Eqn Files}        {.eqn}        }
             {{Pikchr   Files}   {.pik}        }
             {{PlantUML Files}   {.pml}        }
             {{R/Rscript Files}  {.R .r}       }
@@ -126,7 +127,8 @@ oowidgets::widget ::paul::ImEdit {
         array set defaults [list \
                             abc {abcm2ps -g %i&cairosvg Out001.svg -f png -o %b.png} \
                             dot {dot -Tpng %i -o%o} \
-                            pik {fossil pikchr %i  %b.svg&cairosvg -f png -o %o -%b.svg} \
+                            eqn {cat %i | eqn2graph -density 300 2>/dev/null > %o} \
+                            pik {fossil pikchr %i  %b.svg&magick -density 72 %b.svg %o} \
                             pml {plantuml -tpng %i} \
                             r {Rscript %i %o} \
                             sgf {sgf-render sgf-render %s --format png --outfile %s --width 600} \
@@ -252,6 +254,7 @@ oowidgets::widget ::paul::ImEdit {
     #'   is as well not given opens a file dialog for selecting a file.
     #'
     method file_open {{filename ""}} {
+        
         if {$filename eq ""} {
             set filename [$txt file_open]
         } else {

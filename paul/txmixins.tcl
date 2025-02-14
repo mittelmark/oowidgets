@@ -227,12 +227,12 @@ catch { rename ::paul::txfileproc {} }
             }
         } 
         $win delete 1.0 end       
-        set lastfile "*new*"
+        set lastfile "new"
         if {$options(-filecallback) ne ""} {
             eval $options(-filecallback) new $lastfile
         }
         event generate $win <<FileChanged>>
-        return "*new*"
+        return "new"
     }
     #' - _cmdName_ - **file_open** *?filename?*
     #' 
@@ -241,7 +241,6 @@ catch { rename ::paul::txfileproc {} }
     #'   the a file dialog will be displayed to allow the user to select its file.
     #'
     method file_open {{filename ""}} {
-        variable lastdir
         if {[$win edit modified]} {
             set answer [tk_messageBox -title "File modified!" -message "Do you want to save changes?" -type yesnocancel -icon question]
             switch -- $answer  {
@@ -252,8 +251,15 @@ catch { rename ::paul::txfileproc {} }
             }
         } 
         if {$filename eq ""} {
-            set filename [tk_getOpenFile -filetypes $options(-filetypes) -initialdir $lastdir]
-            
+            set ftypes $options(-filetypes)
+            if {$lastfile ne "" && $lastfile ne "new"} {
+                set ext [file extension $lastfile]
+            }
+            set idx [lsearch -index 1 $options(-filetypes) [file extension $lastfile]]
+            if {$idx > -1} {
+                set ftypes [linsert $options(-filetypes) 0 [lindex $options(-filetypes) $idx]]
+            }
+            set filename [tk_getOpenFile -filetypes $ftypes -initialdir $lastdir]
         }
         if {$filename ne ""} {
             if [catch {open $filename r} infh] {

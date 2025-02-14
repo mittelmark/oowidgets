@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250210.0808>
+#  Last Modified : <250214.1128>
 #
 #  Description	 :
 #
@@ -36,6 +36,7 @@ namespace eval ::lisi {
     set types {
         {{Music ABC Files}    {.abc} }
         {{GraphViz Dot Files} {.dot} }
+        {{Eqn Files}          {.eqn} }        
         {{Pikchr Files}       {.pik} }
         {{Plantuml Files}     {.pml} }
         {{R Files}            {.R .r}}

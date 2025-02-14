@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::labentry documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250206.0548>
+#' Date : <250210.1130>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -93,7 +93,7 @@ oowidgets::widget ::paul::LabEntry {
         set lab [ttk::label $path.lab]
         set ent [ttk::entry $path.ent]
         pack $lab -side left -padx 5 -pady 5
-        pack $ent -side left -padx 5 -pady 5
+        pack $ent -side left -fill x -expand true -padx 5 -pady 5
         my configure {*}$args
     }
     #' 

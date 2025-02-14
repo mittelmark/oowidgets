@@ -28,3 +28,5 @@ imedit *-- labentry : part-of
 labentry *-- ttk::label
 labentry *-- ttk::entry
 @enduml
+
+

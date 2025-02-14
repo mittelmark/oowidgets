@@ -35,7 +35,7 @@ a single(!) ampersand. See pikchr for an example:
 - Diagram tools:
     - [plantuml](https://plantuml.com) - `plantuml -tpng %i`
     - [GraphViz](https://graphviz.org) - `dot -Tpng %i -o%o`
-    - [Pikchr](https://pikchr.org/)  - `fossil pikchr %i  %b.svg&cairosvg -f png -o %o -%b.svg`
+    - [Pikchr](https://pikchr.org/)  - `fossil pikchr %i  %b.svg&magick -density 72 %b.svg %o`
 
 - Board Game tools:
     - [sgf-render](https://github.com/julianandrews/sgf-render) - GO/Weiqi/Baduk diagrams - `sgf-render %s --format png --outfile %s --width 500 --move-numbers=1`
@@ -45,6 +45,8 @@ a single(!) ampersand. See pikchr for an example:
     - [abcm2ps](https://github.com/lewdlime/abcm2ps/) - convert ABC music into svg or postscript, cairosvg required to convert the output to png - `abcm2ps -g %i&cairosvg Out001.svg -f png -o %b.png`
 
 - Math tools:
+    - [eqn2graph](https://www.man7.org/linux/man-pages//man1/eqn2graph.1.html) -
+      create one line equations - `cat %i | eqn2graph -density 300 2>/dev/null > %o`
     - [latex](https://editor.codecogs.com/) - convert equations using a web services this as well requires a wrapper script
 
 ## WRAPPER SCRIPT EXAMPLES

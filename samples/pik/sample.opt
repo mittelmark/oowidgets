@@ -1,1 +1,1 @@
-fossil pikchr %i  %b.svg&magick %b.svg %o
+fossil pikchr %i  %b.svg&magick -density 72 %b.svg %o
