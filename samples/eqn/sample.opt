@@ -1,0 +1,1 @@
+cat %i | eqn2graph -density 300 2>/dev/null > %o
