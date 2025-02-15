@@ -77,7 +77,7 @@ Let's  assume that the script file was named  `abc2png`,  made  executable  and
 moved to some folder belonging to your PATH the syntax to call `lisi` would be:
 
 ```bash
-lisi examples/music.abc "abc2png %s %s"
+lisi examples/music.abc "abc2png %i %o"
 ```
 
 
