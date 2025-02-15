@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250214.1128>
+#  Last Modified : <250215.0818>
 #
 #  Description	 :
 #
@@ -39,8 +39,10 @@ namespace eval ::lisi {
         {{Eqn Files}          {.eqn} }        
         {{Pikchr Files}       {.pik} }
         {{Plantuml Files}     {.pml} }
+        {{Python Files}       {.py}  }
         {{R Files}            {.R .r}}
         {{GO SGF Files}       {.sgf} }
+        {{Tex Files}          {.tex} }        
         {{Text Files}         {.txt} }
         {{All Files}          *      }
     }

@@ -30,7 +30,7 @@ Either the tools can be supported  directly or by using small wrapper  scripts
 which are required if the tool can't output  directly the PNG image format. If
 the default  output is svg I use usually  cairosvg to convert from svg to png.
 In simple cases for two required commands these commands can be conbined using
-a single(!) ampersand. See pikchr for an example:
+a single(!) ampersand. See pikchr or abcm2ps for an example:
 
 - Diagram tools:
     - [plantuml](https://plantuml.com) - `plantuml -tpng %i`
