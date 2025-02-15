@@ -47,7 +47,8 @@ a single(!) ampersand. See pikchr for an example:
 - Math tools:
     - [eqn2graph](https://www.man7.org/linux/man-pages//man1/eqn2graph.1.html) -
       create one line equations - `cat %i | eqn2graph -density 300 2>/dev/null > %o`
-    - [latex](https://editor.codecogs.com/) - convert equations using a web services this as well requires a wrapper script
+    -  [latex](https://editor.codecogs.com/)  - convert  equations using a web
+    services this as well requires a wrapper script `text2png %i %o` - see below
 
 ## WRAPPER SCRIPT EXAMPLES
 
@@ -100,7 +101,30 @@ Let's  assume that the script file was named  `fen2png`  made  executable  and
 moved to some folder belonging to your PATH the syntax to call `lisi` would be:
 
 ```
-lisi examples/chess.fen "fen2png %s %s"
+lisi examples/chess.fen "fen2png %i %o"
+```
+
+Now an example for a wrapper  script which  fetches a LaTeX  equation from the
+webservice at https://latex.codecogs.com/:
+
+```bash
+function ltx2png {
+    if [ -z $2 ] ; then
+      echo "Usage: ltx2png INFILE OUTFILE DPI"
+      echo "The default DPI is 110"
+    else
+        if [ -z $3 ]; then
+            DPI=110
+        else
+            DPI=$3
+        fi
+        TEX=`grep -vE '^\s*%' $1 | tr -d '\n' | tr -d ' '`
+        echo "$TEX"
+        wget -q "https://latex.codecogs.com/png.image?\dpi{${DPI}}${TEX}" -O $2
+    fi
+}
+
+ltx2png "$@"
 ```
 
 ## TODO
