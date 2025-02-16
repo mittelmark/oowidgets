@@ -82,6 +82,8 @@ There is a sample project which uses `TclOO` and `oowidgets` to create mega widg
    [code](paul/statusbar.tcl) 
 - [paul::txmixins :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/txmixins.html) - 
    mixin classes for the `tk::text` widget to extend its functions  [code](paul/txmixins.tcl) 
+- [paul::tvmixins :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/tvmixins.html) - 
+   mixin classes for the `ttk::treeview` widget to extend its functions  [code](paul/tvmixins.tcl) 
 
 PS: package name inspired by some wiki code about creating megawidgets with TclOO from which a lot of code was "stolen" ...
 
@@ -250,6 +252,9 @@ namespace eval ::test { }
 ## CHANGES
 
 - 2024-12-29 : 0.4.0 Making it Tcl 9 ready
+- 2025-02-XX : 0.5.0
+    - new paul widgets labentry and treeview mixins
+    - sample application Lisi - graphics made easy to test the code 
 
 ## TODO's
 

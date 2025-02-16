@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 19:59:58
-#  Last Modified : <250207.0709>
+#  Last Modified : <250215.1759>
 #
 #  Description	 :
 #
@@ -57,7 +57,7 @@ namespace eval ::paul {
         dmVyc2lvbiAyLjUNCqkgRGV2ZWxDb3IgMTk5NywxOTk4LiBBbGwgcmlnaHRz
         IHJlc2VydmVkLg0KaHR0cDovL3d3dy5kZXZlbGNvci5jb20AOw==
     }
-    image create photo movie -data {
+    image create photo ::paul::movie -data {
         R0lGODlhEAAQAIIAAPwCBARCRAQCBASChATCxATCBASCBAAAACH5BAEAAAAA
         LAAAAAAQABAAAANHCLrc/izISauYI5NduvlXMIjEQBSnUYCYxnmsSJrouhqh
         6J4wLo0mWuqWy5heN58seBrGdEdeMgQsNW0ggXbL7Qog4HDDnwAAIf5oQ3Jl
@@ -65,7 +65,7 @@ namespace eval ::paul {
         MTk5NywxOTk4LiBBbGwgcmlnaHRzIHJlc2VydmVkLg0KaHR0cDovL3d3dy5k
         ZXZlbGNvci5jb20AOw==
     }
-    image create photo fileImg -data {
+    image create photo ::paul::fileImg -data {
         R0lGODlhEAAOAPcAAAAAADVJYzZKZJOit5WkuZalupqpvpyrwJ6uw6OyyKSzyae2zKm5z6u70a6+
         1K+/1bLC2LrF1L3K4cTP5MnT5svV59HZ6tPb69Xd7Njf7drh7tzj79/l8OHn8ePp8ubr9Ont9evv
         9u7x9/Dz+PL1+fX3+vf4+/n6/Pv8/fz9/v7+/v///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -83,7 +83,7 @@ namespace eval ::paul {
         AAh7AP/9g0CwoAMGCgQqFAhhhcOHKw4IWCjwAcSHBCJMXNjgosMBAkIuXOBxBYoBIBcm8KiiBIgB
         ARYi8HhCRAeYCw1cTEHigwacCgtcNBGCwwWgAgdARDHCQ4YKSP8pddgSxAYLE6JOXVGzAwYKErSi
         HEs2aoCzaNOeFRgQADs=}
-    image create photo clsdFolderImg -data {
+    image create photo ::paul::clsdFolderImg -data {
         R0lGODlhEAAOAPcAAAAAAJycAM7OY//OnP//nP//zvf39wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -100,7 +100,7 @@ namespace eval ::paul {
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAAQAA4A
         AAhjAP8JHEiw4MAACBECMHjQQIECBAgEWGgwgICLGAUkTCgwwMOPIB8SELDQY8STKAkMIPnPZEqV
         MFm6fDlApUyIKGvqHFkSZ06YK3ue3KkzaMsCRIEOMGoxo1OMFAFInUqV6r+AADs=}
-    image create bitmap arrowBlank -data {
+    image create bitmap ::paul::arrowBlank -data {
         #define arrowBlank_width 7
         #define arrowBlank_height 4
         static char arrowBlank_bits[] = {

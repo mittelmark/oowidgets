@@ -46,10 +46,10 @@
 #' 
 #' ```
 #' package require paul
-#' package require tkoo
 #' set txt [tkoo::text pathName ?option value ...?
 #' oo::objdefine $txt mixin Mixin ?Mixin ...?
-#' pack $txt
+#' $txtmixinmethod ?option value ...?
+#' pack $txt 
 #' ```
 #' 
 #' ## <a name='example'></a> EXAMPLE

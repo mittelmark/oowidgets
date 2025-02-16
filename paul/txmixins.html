@@ -23,14 +23,15 @@
 
 <h1 class="title">paul::tx - mixins for the tk::text widget</h1>
 <h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
-<h2 class="date">2025-02-10</h2>
+<h2 class="date">2025-02-16</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> -
 <a href="imedit.html">imedit</a> - <a href="labentry.html">labentry</a>
 - <a href="notebook.html">notebook</a> - <a
 href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> -
-<a href="txmixins.html">txmixins</a>
+<a href="tvmixins.html">tvmixins</a> - <a
+href="txmixins.html">txmixins</a>
 </center></p>
 
 <h2>NAME</h2>
@@ -53,10 +54,10 @@ href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> -
 <h2><a name='synopsis'></a> SYNOPSIS</h2>
 
 <pre class='code'><code>package require paul
-package require tkoo
 set txt [tkoo::text pathName ?option value ...?
 oo::objdefine $txt mixin Mixin ?Mixin ...?
-pack $txt</code></pre>
+$txtmixinmethod ?option value ...?
+pack $txt </code></pre>
 
 <h2><a name='example'></a> EXAMPLE</h2>
 

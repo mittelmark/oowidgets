@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="title" content="paul::dlabel - label with dynamic font size">
+<meta name="title" content="paul::tv - mixins for the ttk::treeview widget">
 <meta name="author" content="Detlef Groth, Schwielowsee, Germany">
     
-<title>paul::dlabel - label with dynamic font size</title>
+<title>paul::tv - mixins for the ttk::treeview widget</title>
     
     
 
@@ -21,7 +21,7 @@
 
 
 
-<h1 class="title">paul::dlabel - label with dynamic font size</h1>
+<h1 class="title">paul::tv - mixins for the ttk::treeview widget</h1>
 <h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
 <h2 class="date">2025-02-16</h2>
 
@@ -37,48 +37,78 @@ href="txmixins.html">txmixins</a>
 <h2>NAME</h2>
 
 <blockquote>
-<p><strong>paul::dlabel</strong> - label with fontsize adaptation</p>
+<p><strong>paul::tv</strong> - oo::class mixins for the ttk::treeview widget</p>
+
+<p>The following mixins are implemented:</p>
+
+<ul>
+<li><a href="#tvfilebrowser">paul::tvfilebrowser</a> - file browser widget</li></ul>
+
+
 </blockquote>
 
 <h2><a name='synopsis'></a> SYNOPSIS</h2>
 
 <pre class='code'><code>package require paul
-paul::dlabel pathName -text TEXT ?-option value ...?
-pack cmdName</code></pre>
+package require tkoo
+set tv [tkoo::treeview pathName ?option value ...?
+oo::objdefine $tv mixin Mixin ?Mixin ...?
+$tv mixinmethod ?option value ...?
+pack $tv</code></pre>
 
-<h2>COMMAND</h2>
-
-<p><a name="dlabel"></a>
-<strong>paul::dlabel</strong> <em>pathName</em></p>
-
-<blockquote>
-<p>Creates a ttk::label where the font size is dynamically adjusted to the widget size.</p>
-</blockquote>
-
-<h2>OPTIONS</h2>
-
-<p>All options of a standard ttk::label are supported.</p>
-
-<h2>METHODS</h2>
-
-<p>All methods of a standard ttk::label are supported.</p>
-
-<h2>EXAMPLE</h2>
+<h2><a name='example'></a> EXAMPLE</h2>
 
 <pre class='code'><code class='tclinn'>package require paul
-wm title . DGApp
-set app [paul::basegui new]
-font create title -family Helvetica -size 10
-puts [winfo children .]
-set frame [$app getFrame]
-set txt &quot; Some Title &quot;
-set dlab [paul::dlabel $frame.l -text $txt]
-pack  $dlab -expand 1 -fill both
-wm geometry . 400x300+0+0</code></pre>
+proc onClick {fname} {
+  puts &quot;Clicked $fname&quot;
+}
+set tv [tkoo::treeview .tv]
+oo::objdefine $tv mixin paul::tvfilebrowser
+$tv tvfilebrowser -browsecmd onClick
+pack $tv -side top -fill both -expand yes</code></pre>
 
-<pre class='code'><code class='tclout'>.mbar .#mbar .frame .sep .stb</code></pre>
+<h2><a name='mixins'></a> MIXINS</h2>
 
-<h2><a name='see'></a> SEE ALSO</h2>
+<p><a name="tvfilebrowser"><strong>dgw::tvfilebrowser</strong></a> <em>[ttk::treeview pathName] ?-option value ...?</em></p>
+
+<p>Creates and configures the <em>dgw::tvfilebrowser</em>  widget using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
+
+<p>The following option is available:</p>
+
+<blockquote>
+<ul>
+<li><em>-directory dirName</em> - starting directory for the filebrowser, default current directory.</li>
+<li><em>-browsecmd cmdName</em> - command to be executed if the users double clicks on a row item or presses the Return key. The widgets <em>pathName</em> and the actual row index are appended to the <em>cmdName</em> as arguments, default to empty string.</li>
+<li><em>-fileimage imgName</em> - image to be displayed as filename image left of the filename, default is standard file icon.</li>
+<li><em>-filepattern pattern</em> - the filter for the files to be displayed in the widget, default to &quot;.+&quot; i.e. all files</li></ul>
+
+
+</blockquote>
+
+<p>The following method(s) is(are) available:</p>
+
+<blockquote>
+<ul>
+<li><em>browseDir dirName</em> - the directory to be loaded into the <em>dgw::tvfilebrowser</em> widget.</li></ul>
+
+
+</blockquote>
+
+<p>Example:</p>
+
+<pre class='code'><code class='tclinn'>package require paul
+proc onClick {fname} {
+  puts &quot;Clicked $fname&quot;
+}
+set tv [tkoo::treeview .tv]
+oo::objdefine $tv mixin paul::tvfilebrowser
+$tv tvfilebrowser -browsecmd onClick
+pack $tv -side top -fill both -expand yes</code></pre>
+
+<pre class='code'><code class='tclout'>Error: window name &quot;tv&quot; already exists in parent
+    while executing
+&quot;$wtype $path&quot;
+    (class &quot;::oowidgets::BaseWidget&quot; method &quot;install&quot; line 7)</code></pre><h2><a name='see'></a> SEE ALSO</h2>
 
 <ul>
 <li><a href="../oowidgets/oowidgets.html">oowidgets</a></li>
@@ -87,11 +117,11 @@ wm geometry . 400x300+0+0</code></pre>
 
 <h2><a name='authors'></a> AUTHOR</h2>
 
-<p>The <strong>paul::statusbar</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
+<p>The <strong>paul::tv</strong> mixins were written by Detlef Groth, University of Potsdam, Germany.</p>
 
 <h2><a name='copyright'></a>COPYRIGHT</h2>
 
-<p>Copyright (c) 2021-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<p>Copyright (c) 2021-2025  Detlef Groth, E-mail: dgroth(at)uni(minus)potsdam(dot)de</p>
 
 <h2><a name='license'></a>LICENSE </h2>
 

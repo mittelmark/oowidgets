@@ -6,6 +6,7 @@
 [notebook](notebook.html) -
 [rotext](rotext.html) -
 [statusbar](statusbar.html) -
+[tvmixins](tvmixins.html) -
 [txmixins](txmixins.html)
 </center>
 

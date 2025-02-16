@@ -99,5 +99,6 @@ source [file join [file dirname [info script]] imedit.tcl]
 source [file join [file dirname [info script]] labentry.tcl] 
 source [file join [file dirname [info script]] rotext.tcl] 
 source [file join [file dirname [info script]] notebook.tcl] 
+source [file join [file dirname [info script]] tvmixins.tcl] 
 source [file join [file dirname [info script]] txmixins.tcl] 
 
