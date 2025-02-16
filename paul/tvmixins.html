@@ -69,9 +69,12 @@ pack $tv -side top -fill both -expand yes</code></pre>
 
 <h2><a name='mixins'></a> MIXINS</h2>
 
-<p><a name="tvfilebrowser"><strong>dgw::tvfilebrowser</strong></a> <em>[ttk::treeview pathName] ?-option value ...?</em></p>
+<p><a name="tvfilebrowser"> </a>
+tkoo::treeview pathName ?-option value ...?<em><br/>
+oo::objdefine pathName mixin </em><em>paul::tvfilebrowser</em><em><br/>
+pathName tvfilebrowser </em>?-option value ...?*</p>
 
-<p>Creates and configures the <em>dgw::tvfilebrowser</em>  widget using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
+<p>Creates and configures the <em>paul::tvfilebrowser</em>  widget using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
 
 <p>The following option is available:</p>
 
@@ -89,7 +92,7 @@ pack $tv -side top -fill both -expand yes</code></pre>
 
 <blockquote>
 <ul>
-<li><em>browseDir dirName</em> - the directory to be loaded into the <em>dgw::tvfilebrowser</em> widget.</li></ul>
+<li><em>browseDir dirName</em> - the directory to be loaded into the <em>paul::tvfilebrowser</em> widget.</li></ul>
 
 
 </blockquote>

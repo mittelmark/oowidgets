@@ -64,9 +64,12 @@
 #'
 #' ## <a name='mixins'></a> MIXINS
 #'
-#' <a name="tvfilebrowser">**dgw::tvfilebrowser**</a> *[ttk::treeview pathName] ?-option value ...?*
+#' <a name="tvfilebrowser"> </a>
+#' tkoo::treeview pathName ?-option value ...?*  
+#' oo::objdefine pathName mixin **paul::tvfilebrowser**   
+#' pathName tvfilebrowser *?-option value ...?*
 #' 
-#' Creates and configures the *dgw::tvfilebrowser*  widget using the Tk window id _pathName_ and the given *options*. 
+#' Creates and configures the *paul::tvfilebrowser*  widget using the Tk window id _pathName_ and the given *options*. 
 #'
 #' The following option is available:
 #'
@@ -77,7 +80,7 @@
 #' 
 #' The following method(s) is(are) available:
 #' 
-#' > - *browseDir dirName* - the directory to be loaded into the *dgw::tvfilebrowser* widget.
+#' > - *browseDir dirName* - the directory to be loaded into the *paul::tvfilebrowser* widget.
 #' 
 #' Example:
 #'
