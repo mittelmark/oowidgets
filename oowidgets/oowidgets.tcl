@@ -274,7 +274,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' 
 #' > - __cget__ _-option_ - the usual cget method for every widget, returning the standard widget options or some new options for the widget
 #'   - __configure__ _?-option value ...?_ - the usual configure method for every widget working with default widget options and new options
-#'   . __mixin__ _CLASSNAME_ ?args? - add a mixin to the current object delegating all arguments to a method with the same name as the CLASSNAME
+#'   . __mixin__ _CLASSNAME_ ?-option value ...? ?CLASSNAME -option value ...`- add one or more mixins to the current object delegating all arguments to a method with the same name as the CLASSNAME
 #'   - __widget__ - returns the widget path for the underlying widget
 #' 
 #' > The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:
