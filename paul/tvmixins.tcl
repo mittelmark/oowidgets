@@ -34,7 +34,10 @@
 #' 
 #' > - [paul::tvband](#tvband) - adding stripes to treeview widgets
 #' > - [paul::tvfilebrowser](#tvfilebrowser) - file browser widget
+#' > - [paul::tvksearch](#tvksearch) - bind home and end as well as typing navigation
 #' > - [paul::tvsortable](#tvsortable) - a sortable treeview
+#' > - [paul::tvtooltip](#tvtooltip) - tool tips for the treeviewwidget
+#' > - [paul::tvtree](#tvtree) - a tree widget with icon support
 #'
 #' ## <a name='synopsis'></a> SYNOPSIS
 #' 
@@ -45,7 +48,7 @@
 #' ```
 #' package require paul
 #' set tv [tkoo::treeview pathName ?option value ...?
-#' $tv mixin method ?option value ...?
+#' $tv mixin mixiname ?-option value ... mixinname -option value ...?
 #' pack $tv
 #' ```
 #' 
@@ -57,7 +60,7 @@
 #'   puts "Clicked $fname"
 #' }
 #' set tv [tkoo::treeview .tv]
-#' $tv mixin paul::tvfilebrowser -browsecmd onClick
+#' $tv mixin paul::tvfilebrowser -browsecmd onClick paul::tvksearch
 #' pack $tv -side top -fill both -expand yes
 #' set tv2 [tkoo::treeview .fb -columns [list A B C] \
 #'        -show headings]
@@ -72,12 +75,30 @@
 #' update idletasks
 #' after 3000
 #' $tv2 configure -bandcolors [list salmon white]
+#' set tree [tkoo::treeview .tree \
+#'      -height 15 -show tree -selectmode browse]
+#' $tree mixin paul::tvtree -icon folder paul::tvtooltip
+#' foreach txt {first second third} {
+#'    set id [$tree insert {} end -text " $txt item" -open 1]
+#'    for {set i [expr {1+int(rand()*5)}]} {$i > 0} {incr i -1} {
+#'        set child [$tree insert $id 0 -text " child $i"]
+#'        for {set j [expr {int(rand()*3)}]} {$j > 0} {incr j -1} {
+#'           $tree insert $child 0 -text " grandchild $i"
+#'        }
+#'    }
+#' }
+#' pack $tree -side top -fill both -expand true
+#' pack [::ttk::label .msg -font "Times 12 bold" -textvariable ::msg -width 20 \
+#'       -background salmon -borderwidth 2 -relief ridge] \
+#'       -side top -fill x -expand false -ipadx 5 -ipady 4
+#' bind $tree <<RowEnter>> { set ::msg "  Entering row %d"}
+#' bind $tree <<RowLeave>> { set ::msg "  Leaving row %d"}
 #' ```
 #'
 #' ## <a name='mixins'></a> MIXINS
 #'
 #' 
-#' <a name="tvband">**dgw::tvband**</a> 
+#' <a name="tvband"> </a> 
 #' *pathName mixin* **tvband** *?-option value ...?*
 #' 
 #' > Creates and configures the mixin *paul::tvband* for a *tkoo::treeview* using the Tk window id _pathName_ and the given *options*. 
@@ -109,7 +130,6 @@
 package require oowidgets
 catch { rename ::paul::tvband {} }
 
-puts [info commands ::oo::Helpers::*]
 ::oo::class create ::paul::tvband {
     variable win
     method tvband {args} {
@@ -288,6 +308,80 @@ catch { rename ::paul::tvfilebrowser {} }
 
     
 }
+
+#'
+#' <a name="tvksearch"></a>
+#' *pathName mixin* **paul::tvksearch** 
+#'
+#' > Adds the mixin *paul::tvksearch* for a *tkoo::treeview* using the Tk window id _pathName_. 
+#'
+#' > With this widget you can use the Home and End keys for navigation and further letter
+#'   typing starts searching in the first column shifting focus and display to the current matching entry.
+#'
+#' > There are currently no options or methods available for this widget.
+#'
+#' > Example:
+#' 
+#' ```
+#' # demo: tvksearch
+#' set tvk [tkoo::treeview .tvk]
+#' $tvk mixin paul::tvfilebrowser paul::tvksearch
+#' pack .fb -side top -fill both -expand yes
+#' ```
+#' 
+# widget adaptor which allows forward searching in a ttk::treeview 
+# using the starting letters matchinf entries in column 1
+# with typing beginning letters 
+# further has bindings of Home and End key
+catch { rename ::paul::tvksearch {} }
+
+::oo::class create ::paul::tvksearch {
+    variable LastKeyTime ""
+    variable LastKey ""
+    variable win
+    method tvksearch {args} {
+        set win [my widget]
+        bind $win <Key-Home>  [mymethod setSelection 0]
+        bind $win <Key-End>   [mymethod setSelection end]
+        bind $win <Any-Key> [mymethod ListMatch %A]
+        set LastKeyTime [clock seconds]
+        my configure {*}$args
+    }
+    method setSelection {index} {
+        my focus [lindex [my children {}] $index]
+        my selection set  [lindex [my children {}] $index]
+        focus -force $win
+        my see [lindex [my selection] 0]
+    }
+    method  ListMatch {key} {
+        if [regexp {[-A-Za-z0-9]} $key] {
+            set ActualTime [clock seconds]
+            if {[expr {$ActualTime-$LastKeyTime}] < 3} {
+                set ActualKey "$LastKey$key"
+            } else {
+                set ActualKey $key
+            }
+
+            set n 0
+            foreach i [$win children {}] {
+                set name [lindex [$win item $i -value] 0]
+                if [string match $ActualKey* $name] {
+                    $win selection remove [$win selection]
+                    $win focus $i 
+                    $win selection set  $i
+                    focus -force $win
+                    $win see $i
+                    set LastKeyTime [clock seconds]
+                    set LastKey $ActualKey
+                    break
+                } else {
+                    incr n
+                }
+            }
+        } 
+    }
+}
+
 
 #'
 #' <a name="tvsortable"></a> 
@@ -470,6 +564,157 @@ catch { rename ::paul::tvsortable {} }
     }
 
 
+}
+#'
+#' <a name="tvtooltip"> </a>
+#' *pathName mixin* **paul::tvtooltip** *?-option value ...?*
+#'
+#' > Creates and configures the mixin *paul::tvtooltip* for a *tkoo::treeview* using the Tk window id _pathName_ and the given *options*. 
+#'
+#' > There are currently no options available.
+#' 
+#' > The widget provides the following events:
+#' 
+#' > - <<RowEnter\>> with the following symbols: %d the row index, and the standards %W (widget), %x (widgetX), %y (widgetY), %X (rootx), %Y (rootY)
+#'   - <<RowLeave\>> with the following symbols: %d the row index, and the standards %W (widget), %x (widgetX), %y (widgetY), %X (rootx), %Y (rootY)
+#'
+#' > Example:
+#' 
+#' ```
+#' # demo: tvtooltip
+#' set tt [tkoo::treeview .fp2]
+#' $tt mixin ::paul::tvtooltip ::paul::tvfilebrowser \
+#'          -directory . -fileimage movie \
+#'          -filepattern {\.(3gp|mp4|avi|mkv|mp3|ogg)$}
+#' 
+#' pack $tt -side top -fill both -expand yes
+#' pack [::ttk::label .msg -font "Times 12 bold" -textvariable ::msg -width 20 \
+#'       -background salmon -borderwidth 2 -relief ridge] \
+#'       -side top -fill x -expand false -ipadx 5 -ipady 4
+#' bind $tt <<RowEnter>> { set ::msg "  Entering row %d"}
+#' bind $tt <<RowLeave>> { set ::msg "  Leaving row %d"}
+#' ```
+#' 
+
+# https://wiki.tcl-lang.org/page/TreeView+Tooltips
+catch { rename ::paul::tvtooltip {} }
+
+::oo::class create ::paul::tvtooltip {
+    variable LAST 
+    variable AFTERS 
+    variable win
+    method tvtooltip {args} {
+        set win [my widget]
+        my configure {*}$args
+        array set LAST [list $win ""]
+        array set AFTERS [list $win ""]
+        bind $win <Motion> [mymethod OnMotion %W %x %y %X %Y]
+    }
+    method OnMotion {W x y rootX rootY} {
+        set id [$W identify row $x $y]
+        set lastId $LAST($W)
+        set LAST($W) $id
+        if {$id ne $lastId} {
+            after cancel $AFTERS($W)
+            if {$lastId ne ""} {
+                event generate $W <<RowLeave>> \
+                      -data $lastId -x $x -y $y -rootx $rootX -rooty $rootY
+            }
+            if {$id ne ""} {
+                set AFTERS($W) \
+                      [after 300 event generate $W <<RowEnter>> \
+                       -data $id -x $x -y $y -rootx $rootX -rooty $rootY]
+            }
+        }
+    }
+}
+
+
+#'
+#' <a name="tvtree"> </a>
+#' *pathName mixin* **paul::tvtree** *?-option value ...?*
+#'
+#' > Creates and configures the mixin *paul::tvtree* for a *tkoo::treeview* using the Tk window id _pathName_ and the given *options*. 
+#'
+#' > The following option is available:
+#' 
+#' - *-icon* - the icon type, which can be currently either book or folder. To provide your own icons you must create two image icons \<name\>open16 and \<name\>close16. Support for icons of size 22 will be added later.
+#' 
+#' > The widget provides the following event:
+#' 
+#' - <<InsertItem\>> which is fired if a item is inserted into the *tvtree* widget, there are the following event symbols available: _%d_ the row index, and the standard _%W_ (widget pathname).
+#'
+#' > Example:
+#' 
+#' ```{.tcl eval=true}
+#' # demo: tvtree
+#' set tree [tkoo::treeview .tree2 \
+#'      -height 15 -show tree -selectmode browse]
+#' $tree mixin paul::tvtree -icon folder
+#' foreach txt {first second third} {
+#'    set id [$tree insert {} end -text " $txt item" -open 1]
+#'    for {set i [expr {1+int(rand()*5)}]} {$i > 0} {incr i -1} {
+#'        set child [$tree insert $id 0 -text " child $i"]
+#'        for {set j [expr {int(rand()*3)}]} {$j > 0} {incr j -1} {
+#'           $tree insert $child 0 -text " grandchild $i"
+#'        }
+#'    }
+#' }
+#' pack $tree -side top -fill both -expand true
+#' ```
+#' 
+catch { rename ::paul::tvtree {} }
+
+::oo::class create ::paul::tvtree {
+    variable win
+    method tvtree {args} {
+        set win [my widget]
+        my option -icon ::paul::book
+        
+        my configure {*}$args
+        trace add execution $win leave [mymethod tvwintrace]
+                      bind $win <<TreeviewOpen>> [mymethod TreeviewUpdateImages true]
+        bind $win <<TreeviewClose>> [mymethod TreeviewUpdateImages false]
+        bind $win <<InsertItem>> [mymethod InsertItem %d]
+    }
+    method tvwintrace {args} {
+        set path [lindex [lindex $args 0] 0]
+        set meth [lindex [lindex $args 0] 1]
+        if {$meth eq "insert"} {
+            set parent [lindex [lindex $args 0] 2]
+            set index [lindex [lindex $args 0] 3]
+            set item [lindex [$path children $parent] $index]
+            event generate $win <<InsertItem>> -data $item
+        }
+    }
+    method InsertItem {item} {
+        set parent [$win parent $item]
+        $win item $item -image ::paul::file16
+        if {$parent eq {}} {
+            $win item $item -image ::paul::file16
+        } else {
+            if {[$win item $parent -open]} {
+                $win item $parent -image ::paul::[my cget -icon]open16
+            } else {
+                $win item $parent -image ::paul::[my cget -icon]close16
+            }
+        }
+    }
+
+    method TreeviewUpdateImages {open} {
+        # event fires before 
+        # the children are indeed displayed or hided
+        set item [$win focus]
+        if {$open} {
+            if {[llength [$win children $item]] > 0} {
+                $win item $item -image ::paul::[my cget -icon]open16
+            }
+        } else {
+            if {[llength [$win children $item]] > 0} {
+                $win item $item -image ::paul::[my cget -icon]close16
+            }
+        }
+    }
 }
 
 #' ## <a name='see'></a> SEE ALSO

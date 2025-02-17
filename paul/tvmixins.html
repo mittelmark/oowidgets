@@ -44,7 +44,10 @@ href="txmixins.html">txmixins</a>
 <ul>
 <li><a href="#tvband">paul::tvband</a> - adding stripes to treeview widgets</li>
 <li><a href="#tvfilebrowser">paul::tvfilebrowser</a> - file browser widget</li>
-<li><a href="#tvsortable">paul::tvsortable</a> - a sortable treeview</li></ul>
+<li><a href="#tvksearch">paul::tvksearch</a> - bind home and end as well as typing navigation</li>
+<li><a href="#tvsortable">paul::tvsortable</a> - a sortable treeview</li>
+<li><a href="#tvtooltip">paul::tvtooltip</a> - tool tips for the treeviewwidget</li>
+<li><a href="#tvtree">paul::tvtree</a> - a tree widget with icon support</li></ul>
 
 
 </blockquote>
@@ -53,7 +56,7 @@ href="txmixins.html">txmixins</a>
 
 <pre class='code'><code>package require paul
 set tv [tkoo::treeview pathName ?option value ...?
-$tv mixin method ?option value ...?
+$tv mixin mixiname ?-option value ... mixinname -option value ...?
 pack $tv</code></pre>
 
 <h2><a name='example'></a> EXAMPLE</h2>
@@ -63,22 +66,43 @@ proc onClick {fname} {
   puts &quot;Clicked $fname&quot;
 }
 set tv [tkoo::treeview .tv]
-$tv mixin paul::tvfilebrowser -browsecmd onClick
+$tv mixin paul::tvfilebrowser -browsecmd onClick paul::tvksearch
 pack $tv -side top -fill both -expand yes
 set tv2 [tkoo::treeview .fb -columns [list A B C] \
        -show headings]
-$tv2 mixin ::paul::tvsortable -sorttypes [list A real B real C integer]
+$tv2 mixin ::paul::tvsortable -sorttypes [list A real B real C integer] \
+    paul::tvband  -bandcolors [list #FFFFFF #FFEECC]
 foreach col [list A B C] { $tv2 heading $col -text $col }
 for {set i 0} {$i &lt; 20} {incr i 1} {
    $tv2 insert {} end -values [list  [expr {int(rand()*100)}] \
                   [expr {int(rand()*1000)}] [expr {int(rand()*1000)}]]
 }
-$tv2 mixin paul::tvband
-pack $tv2 -side top -fill both -expand yes</code></pre>
+pack $tv2 -side top -fill both -expand yes
+update idletasks
+after 3000
+$tv2 configure -bandcolors [list salmon white]
+set tree [tkoo::treeview .tree \
+     -height 15 -show tree -selectmode browse]
+$tree mixin paul::tvtree -icon folder paul::tvtooltip
+foreach txt {first second third} {
+   set id [$tree insert {} end -text &quot; $txt item&quot; -open 1]
+   for {set i [expr {1+int(rand()*5)}]} {$i &gt; 0} {incr i -1} {
+       set child [$tree insert $id 0 -text &quot; child $i&quot;]
+       for {set j [expr {int(rand()*3)}]} {$j &gt; 0} {incr j -1} {
+          $tree insert $child 0 -text &quot; grandchild $i&quot;
+       }
+   }
+}
+pack $tree -side top -fill both -expand true
+pack [::ttk::label .msg -font &quot;Times 12 bold&quot; -textvariable ::msg -width 20 \
+      -background salmon -borderwidth 2 -relief ridge] \
+      -side top -fill x -expand false -ipadx 5 -ipady 4
+bind $tree &lt;&lt;RowEnter&gt;&gt; { set ::msg &quot;  Entering row %d&quot;}
+bind $tree &lt;&lt;RowLeave&gt;&gt; { set ::msg &quot;  Leaving row %d&quot;}</code></pre>
 
 <h2><a name='mixins'></a> MIXINS</h2>
 
-<p><a name="tvband"><strong>dgw::tvband</strong></a> 
+<p><a name="tvband"> </a> 
 <em>pathName mixin</em> <strong>tvband</strong> <em>?-option value ...?</em></p>
 
 <blockquote>
@@ -140,6 +164,25 @@ oo::objdefine $tv mixin paul::tvfilebrowser
 $tv tvfilebrowser -browsecmd onClick
 pack $tv -side top -fill both -expand yes</code></pre>
 
+<p><a name="tvksearch"></a>
+<em>pathName mixin</em> <strong>paul::tvksearch</strong></p>
+
+<blockquote>
+<p>Adds the mixin <em>paul::tvksearch</em> for a <em>tkoo::treeview</em> using the Tk window id <em>pathName</em>.</p>
+
+<p>With this widget you can use the Home and End keys for navigation and further letter
+  typing starts searching in the first column shifting focus and display to the current matching entry.</p>
+
+<p>There are currently no options or methods available for this widget.</p>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code># demo: tvksearch
+set tvk [tkoo::treeview .tvk]
+$tvk mixin paul::tvfilebrowser paul::tvksearch
+pack .fb -side top -fill both -expand yes</code></pre>
+
 <p><a name="tvsortable"></a> 
 <em>pathName mixin</em> <strong>paul::tvsortable</strong> <em>?-option value ...?</em></p>
 
@@ -186,6 +229,77 @@ for {set i 0} {$i &lt; 20} {incr i 1} {
 pack .tvs -side top -fill both -expand yes
 update idletasks
 after 3000</code></pre>
+
+<p><a name="tvtooltip"> </a>
+<em>pathName mixin</em> <strong>paul::tvtooltip</strong> <em>?-option value ...?</em></p>
+
+<blockquote>
+<p>Creates and configures the mixin <em>paul::tvtooltip</em> for a <em>tkoo::treeview</em> using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
+
+<p>There are currently no options available.</p>
+
+<p>The widget provides the following events:</p>
+
+<ul>
+<li>&lt;&lt;RowEnter>&gt; with the following symbols: %d the row index, and the standards %W (widget), %x (widgetX), %y (widgetY), %X (rootx), %Y (rootY)</li>
+<li>&lt;&lt;RowLeave>&gt; with the following symbols: %d the row index, and the standards %W (widget), %x (widgetX), %y (widgetY), %X (rootx), %Y (rootY)
+</li></ul>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code># demo: tvtooltip
+set tt [tkoo::treeview .fp2]
+$tt mixin ::paul::tvtooltip ::paul::tvfilebrowser \
+         -directory . -fileimage movie \
+         -filepattern {\.(3gp|mp4|avi|mkv|mp3|ogg)$}
+
+pack $tt -side top -fill both -expand yes
+pack [::ttk::label .msg -font &quot;Times 12 bold&quot; -textvariable ::msg -width 20 \
+      -background salmon -borderwidth 2 -relief ridge] \
+      -side top -fill x -expand false -ipadx 5 -ipady 4
+bind $tt &lt;&lt;RowEnter&gt;&gt; { set ::msg &quot;  Entering row %d&quot;}
+bind $tt &lt;&lt;RowLeave&gt;&gt; { set ::msg &quot;  Leaving row %d&quot;}</code></pre>
+
+<p><a name="tvtree"> </a>
+<em>pathName mixin</em> <strong>paul::tvtree</strong> <em>?-option value ...?</em></p>
+
+<blockquote>
+<p>Creates and configures the mixin <em>paul::tvtree</em> for a <em>tkoo::treeview</em> using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
+
+<p>The following option is available:</p>
+</blockquote>
+
+<ul>
+<li><em>-icon</em> - the icon type, which can be currently either book or folder. To provide your own icons you must create two image icons \&lt;name>open16 and \&lt;name>close16. Support for icons of size 22 will be added later.
+</li></ul>
+
+<blockquote>
+<p>The widget provides the following event:</p>
+</blockquote>
+
+<ul>
+<li>&lt;&lt;InsertItem>&gt; which is fired if a item is inserted into the <em>tvtree</em> widget, there are the following event symbols available: <em>%d</em> the row index, and the standard <em>%W</em> (widget pathname).
+</li></ul>
+
+<blockquote>
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code class='tclinn'># demo: tvtree
+set tree [tkoo::treeview .tree2 \
+     -height 15 -show tree -selectmode browse]
+$tree mixin paul::tvtree -icon folder
+foreach txt {first second third} {
+   set id [$tree insert {} end -text &quot; $txt item&quot; -open 1]
+   for {set i [expr {1+int(rand()*5)}]} {$i &gt; 0} {incr i -1} {
+       set child [$tree insert $id 0 -text &quot; child $i&quot;]
+       for {set j [expr {int(rand()*3)}]} {$j &gt; 0} {incr j -1} {
+          $tree insert $child 0 -text &quot; grandchild $i&quot;
+       }
+   }
+}
+pack $tree -side top -fill both -expand true</code></pre>
 
 <h2><a name='see'></a> SEE ALSO</h2>
 
