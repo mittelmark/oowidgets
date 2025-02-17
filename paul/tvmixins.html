@@ -155,7 +155,8 @@ pack $tvband -side top -fill both -expand yes</code></pre>
 <p>Example:</p>
 </blockquote>
 
-<pre class='code'><code class='tclinn'>package require paul
+<pre class='code'><code class='tclinn'># demo: tvfilebrowser
+package require paul
 proc onClick {fname} {
   puts &quot;Clicked $fname&quot;
 }
@@ -181,7 +182,7 @@ pack $tv -side top -fill both -expand yes</code></pre>
 <pre class='code'><code># demo: tvksearch
 set tvk [tkoo::treeview .tvk]
 $tvk mixin paul::tvfilebrowser paul::tvksearch
-pack .fb -side top -fill both -expand yes</code></pre>
+pack $tvk -side top -fill both -expand yes</code></pre>
 
 <p><a name="tvsortable"></a> 
 <em>pathName mixin</em> <strong>paul::tvsortable</strong> <em>?-option value ...?</em></p>
@@ -218,9 +219,8 @@ In this case the directories are always sorted above the filenames.
 </blockquote>
 
 <pre class='code'><code># demo: tvsortable
-tkoo::treeview .tvs -columns [list A B C] \
-       -show headings]
-.tvs mixin tvsortable -sorttypes [list A real B real C integer]
+tkoo::treeview .tvs -columns [list A B C] -show headings
+.tvs mixin paul::tvsortable -sorttypes [list A real B real C integer]
 foreach col [list A B C] { .tvs heading $col -text $col }
 for {set i 0} {$i &lt; 20} {incr i 1} {
    .tvs insert {} end -values [list  [expr {int(rand()*100)}] \

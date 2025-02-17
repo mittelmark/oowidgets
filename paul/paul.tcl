@@ -65,23 +65,41 @@ proc ::paul::getMarkdown {filename} {
 }
             
     
-proc ::paul::getExampleCode {filename} {
+proc ::paul::getExampleCode {filename {section}} {
     if [catch {open $filename r} infh] {
         puts stderr "Cannot open $filename: $infh"
         exit
     } else {
         set flag -1
+        set pre 0
         set code ""
         while {[gets $infh line] >= 0} {
-            if {[regexp {^#' ## .*EXAMPLE} $line]} {
-                set flag 0
-            } elseif {$flag == 0 && [regexp {^#' >? ?```} $line]} {
-                set flag 1
-            } elseif {$flag == 1 && [regexp {^#' >? ?```} $line]} {
-                break
-            } elseif {$flag == 1 && [regexp {^#' } $line]} {
-                append code [string range $line 3 end]
-                append code "\n"
+            if {$section eq ""} {
+                ## default Example section
+                if {[regexp {^#' ## .*EXAMPLE} $line]} {
+                    set flag 0
+                } elseif {$flag == 0 && [regexp {^#' >? ?```} $line]} {
+                    set flag 1
+                } elseif {$flag == 1 && [regexp {^#' >? ?```} $line]} {
+                    break
+                } elseif {$flag == 1 && [regexp {^#' } $line]} {
+                    append code [string range $line 3 end]
+                    append code "\n"
+                }
+            } else {
+                if {$flag == -1 && [regexp {^#' >? ?```} $line]} {
+                    set pre 1
+                } elseif {$flag == 1 && [regexp {^#' >? ?```} $line]} {
+                    break
+                } elseif {$pre == 1 && [regexp {^#' >? ?```} $line]} {
+                    set pre 0
+                } elseif {$pre == 1 && [regexp "#' # demo: $section\s*$" $line]} {
+                    
+                    set flag 1
+                } elseif {$flag == 1 && [regexp {^#' } $line]} {
+                    append code [string range $line 3 end]
+                    append code "\n"
+                }
             }
         }
         close $infh

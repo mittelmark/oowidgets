@@ -133,6 +133,7 @@ catch { rename ::paul::tvband {} }
 ::oo::class create ::paul::tvband {
     variable win
     method tvband {args} {
+        set win [my widget]
         my option -bandcolors [list #FFFFFF #DDEEFF]
         my configure {*}$args
         $win tag configure band0 -background [lindex [my cget -bandcolors] 0]
@@ -198,6 +199,7 @@ catch { rename ::paul::tvband {} }
 #' > Example:
 #'
 #' ```{.tcl eval=true}
+#' # demo: tvfilebrowser
 #' package require paul
 #' proc onClick {fname} {
 #'   puts "Clicked $fname"
@@ -326,7 +328,7 @@ catch { rename ::paul::tvfilebrowser {} }
 #' # demo: tvksearch
 #' set tvk [tkoo::treeview .tvk]
 #' $tvk mixin paul::tvfilebrowser paul::tvksearch
-#' pack .fb -side top -fill both -expand yes
+#' pack $tvk -side top -fill both -expand yes
 #' ```
 #' 
 # widget adaptor which allows forward searching in a ttk::treeview 
@@ -412,9 +414,8 @@ catch { rename ::paul::tvksearch {} }
 #' 
 #' ```
 #' # demo: tvsortable
-#' tkoo::treeview .tvs -columns [list A B C] \
-#'        -show headings]
-#' .tvs mixin tvsortable -sorttypes [list A real B real C integer]
+#' tkoo::treeview .tvs -columns [list A B C] -show headings
+#' .tvs mixin paul::tvsortable -sorttypes [list A real B real C integer]
 #' foreach col [list A B C] { .tvs heading $col -text $col }
 #' for {set i 0} {$i < 20} {incr i 1} {
 #'    .tvs insert {} end -values [list  [expr {int(rand()*100)}] \
@@ -743,8 +744,12 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp tvmixins $argv0]} 
     if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
         puts [package version paul]
         destroy .
-    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {
-        set code [::paul::getExampleCode [info script]]
+    } elseif {[llength $argv] >= 1 && [lindex $argv 0] eq "--demo"} {
+        set section ""
+        if {[llength $argv] == 2} {
+            set section [lindex $argv 1]
+        } 
+        set code [::paul::getExampleCode [info script] $section]
         eval $code
     } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {
         set code [::paul::getExampleCode [info script]]
