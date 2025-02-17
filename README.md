@@ -253,6 +253,7 @@ namespace eval ::test { }
 
 - 2024-12-29 : 0.4.0 Making it Tcl 9 ready
 - 2025-02-XX : 0.5.0
+    - new method mixin to add classes to the current object
     - new paul widgets labentry and treeview mixins
     - sample application Lisi - graphics made easy to test the code 
 

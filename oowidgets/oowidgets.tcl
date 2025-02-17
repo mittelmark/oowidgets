@@ -4,7 +4,7 @@ package provide oowidgets 0.5.0
 #' ---
 #' title: package oowidgets - create megawidgets using TclOO
 #' author: Detlef Groth, University of Potsdam, Germany
-#' date: 2025-02-02
+#' date: 2025-02-17
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -75,6 +75,7 @@ if {![package vsatisfies [package provide Tcl] 8.7]} {
         return [uplevel 1 {namespace qualifiers [namespace which my]}]::$varname
     }
 }
+
 
 namespace eval ::oowidgets { 
     variable tmp
@@ -197,6 +198,31 @@ oo::class create ::oowidgets::BaseWidget {
           }
           return [$widget configure {*}$nargs]
       } 
+      method mixin {args} {
+          set flag false
+          array set mixinargs [list]
+          set mixins [list]
+          foreach arg $args {
+              if {[regexp {^-} $arg]} {
+                  lappend mixinargs($mix) $arg
+                  set flag true
+              } elseif {$flag} {
+                  lappend mixinargs($mix) $arg
+                  set flag false
+              } else {
+                  lappend mixins $arg
+                  set mix $arg
+                  set mixinargs($arg) [list]
+              }
+          }
+          oo::objdefine [self] mixin {*}$mixins
+          foreach name $mixins {
+              set meth [namespace tail $name]
+              if {$meth in [info class methods $name]} {
+                  my $meth {*}$mixinargs($name)
+              }
+          }
+      }
       method widget {} {
           my variable widgetpath
           return $widgetpath
@@ -248,6 +274,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' 
 #' > - __cget__ _-option_ - the usual cget method for every widget, returning the standard widget options or some new options for the widget
 #'   - __configure__ _?-option value ...?_ - the usual configure method for every widget working with default widget options and new options
+#'   . __mixin__ _CLASSNAME_ ?args? - add a mixin to the current object delegating all arguments to a method with the same name as the CLASSNAME
 #'   - __widget__ - returns the widget path for the underlying widget
 #' 
 #' > The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:

@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 19:59:58
-#  Last Modified : <250215.1759>
+#  Last Modified : <250217.0839>
 #
 #  Description	 :
 #
@@ -107,5 +107,33 @@ namespace eval ::paul {
             0x00, 0x00, 0x00, 0x00
         };
     }   
+    image create photo ::paul::arrow(1) -data {
+        R0lGODlhEAAQAIIAAAT+BPwCBAQCBAQC/FxaXAAAAAAAAAAAACH5BAEAAAAA
+        LAAAAAAQABAAAAM5CBDM+uKp8KiMsmaAs82dtnGeCHnNp4TjNQ4jq8CbDNOr
+        oIe3ROyEx2A4vOgkOBzgFxQ6Xa0owJ8AACH+aENyZWF0ZWQgYnkgQk1QVG9H
+        SUYgUHJvIHZlcnNpb24gMi41DQqpIERldmVsQ29yIDE5OTcsMTk5OC4gQWxs
+        IHJpZ2h0cyByZXNlcnZlZC4NCmh0dHA6Ly93d3cuZGV2ZWxjb3IuY29tADs=
+    }
+    image create photo ::paul::arrow(0) -data {
+        R0lGODlhEAAQAIIAAAT+BAQC/AQCBPwCBFxaXAAAAAAAAAAAACH5BAEAAAAA
+        LAAAAAAQABAAAAM4CAqxLm61CGBs81FMrQxgpnhKJlaXFJHUGg0w7DrDUmvt
+        PQo8qyuEHoHW6hEVv+DQFvuhWtCFPwEAIf5oQ3JlYXRlZCBieSBCTVBUb0dJ
+        RiBQcm8gdmVyc2lvbiAyLjUNCqkgRGV2ZWxDb3IgMTk5NywxOTk4LiBBbGwg
+        cmlnaHRzIHJlc2VydmVkLg0KaHR0cDovL3d3dy5kZXZlbGNvci5jb20AOw==
+    }
     
+    image create bitmap ::paul::arrow(2) -data {
+        #define arrowUp_width 7
+        #define arrowUp_height 4
+        static char arrowUp_bits[] = {
+            0x08, 0x1c, 0x3e, 0x7f
+        };
+    }
+    image create bitmap ::paul::arrow(3) -data {
+        #define arrowDown_width 7
+        #define arrowDown_height 4
+        static char arrowDown_bits[] = {
+            0x7f, 0x3e, 0x1c, 0x08
+        };
+    }
 }
