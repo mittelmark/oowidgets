@@ -32,7 +32,8 @@
 #' 
 #' > The following mixins are implemented:
 #' 
-#' > - [paul::tvband](#tvband) - adding stripes to treeview widgets
+#' > - [paul::tvband](#tvband) - adding stripes to treeview widget
+#' > - [paul::tvedit](#tvedit) - editable cells for a treeview widget
 #' > - [paul::tvfilebrowser](#tvfilebrowser) - file browser widget
 #' > - [paul::tvksearch](#tvksearch) - bind home and end as well as typing navigation
 #' > - [paul::tvsortable](#tvsortable) - a sortable treeview
@@ -179,13 +180,269 @@ catch { rename ::paul::tvband {} }
         }
     }
 }
+
+#'
+#' <a name="tvedit"> </a>
+#' *pathName mixin* **paul::tvedit* *?-option value ...?*
+#' 
+#' > Creates and configures the mixin *paul::tvedit* for a *tkoo::treeview* widget using the Tk window id _pathName_ and the given *options*. 
+#'   This widget adaptor allows to do in place edits of the text within the ttk::treeview widget. The code is largly based on the wiki code in [Inplace edit in ttk::treeview](https://wiki.tcl-lang.org/page/Inplace+edit+in+ttk%3A%3Atreeview). Note: Currently only tabular, non hierarchical *ttk::treeview* widget's can be edited.
+#'
+#' > The following optiosn are available:
+#'
+#' The following options are available:
+#'
+#' > - *-edittypes* *list*  - list of key values pairs where the key is the colummn name and 
+#'       the values are pssible data types or lists of available values. The following data types are available
+#'   1. *bool* provides a boolean value selection of true and false using a check box
+#'   1. *int* a integer range of values must be given as: *int [list start end]*
+#'   1. *list* list of possible values must be given with the values such as: *list [list A B C D E]*
+#'   1. the default if no type is provided for a column name is a text entry with free text edition available
+#' 
+#' > - *-editdefault* *type* the default edit is a entry text field, if you set this to an empty string only columns listed in the *-edittypes* options can be edited.
+#' 
+#' > - *-editendcmd* *commandName* the command to be executed after the value was changed. 
+#'     The widget path, the data type, the row id, the old and the new value are added as command arguments. This method can be used to validate the input as well and to perform some actions after the entry was edited.
+#' 
+#' > The widget provides the follwing events:
+#' 
+#' >  - <<*TreeviewEditEnd*\>> which is fired if a entry in the *ttk::treeview* widget
+#'     is changed.  The following event symbols are available: *%d* a list of the row index and the column name which was changed, *%W* (widget).
+#' 
+#' > Bindings:
+#' 
+#' > - *<KeyPress-F2>* - edit current row entries
+#' - *<KeyPress-Escape>* - cancel edits
+#' - *<KeyPress-Return>* - save edit and end current edits
+#' - *<KeyPress-Tab>* - switch to the next edit field
+#' - *<KeyPress-Shift-Tab>* - switch to the previous edit field
+#' 
+#' > Example:
+#' 
+#' ```
+#' # demo: tvedit
+#' proc editDone {args} {
+#'       puts "done: $args"
+#' }
+#' set tve [tkoo::treeview .tve -columns {bl in li st} -show {headings} \
+#'    -selectmode extended -yscrollcommand {.sb set}]
+#' $tve mixin paul::tvband paul::tvedit  -edittypes [list \
+#'                      bl bool \
+#'                      in [list int 0 100] \
+#'                      li [list list "Letter A" "Letter B" "Letter C" "Letter D"] \
+#'                      st string] \
+#'    -editdefault "" -editendcmd editDone
+#' pack $tve -fill both -expand true -side left
+#' pack [ttk::scrollbar .sb -orient v -command ".tve yview"] -fill y -side left
+#' $tve insert {} end -values {true 15 {Letter B} world}
+#' $tve insert {} end -values {true 35 {Letter D} world}
+#' for {set i 0} {$i<20} {incr i} {
+#'      .tve insert {} end -values [list true $i {Letter B} hello]
+#' }
+#' 
+#' ```
+
+catch { rename ::paul::tvedit {} }
+
+::oo::class create ::paul::tvedit {
+    variable edittypes
+    variable curfocus
+    variable win
+    method tvedit {args} {
+        my option -edittypes [list]
+        my option -editdefault entry
+        my option -editendcmd ""
+        set win [my widget]
+        my configure {*}$args
+        # intercept all the events changing focus
+        #bind $win <<TreeviewSelect>> +[mymethod checkFocus %W]
+        bind $win <KeyPress-F2> +[mymethod checkFocus %W %x %y]
+        #bind $win <KeyRelease> +[mymethod  checkFocus %W]
+        bind $win <ButtonPress-4> +[list after idle [mymethod updateWnds %W]]
+        bind $win <ButtonPress-5> +[list after idle [mymethod updateWnds %W]]
+        bind $win <MouseWheel> +[list after idle [mymethod updateWnds %W]]
+        bind $win <B1-Motion> +[list if {$ttk::treeview::State(pressMode)=="resize"} { [mymethod updateWnds %W] }]
+        bind $win <Configure> +[list after idle [mymethod updateWnds %W]]
+        bind all <KeyPress-Return> +[mymethod _clear $win %d]
+        #bind all <KeyPress-Escape> +[mymethod _clear $win %d]
+        bind $win <<TreeviewInplaceEdit>> [mymethod InplaceEdit %d %v] 
+        array set edittypes [my cget -edittypes]
+    }
+    method InplaceEdit {d v} {
+        if {[$win children [lindex $d 1]]==""} {
+            set col [lindex $d 0] 
+            if {$col eq "#0"} {
+                my _inplaceEntry $win {*}$d 
+            } elseif {[info exists edittypes($col)]} {
+                if {$edittypes($col) eq "bool"} {
+                    my _inplaceCheckbutton $win {*}$d true false
+                } elseif {[lindex $edittypes($col) 0] eq "int"} {
+                    my _inplaceSpinbox $win {*}$d [lindex $edittypes($col) 1] [lindex $edittypes($col) 2] 1
+                } elseif {[lindex $edittypes($col) 0] eq "list"} {
+                    my _inplaceList $win {*}$d [lrange $edittypes($col) 1 end]
+                } else {
+                    my _inplaceEntry $win {*}$d
+                }
+            } else {
+                if {[my cget -editdefault] eq "entry"} {
+                    $win _inplaceEntry $win {*}$d
+                }
+            }
+        } elseif {[lindex $d 0]=="list"} {
+            # did not work yet
+            $win _inplaceEntryButton $win {*}$d [list set %$v "tree: $win, column,item=$d"]
+        }
+    }
+    # check, if focus has changed
+    method checkFocus {w {X {}} {Y {}} } {
+        if {![info exists curfocus($w)]} {
+            set changed 1
+        } elseif {$curfocus($w)!=[$w focus]} {
+            my _clear $w $curfocus($w)
+            set changed 1
+        } else {
+            set changed 0
+        }
+        set newfocus [$w focus]
+        if {$changed} {
+            if {$newfocus!=""} {
+                my _focus $w $newfocus
+                if {$X!=""} {
+                    set col [$w identify column $X $Y]
+                    if {$col!=""} {
+                        if {$col!="#0"} {
+                            set col [$w column $col -id]
+                        }  
+                    }  
+                    catch {focus $w.$col}
+                }  
+            }        
+            set curfocus($w) $newfocus
+            my updateWnds $w 
+        }
+    }
+    # update inplace edit widgets positions
+    method updateWnds {w} {
+        if {![info exists curfocus($w)]} { return }
+        set item $curfocus($w)
+        if {$item==""} { return }
+        foreach col [concat [$w cget -columns] #0] {
+            set wnd $w.$col
+            if {[winfo exists $wnd]} {
+                set bbox [$w bbox $item $col]
+                if {$bbox==""} { 
+                    place forget $wnd
+                } else {
+                    place $wnd -x [lindex $bbox 0] -y [lindex $bbox 1] -width [lindex $bbox 2] -height [lindex $bbox 3]
+                }
+            }
+        }
+    }
+    # remove all inplace edit widgets
+    method _clear {w {item ""}} {
+        foreach col [concat [$w cget -columns] #0] {
+            set wnd $w.$col
+            if {[winfo exists $wnd]} { 
+                destroy $wnd
+            }
+        }
+    }
+    # called when focus item has changed
+    method _focus {w item} {
+        set cols [$w cget -displaycolumns]
+        if {$cols=="#all"} { 
+            set cols [concat #0 [$w cget -columns]]
+        }
+        foreach col $cols {
+            event generate $w <<TreeviewInplaceEdit>> -data [list $col $item]
+            if {[winfo exists $w.$col]} {
+                bind $w.$col <Key-Tab> {focus [tk_focusNext %W]}
+                bind $w.$col <Shift-Key-Tab> {focus [tk_focusPrev %W]}
+            }
+        }
+    }
+    # helper functions for inplace edit
+    method _get_value {w column item} {
+        if {$column=="#0"} {
+            return [$w item $item -text]
+        } else {
+            return [$w set $item $column]
+        }
+    }
+    method _set_value {w column item value} {
+        if {$column=="#0"} {
+            $w item $item -text $value
+        } else {
+            $w set $item $column $value
+        }
+    }
+    method _cancel_value {w column item} {
+        set value [my _get_value $w $column $item]
+        set curfocus($w,$column) $value
+        my _clear $w
+        focus -force $w
+    }
+
+    method _update_value {w column item} {
+        set value [my _get_value $w $column $item]
+        set newvalue $curfocus($w,$column)
+        if {$value!=$newvalue} {
+           my _set_value $w $column $item $newvalue
+       }
+       if {[my cget -editendcmd] ne ""} {
+           [my cget -editendcmd] $w $column $item $value $newvalue
+       }
+       focus -force $w
+       event generate $w <<TreeviewEditEnd>> -data [list $item $column]
+    }
+    # these functions create widgets for in-place edit, use them in your in-place edit handler
+    method _inplaceEntry {w column item} {
+        set wnd $w.$column 
+        ttk::entry $wnd -textvariable [myvar curfocus($w,$column)] -width 3
+        set curfocus($w,$column) [my _get_value $w $column $item]
+        bind $wnd <Destroy> [mymethod _update_value $w $column $item]
+        bind $wnd <KeyPress-Escape> [mymethod _cancel_value $w $column $item]
+    }
+    method _inplaceEntryButton {w column item script} {
+        set wnd $w.$column
+        ttk::frame $wnd
+        pack [ttk::entry $wnd.e -width 3 -textvariable [myvar curfocus($w,$column)]] -side left -fill x -expand true
+        pack [ttk::button $wnd.b -style Toolbutton -text "..." -command [string map [list %v [myvar curfocus($w,$column)]] $script]] -side left -fill x 
+        set curfocus($w,$column) [my _get_value $w $column $item]
+        bind $wnd <Destroy> [mymethod _update_value $w $column $item]
+        bind $wnd <KeyPress-Escape> [mymethod _cancel_value $w $column $item]
+    }
+    method _inplaceCheckbutton {w column item {onvalue 1} {offvalue 0} } {
+        set wnd $w.$column 
+        ttk::checkbutton $wnd -variable [myvar curfocus($w,$column)] -onvalue $onvalue -offvalue $offvalue
+        set curfocus($w,$column) [my _get_value $w $column $item]
+        bind $wnd <Destroy> [mymethod _update_value $w $column $item]
+        bind $wnd <KeyPress-Escape> [mymethod _cancel_value $w $column $item]
+    }
+    method _inplaceList {w column item values} {
+        set wnd $w.$column 
+        ttk::combobox $wnd -textvariable [myvar curfocus($w,$column)] -values $values -state readonly 
+        set curfocus($w,$column) [my _get_value $w $column $item]
+        bind $wnd <Destroy> [mymethod _update_value $w $column $item]
+        bind $wnd <KeyPress-Escape> [mymethod _cancel_value $w $column $item]
+    }
+    method _inplaceSpinbox {w column item min max step} {
+        set wnd $w.$column 
+        spinbox $wnd -textvariable [myvar curfocus($w,$column)] -from $min -to $max -increment $step
+        set curfocus($w,$column) [my _get_value $w $column $item]
+        bind $wnd <Destroy> [mymethod _update_value $w $column $item]
+        bind $wnd <KeyPress-Escape> [mymethod _cancel_value $w $column $item]
+    }
+}
+
+
 #'
 #' <a name="tvfilebrowser"> </a>
 #' *pathName mixin* **tvfilebrowser** *?-option value ...?*
 #' 
 #' > Creates and configures the mixin *paul::tvfilebrowser* for a *tkoo::treeview* using the Tk window id _pathName_ and the given *options*. 
 #'
-#' > The following option is available:
+#' > The following options are available:
 #'
 #' > - *-directory dirName* - starting directory for the filebrowser, default current directory.
 #' - *-browsecmd cmdName* - command to be executed if the users double clicks on a row item or presses the Return key. The widgets *pathName* and the actual row index are appended to the *cmdName* as arguments, default to empty string.

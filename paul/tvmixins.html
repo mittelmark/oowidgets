@@ -23,7 +23,7 @@
 
 <h1 class="title">paul::tv - mixins for the ttk::treeview widget</h1>
 <h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
-<h2 class="date">2025-02-17</h2>
+<h2 class="date">2025-02-18</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> -
@@ -42,7 +42,8 @@ href="txmixins.html">txmixins</a>
 <p>The following mixins are implemented:</p>
 
 <ul>
-<li><a href="#tvband">paul::tvband</a> - adding stripes to treeview widgets</li>
+<li><a href="#tvband">paul::tvband</a> - adding stripes to treeview widget</li>
+<li><a href="#tvedit">paul::tvedit</a> - editable cells for a treeview widget</li>
 <li><a href="#tvfilebrowser">paul::tvfilebrowser</a> - file browser widget</li>
 <li><a href="#tvksearch">paul::tvksearch</a> - bind home and end as well as typing navigation</li>
 <li><a href="#tvsortable">paul::tvsortable</a> - a sortable treeview</li>
@@ -131,13 +132,85 @@ for {set i 0} {$i &lt; 20} {incr i 1} {
 }
 pack $tvband -side top -fill both -expand yes</code></pre>
 
+<p><a name="tvedit"> </a>
+<em>pathName mixin</em> <em></em>paul::tvedit<em> </em>?-option value ...?*</p>
+
+<blockquote>
+<p>Creates and configures the mixin <em>paul::tvedit</em> for a <em>tkoo::treeview</em> widget using the Tk window id <em>pathName</em> and the given <em>options</em>. 
+  This widget adaptor allows to do in place edits of the text within the ttk::treeview widget. The code is largly based on the wiki code in <a href="https://wiki.tcl-lang.org/page/Inplace+edit+in+ttk%3A%3Atreeview">Inplace edit in ttk::treeview</a>. Note: Currently only tabular, non hierarchical <em>ttk::treeview</em> widget's can be edited.</p>
+
+<p>The following optiosn are available:</p>
+</blockquote>
+
+<p>The following options are available:</p>
+
+<blockquote>
+<ul>
+<li><p><em>-edittypes</em> <em>list</em>  - list of key values pairs where the key is the colummn name and 
+  the values are pssible data types or lists of available values. The following data types are available</p><ol>
+<li><em>bool</em> provides a boolean value selection of true and false using a check box</li>
+<li><em>int</em> a integer range of values must be given as: <em>int [list start end]</em></li>
+<li><em>list</em> list of possible values must be given with the values such as: <em>list [list A B C D E]</em></li>
+<li>the default if no type is provided for a column name is a text entry with free text edition available
+</li></ol>
+
+</li>
+<li><p><em>-editdefault</em> <em>type</em> the default edit is a entry text field, if you set this to an empty string only columns listed in the <em>-edittypes</em> options can be edited.</p>
+
+</li>
+<li><p><em>-editendcmd</em> <em>commandName</em> the command to be executed after the value was changed. 
+The widget path, the data type, the row id, the old and the new value are added as command arguments. This method can be used to validate the input as well and to perform some actions after the entry was edited.</p>
+
+</li></ul>
+
+<p>The widget provides the follwing events:</p>
+
+<ul>
+<li>&lt;&lt;<em>TreeviewEditEnd</em>>&gt; which is fired if a entry in the <em>ttk::treeview</em> widget
+is changed.  The following event symbols are available: <em>%d</em> a list of the row index and the column name which was changed, <em>%W</em> (widget).
+</li></ul>
+
+<p>Bindings:</p>
+
+<ul>
+<li><em>&lt;KeyPress-F2&gt;</em> - edit current row entries</li>
+<li><em>&lt;KeyPress-Escape&gt;</em> - cancel edits</li>
+<li><em>&lt;KeyPress-Return&gt;</em> - save edit and end current edits</li>
+<li><em>&lt;KeyPress-Tab&gt;</em> - switch to the next edit field</li>
+<li><em>&lt;KeyPress-Shift-Tab&gt;</em> - switch to the previous edit field
+</li></ul>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code># demo: tvedit
+proc editDone {args} {
+      puts &quot;done: $args&quot;
+}
+set tve [tkoo::treeview .tve -columns {bl in li st} -show {headings} \
+   -selectmode extended -yscrollcommand {.sb set}]
+$tve mixin paul::tvband paul::tvedit  -edittypes [list \
+                     bl bool \
+                     in [list int 0 100] \
+                     li [list list &quot;Letter A&quot; &quot;Letter B&quot; &quot;Letter C&quot; &quot;Letter D&quot;] \
+                     st string] \
+   -editdefault &quot;&quot; -editendcmd editDone
+pack $tve -fill both -expand true -side left
+pack [ttk::scrollbar .sb -orient v -command &quot;.tve yview&quot;] -fill y -side left
+$tve insert {} end -values {true 15 {Letter B} world}
+$tve insert {} end -values {true 35 {Letter D} world}
+for {set i 0} {$i&lt;20} {incr i} {
+     .tve insert {} end -values [list true $i {Letter B} hello]
+}
+</code></pre>
+
 <p><a name="tvfilebrowser"> </a>
 <em>pathName mixin</em> <strong>tvfilebrowser</strong> <em>?-option value ...?</em></p>
 
 <blockquote>
 <p>Creates and configures the mixin <em>paul::tvfilebrowser</em> for a <em>tkoo::treeview</em> using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
 
-<p>The following option is available:</p>
+<p>The following options are available:</p>
 
 <ul>
 <li><em>-directory dirName</em> - starting directory for the filebrowser, default current directory.</li>
@@ -320,7 +393,7 @@ pack $tree -side top -fill both -expand true</code></pre>
 
 <pre class='code'><code class='tclout'>BSD 3-Clause License
 
-Copyright (c) 2021-2024, Detlef Groth, University of Potsdam, Germany
+Copyright (c) 2021-2025, Detlef Groth, University of Potsdam, Germany
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
