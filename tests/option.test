@@ -35,7 +35,38 @@ tcltest::test option-1.4 {chcck message option} {
     $btn option_test
 } {Hello}
 
-tcltest::test option-1.5 {exit test application} {
+tcltest::test option-1.5 {new button} {
+    namespace eval ::opt { }
+    oowidgets::widget ::opt::Sample2 {
+        constructor {path args} {
+            my option -world World
+
+           my install ttk::button $path -message testmessage \
+                 -flashtime 100
+           my configure {*}$args
+       }
+       method test {} {
+           return [my cget -message]
+       }
+       method option_test { } {
+           return [my cget -world]
+       }   
+       
+   }  
+   info commands ::opt::*
+} {::opt::Sample2 ::opt::sample2 ::opt::Sample ::opt::sample}
+
+tcltest::test option-1.6 {chcck message option} {
+    set btn2 [::opt::sample2 .btn2]
+    $btn2 test
+} {testmessage}
+
+tcltest::test option-1.7 {chcck message option} {
+    $btn2 option_test
+} {World}
+
+
+tcltest::test option-1.8 {exit test application} {
     destroy [winfo children .]
 } {}
 

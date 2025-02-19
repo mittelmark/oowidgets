@@ -1,8 +1,9 @@
 TCLSH=tclsh
 default:
-	pandoc tutorial.md -o tutorial.html --filter pantcl -s --toc
-	htmlark tutorial.html -o temp.html
-	mv temp.html tutorial.html
+	#pandoc tutorial.md -o tutorial.html --filter pantcl -s --toc
+	pantcl tutorial.md tutorial.html --css mini.css --no-pandoc
+	#htmlark tutorial.html -o temp.html
+	#mv temp.html tutorial.html
 manual:
 	pantcl oowidgets/oowidgets.tcl oowidgets/oowidgets.html --css "mini.css" --no-pandoc
 

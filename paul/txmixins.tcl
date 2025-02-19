@@ -162,9 +162,6 @@ catch { rename ::paul::txfileproc {} }
     #' ```
     #' 
     method fileproc {args} {
-        variable lastfile
-        variable win
-        variable lastdir
         set win [my widget]
         array set options [list -filecallback "" -filetypes { {{Text Files} {.txt}} {{All Files} {*.*}} } \
                            -filename new]
@@ -188,8 +185,6 @@ catch { rename ::paul::txfileproc {} }
     #'   to allow the user to select its file.
     #'
     method file_exit {} {
-        variable win
-        variable lastfile
         if {$lastfile in [list "*new*" "new"]} {
             my file_save_as
         }

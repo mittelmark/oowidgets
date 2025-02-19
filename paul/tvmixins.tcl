@@ -179,6 +179,7 @@ catch { rename ::paul::tvband {} }
             $path tag add band$t $item
         }
     }
+    unexport wintrace
 }
 
 #'
@@ -564,7 +565,7 @@ catch { rename ::paul::tvfilebrowser {} }
             $win heading $header -image ::paul::arrowBlank
         }
     }
-
+    unexport fbReturn fbOnClick
     
 }
 
@@ -600,19 +601,20 @@ catch { rename ::paul::tvksearch {} }
     variable win
     method tvksearch {args} {
         set win [my widget]
-        bind $win <Key-Home>  [mymethod setSelection 0]
-        bind $win <Key-End>   [mymethod setSelection end]
+        bind $win <Key-Home>  [mymethod SetSelection 0]
+        bind $win <Key-End>   [mymethod SetSelection end]
         bind $win <Any-Key> [mymethod ListMatch %A]
         set LastKeyTime [clock seconds]
         my configure {*}$args
+        ## should be only called once
     }
-    method setSelection {index} {
+    method SetSelection {index} {
         my focus [lindex [my children {}] $index]
         my selection set  [lindex [my children {}] $index]
         focus -force $win
         my see [lindex [my selection] 0]
     }
-    method  ListMatch {key} {
+    method ListMatch {key} {
         if [regexp {[-A-Za-z0-9]} $key] {
             set ActualTime [clock seconds]
             if {[expr {$ActualTime-$LastKeyTime}] < 3} {
@@ -820,7 +822,7 @@ catch { rename ::paul::tvsortable {} }
             my sortBy $lastCol $lastDir
         }
     }
-
+    unexport reSort sortBy
 
 }
 #'

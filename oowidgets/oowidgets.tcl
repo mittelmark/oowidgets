@@ -76,7 +76,24 @@ if {![package vsatisfies [package provide Tcl] 8.7]} {
     }
 }
 
-
+#proc ::oo::define::option {key value} {
+#    set argc [llength [info level 0]]
+#    if {$argc != 3} {
+#        return -code error "wrong # args: should be \"[lindex [info level 0] 0] key value\""
+#    }
+#    uplevel 1 [list my option $key $value]
+#    # Get the name of the current class
+#    #    set cls [lindex [info level -1] 1]
+#    #    puts $cls
+#    # Get its private “my” command
+#    #    set my [info object namespace $cls]
+#    #    puts $my
+#    #    puts [info vars ${my}::*]
+#    #    set ${my}::widgetOptions($key) $value
+#    
+#    #$my option $key $value
+#}
+#proc ::oo::define::onconfigure {key value body} { }
 namespace eval ::oowidgets { 
     variable tmp
     set tmp 0
@@ -274,7 +291,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' 
 #' > - __cget__ _-option_ - the usual cget method for every widget, returning the standard widget options or some new options for the widget
 #'   - __configure__ _?-option value ...?_ - the usual configure method for every widget working with default widget options and new options
-#'   . __mixin__ _CLASSNAME_ ?-option value ...? ?CLASSNAME -option value ...`- add one or more mixins to the current object delegating all arguments to a method with the same name as the CLASSNAME
+#'   - __mixin__ _CLASSNAME_ ?-option value ...? ?CLASSNAME -option value ...`- add one or more mixins to the current object delegating all arguments to a method with the same name as the CLASSNAME
 #'   - __widget__ - returns the widget path for the underlying widget
 #' 
 #' > The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:
