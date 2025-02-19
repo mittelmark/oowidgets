@@ -122,21 +122,15 @@ oo::class create ::oowidgets::BaseWidget {
       variable widgetpath
       variable widgettype
       constructor {path args} {
-              my variable widgetOptions
-              my variable parentOptions
-              array set widgetOptions [list]
-              array set parentOptions [list]
-              #my configure {*}$args
+          array set widgetOptions [list]
+          array set parentOptions [list]
+          #my configure {*}$args
       }
 
       # public methods starts with lower case declaration names,
       # whereas private methods starts with uppercase naming
       
       method install {wtype path args} {
-          my variable parentOptions
-          my variable widgetOptions
-          my variable widget
-          my variable widgetpath 
           set widgetpath $path
           $wtype $path
           set widget ${path}_
@@ -158,25 +152,20 @@ oo::class create ::oowidgets::BaseWidget {
           rename $path $widget
       }
       method cget { {opt "" }  } {
-              my variable widgetOptions
-              my variable parentOptions
-              if { [string length $opt] == 0 } {
-                  return -code error "wrong # args: should be [my widget] cget option"
-              }
-              if { [info exists widgetOptions($opt) ] } {
-                      return $widgetOptions($opt)
-              } elseif {[info exists parentOptions($opt)]} {
-                      return $parentOptions($opt)
-              } 
-              return -code error "# unknown option $opt"
+          if { [string length $opt] == 0 } {
+              return -code error "wrong # args: should be [my widget] cget option"
+          }
+          if { [info exists widgetOptions($opt) ] } {
+              return $widgetOptions($opt)
+          } elseif {[info exists parentOptions($opt)]} {
+              return $parentOptions($opt)
+          } 
+          return -code error "# unknown option $opt"
       }
       method tkclass {} {
           return [winfo class [string range [self] 2 end]]
       }
       method configure { args } {
-          my variable widget
-          my variable widgetOptions
-          my variable parentOptions
           if {[llength $args] == 0}  {
               return [list {*}[array get parentOptions] {*}[array get widgetOptions]]
           } elseif {[llength $args] == 1}  {
@@ -241,16 +230,13 @@ oo::class create ::oowidgets::BaseWidget {
           }
       }
       method widget {} {
-          my variable widgetpath
           return $widgetpath
       }
       method option {key val} {
-          my variable widgetOptions
           set widgetOptions($key) $val
       }
       # delegate all other methods to the widget
       method unknown {method args} {
-          my variable widget
           if {[catch {$widget $method {*}$args} result]} {
               return -code error $result
           } else {
