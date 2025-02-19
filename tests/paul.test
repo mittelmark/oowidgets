@@ -151,3 +151,5 @@ tcltest::test dlabel-1.1 {dlabel example} {
     after 2000
     set x 1
 } {1}
+
+::tcltest::cleanupTests 0

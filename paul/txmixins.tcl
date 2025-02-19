@@ -185,6 +185,7 @@ catch { rename ::paul::txfileproc {} }
     #'   to allow the user to select its file.
     #'
     method file_exit {} {
+        set win [my widget]
         if {$lastfile in [list "*new*" "new"]} {
             my file_save_as
         }

@@ -41,10 +41,10 @@ oowidgets::widget CLASSNAME CODE</code></pre>
 <p><strong>oowidgets::widget</strong> <em>classname</em> <em>code</em></p>
 
 <blockquote>
-<p>Creates a class with the given <em>classname</em> and a widget command
+<p>Creates a class with the given <em>classname</em> and a Tk widget command
 using the given <em>classname</em> and <em>code</em> block.
-The created widget command has the same name as the class 
-name but consists only of lowercase letters. Therefor in order
+The created Tk widget command has the same name as the class 
+name but consists only of lowercase letters. Therefore in order
 to avoid name collisions, the given <em>classname</em> must have at least 
 one uppercase letter.</p>
 
@@ -71,8 +71,8 @@ the given <em>classname</em> will be then automatically capitalized at the first
 
 <ul>
 <li><strong>cget</strong> <em>-option</em> - the usual cget method for every widget, returning the standard widget options or some new options for the widget</li>
-<li><strong>configure</strong> <em>?-option value ...?</em> - the usual configure method for every widget working with default widget options and new options
-  . <strong>mixin</strong> <em>CLASSNAME</em> ?-option value ...? ?CLASSNAME -option value ...`- add one or more mixins to the current object delegating all arguments to a method with the same name as the CLASSNAME</li>
+<li><strong>configure</strong> <em>?-option value ...?</em> - the usual configure method for every widget working with default widget options and new options</li>
+<li><strong>mixin</strong> <em>CLASSNAME</em> ?-option value ...? ?CLASSNAME -option value ...`- add one or more mixins to the current object delegating all arguments to a method with the same name as the CLASSNAME</li>
 <li><strong>widget</strong> - returns the widget path for the underlying widget
 </li></ul>
 
@@ -80,7 +80,7 @@ the given <em>classname</em> will be then automatically capitalized at the first
 
 <ul>
 <li><strong>install</strong> <em>basewidget path ?-option value ...?</em> - the way to install a default widget with standard and new options</li>
-<li><strong>option</strong> <em>--option value</em> - used in the constructor to create public accesible options</li>
+<li><strong>option</strong> <em>-option value</em> - used in the constructor to create public accesible options</li>
 <li><strong>tkclass</strong>  - returns the value of <em>[winfo class widgetPath]</em> for the internal default widget, should be used inside mixins which should be working for different widget types
 </li></ul>
 
@@ -133,7 +133,7 @@ after#0</code></pre>
 <p>Copyright 2023-2025 Detlef Groth, University of Potsdam, Germany</p>
 
 <p>Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:</p>
+modification, are permitted provided that the following conditions are met:</p>
 
 <ol>
 <li><p>Redistributions of source code must retain the above copyright notice,

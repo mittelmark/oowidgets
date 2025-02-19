@@ -218,9 +218,8 @@ oowidgets::widget ::paul::Dlabel {
 The main differences using `oowidgets`:
 
 - no hull widget, just direct install of ttk::label without a frame
-- snit: `$self configurelist $args` - `oowidgets: `my configure {*}$args`
-- all methods and options are automatically delegated to this main widget if there is no hull widget
-- not `mymethod` but the `callback` method suggested in [Tclers Wiki](https://wiki.tcl-lang.org/page/TclOO+Tricks)
+- snit: `$self configurelist $args` - oowidgets: `my configure {*}$args`
+- all methods and options are automatically delegated to this main widget as there is no hull widget
 - not using an options array but `my cget`
 
 Let's give an other example, the famous readonly text widget, 
@@ -255,8 +254,8 @@ namespace eval ::test { }
 - 2025-02-XX : 0.5.0
     - new method mixin to add classes to the current object
     - new paul widgets labentry and treeview mixins
-    - sample application Lisi - graphics made easy to test the code 
-
+    - sample application "Lisi - graphics made easy" to test the code extensively
+    
 ## TODO's
 
 - delegate method?

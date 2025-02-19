@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250215.0818>
+#  Last Modified : <250219.1114>
 #
 #  Description	 :
 #
@@ -49,13 +49,22 @@ namespace eval ::lisi {
 }
 
 proc ::lisi::usage {app} {
-    puts "Usage: $app ?--help? ?FILENAME? ?CMDLINE?"
-    puts "\n   Example: $::argv0 schema.pml \"plantuml -tpng %i\""
+    if {[file tail $app] eq "tclmain"} {
+        set app "tclmain -m lisi"
+    }
+    puts "  Usage: $app ?--help? ?FILENAME? ?CMDLINE?"
+    puts "\n  Example: $app schema.pml \"plantuml -tpng %i\"\n"
     destroy .
     exit 0
 }
 proc ::lisi::help {app argv} {
-    puts help
+    puts "Lisi - Graphics made easy - Detlef Groth, University of Potsdam"
+    puts "---------------------------------------------------------------"
+    puts "\n  Example showcase application for object oriented programming"
+    puts "  demonstrating the creation and use of megawidgets using the"
+    puts "  oowidgets and paul packages: "
+    puts "  See https://github.com/mittelmark/oowidgets\n"
+    usage $app
 }
 proc ::lisi::gui {args} { 
     set app [::paul::basegui new -style clam]
@@ -96,6 +105,10 @@ proc ::lisi::main {argv} {
     variable defaults
     if {[llength $argv] == 0} {
         gui
+        return
+    }
+    if {[lsearch $argv --help] > -1} {
+        help $::argv0 $argv
         return
     }
     set filename [lindex $argv 0]

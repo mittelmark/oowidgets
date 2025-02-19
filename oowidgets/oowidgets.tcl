@@ -263,10 +263,10 @@ oo::class create ::oowidgets::BaseWidget {
 
 #' **oowidgets::widget** _classname_ _code_ 
 #' 
-#' > Creates a class with the given _classname_ and a widget command
+#' > Creates a class with the given _classname_ and a Tk widget command
 #' using the given _classname_ and _code_ block.
-#' The created widget command has the same name as the class 
-#' name but consists only of lowercase letters. Therefor in order
+#' The created Tk widget command has the same name as the class 
+#' name but consists only of lowercase letters. Therefore in order
 #' to avoid name collisions, the given _classname_ must have at least 
 #' one uppercase letter. 
 #' 
@@ -297,7 +297,7 @@ oo::class create ::oowidgets::BaseWidget {
 #' > The following protected object commands are implemented within the oowidgets base class and can be used only inside derived new class:
 #' 
 #' > - __install__ _basewidget path ?-option value ...?_ - the way to install a default widget with standard and new options
-#' > - __option__ _--option value_ - used in the constructor to create public accesible options
+#' > - __option__ _-option value_ - used in the constructor to create public accesible options
 #'   - __tkclass__  - returns the value of _[winfo class widgetPath]_ for the internal default widget, should be used inside mixins which should be working for different widget types
 #' 
 #' >  Example:
@@ -367,7 +367,7 @@ proc oowidgets::widget {name body} {
 #' 
 
 #' Redistribution and use in source and binary forms, with or without
-#'  modification, are permitted provided that the following conditions are met: 
+#' modification, are permitted provided that the following conditions are met: 
 #' 
 #' 1. Redistributions of source code must retain the above copyright notice,
 #' this list of conditions and the following disclaimer. 
@@ -391,4 +391,4 @@ proc oowidgets::widget {name body} {
 #' WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 #' OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #' ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
-
+#'

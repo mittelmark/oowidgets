@@ -59,5 +59,7 @@ tcltest::test flash-1.6 {create flash method} {
 
 
 tcltest::test exit-1.1 {exit test application} {
-    destroy [winfo children .]
+    foreach child [winfo children .] { destroy $child }
 } {}
+
+::tcltest::cleanupTests 0
