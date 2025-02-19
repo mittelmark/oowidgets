@@ -683,7 +683,10 @@ if {false} {
 #'
 #' ## <a name='authors'></a> AUTHOR
 #'
-#' The **paul::tx** mixins were written by Detlef Groth, University of Potsdam, Germany.
+#' The **paul::tx** mixins were assembled together by Detlef Groth, University of Potsdam, Germany.
+#' A lot of code was taken from the [Tclers Wiki](https://wiki.tcl-lang.org/)
+#' and made usuable in real applications
+#' by myself by reorganizing the code and fixing possible issues.
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'

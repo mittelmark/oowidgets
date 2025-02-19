@@ -242,6 +242,8 @@ catch { rename ::paul::tvband {} }
 #' }
 #' 
 #' ```
+#' 
+#' > Acknowledgment Code: [Tcler Wiki](https://wiki.tcl-lang.org/page/Inplace+edit+in+ttk%3A%3Atreeview)
 
 catch { rename ::paul::tvedit {} }
 
@@ -985,6 +987,8 @@ catch { rename ::paul::tvtree {} }
 #' ## <a name='authors'></a> AUTHOR
 #'
 #' The **paul::tv** mixins were written by Detlef Groth, University of Potsdam, Germany.
+#' A lot of code was taken from the [Tclers Wiki]() and made usuable in real applications
+#' by myself by reorganizing the code and fixing possible issues.
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
