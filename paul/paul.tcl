@@ -65,7 +65,7 @@ proc ::paul::getMarkdown {filename} {
 }
             
     
-proc ::paul::getExampleCode {filename {section}} {
+proc ::paul::getExampleCode {filename {section ""}} {
     if [catch {open $filename r} infh] {
         puts stderr "Cannot open $filename: $infh"
         exit

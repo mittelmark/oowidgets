@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::rotext - readonly text widget 
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : <241223.1239>
+#' Date : <250219.1133>
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -76,10 +76,10 @@ namespace eval ::paul { }
 ::oowidgets::widget ::paul::Rotext {
     variable textw
     constructor {path args} {
-        # we need the real widget
-        set textw ${path}_
         # Create the text widget; turn off its insert cursor
         my install tk::text $path -insertwidth 0 -border 5 -relief flat
+        # we need the real widget - underline at the end
+        set textw [my widget]_
         my configure {*}$args
     }
     # Disable the text widget's insert and delete methods
