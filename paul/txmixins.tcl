@@ -48,8 +48,8 @@
 #' ```
 #' package require paul
 #' set txt [tkoo::text pathName ?option value ...?
-#' oo::objdefine $txt mixin Mixin ?Mixin ...?
-#' $txtmixinmethod ?option value ...?
+#' oo::objdefine $txt mixin ?-append? Mixin ?Mixin ...?
+#' $txt mixin Mixin ?option value ... Mixin option value?
 #' pack $txt 
 #' ```
 #' 
@@ -129,6 +129,99 @@ catch { rename ::paul::txautorep {} }
         }
     }
 }
+
+# dgw::txblocksel docu { 
+#' 
+#' <a name="txblocksel"> </a>
+#' *pathName mixin* **txblocksel** *?-option value ...?*
+#' 
+#' > Creates and configures the mixin *paul::txblocksel* for an text editor 
+#'   created with the *tkoo::text* widget command using the Tk window id 
+#'   _pathName_ and the given *options*. 
+#'
+#' > The text widget supports the block selection of text using 
+#'   The Control-key together with left mouse down and cursor movement for selecting the text.
+#' 
+#' > So the steps are:
+#' 
+#' > * Control-ButtonPress-1 to activate block selection
+#'   * Control-Button1-Motion to modify (increase/decrease) the selection
+#'   * Control-x to cut selection, Control-c to copy selection to clipboard
+#' 
+#' > This mixin widget code is just an adaption from the Wiki code written by Martin Eder here:
+#'   [Simple Block Selection for Text Widget](https://wiki.tcl-lang.org/page/Simple+Block+Selection+for+Text+Widget).
+#' 
+#' > The widget mixin currently has no options and public methods which should be used. 
+#' 
+#' > Example:
+#' 
+#' ```{.tcl eval=true}
+#' # demo: txblocksel
+#' catch { destroy .txt}
+#' set txt [tkoo::text .txt -background salmon]
+#' $txt mixin ::paul::txblocksel
+#' .txt insert end "\nHint:\n\n* Press Ctrl-Button-1 and then, by holding move the mouse\n"
+#' .txt insert end "to the bottom right.\n* For copy and paste use Control-c and Control-v."
+#' .txt tag configure hint -foreground #1166ff
+#' .txt tag add hint 1.0 6.end
+#' .txt insert end "\n\nBlock selection!\n\n"
+#' foreach col [list A B C] { 
+#'    .txt insert end "# Header $col\n\nSome text\n\n"
+#'    .txt insert end "Hello"
+#'    .txt insert end "\n\n"
+#' }
+#' .txt configure -borderwidth 10 -relief flat 
+#' pack .txt -side top -fill both -expand yes -padx 5 -pady 5
+#' pack [tk::text .txt2] -side top -fill both -expand yes -padx 5 -pady 5
+#' ```
+#'
+# https://wiki.tcl-lang.org/page/Simple+Block+Selection+for+Text+Widget
+# }
+
+catch { rename ::paul::txblocksel {} }
+::oo::class create ::paul::txblocksel {
+    variable spos
+    variable win
+    method txblocksel {args} {
+        set win [my widget]
+        ## using text will use this on all text widgets of the 
+        ## application, using $win seems to fail
+        bind Text <Control-ButtonPress-1> [mymethod mouse_down %W %x %y]
+        bind Text <Control-Button1-Motion> [mymethod block_sel %W %x %y]
+        bind Text <Control-Key-x>  [mymethod copy_blocksel %W 1]
+        bind Text <Control-Key-c> [mymethod copy_blocksel %W 0]
+    }
+    method block_sel {wid x y} {
+        $wid tag remove sel 0.0 end
+        set fpos [split [$wid index "@$x,$y"] "."]
+        for {set sl [lindex $spos 0]} {$sl <= [lindex $fpos 0]} {incr sl} {
+            $wid tag add sel "$sl.[lindex $spos 1]" "$sl.[lindex $fpos 1]"
+        }
+    }
+    method mouse_down {wid x y} {
+        $wid mark set insert "@$x,$y"
+        $wid tag remove sel 0.0 end
+        set spos [split [$wid index insert] "."]
+    }
+    method copy_blocksel {txt {cutit 0}} {
+        set starttag [$txt index end]
+        set mseltxt ""
+        
+        while {[set curmtag [$txt tag prevrange sel $starttag]] != ""} {
+            set msta [lindex $curmtag 0]
+            set msto [lindex $curmtag 1]
+            set mseltxt "[$txt get $msta $msto]\n$mseltxt"
+            if {$cutit == 1} {$txt delete $msta $msto}
+            set starttag [lindex $curmtag 0]
+        }
+        if {$mseltxt != ""} {
+            clipboard clear
+            clipboard append -- $mseltxt
+        }
+    }
+    
+}
+
 
 #' <a name="txfileproc"></a>**paul::txfileproc** -  *oo::objdefine pathName mixin paul::txfileproc*
 #' 
@@ -603,22 +696,22 @@ catch { rename ::paul::txmatching {} }
 #' <a name="txpopup"> </a>
 #' *pathName mixin* **txpopup** *?-option value ...?*
 #' 
-#' > Creates and configures the mixin *paul::txpopup* an text editor 
-#'   edit menu popup for a *tkoo::treeview* using the Tk window id _pathName_ and the given *options*. 
-#'
+#' > Creates and configures the mixin *paul::txpopup* for a text editor 
+#'   providing an edit menu popup for a *tkoo::text* object using the Tk window 
+#'   id _pathName_ and the given *options*. 
 #' 
 #' > The text widget then supports the typical right click popup operations
 #'   for the text widget like undo/redo, copy, paste, delete etc.
 #'   It comes with a set of default bindings which can be disabled quite easily, 
 #'   see below for an example.
 #'
-#' The following options are available:
+#' > The following options are available:
 #'
 #' > - *-redokey* *sequence* - the key sequence to redo an operation, default: *Control-y*
 #'   - *-popupkey* *sequence* - the key sequence to open the popup, usually right mouse click, so default: *Button-3*
 #'   - *-toolcommand*  *procname* - the name of a procedure which is called when the tool command is exectued, default emtpy string, none
 #' 
-#' The following public method is available:
+#' > The following public method is available:
 #' 
 #' > - *menu* - show the popup menu, usually the right mouse click, but the user can create additional popup keys.
 #' 
