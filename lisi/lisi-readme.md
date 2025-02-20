@@ -161,7 +161,7 @@ Rscript %i %o
 ## TODO
 
 - Button-Bar from sqlview
-- File Save As
-- Example: LaTeX equations: https://editor.codecogs.com/?lang=en-en
-- Example: Pikchr
-- Example: Rscript, Gnuplot
+- File Save As (done)
+- Example: LaTeX equations: https://editor.codecogs.com/?lang=en-en (done)
+- Example: Pikchr (done)
+- Example: Rscript (done), Gnuplot
