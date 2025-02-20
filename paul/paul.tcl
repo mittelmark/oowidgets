@@ -2,7 +2,7 @@ package require Tk
 package require TclOO
 package require oowidgets
 package require tkoo
-package provide paul 0.5.0
+package provide paul 0.6.0
 
 # some generic utilities
 
