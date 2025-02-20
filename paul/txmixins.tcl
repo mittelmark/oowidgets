@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::tx - mixins for the tk::text widget
 #' author: Detlef Groth, Schwielowsee, Germany
-#' Date : 2024-12-23
+#' Date : 2024-02-20
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -35,6 +35,7 @@
 #'   - [paul::txfileproc](#txfileproc) - file-save, file-new, file-open etc procedures for the text widget
 #'   - [paul::txindent](#txindent) - automatic indentation for text widgets
 #'   - [paul::txmatching](#txmatching) - hilight matching parenthesis, brackets or braces
+#'   - [paul::txpopup](#txpopup) - text editor edit menu popup
 #'   - [paul::txunicode](#txunicode) - entering Unicode characters
 #'
 #' ## <a name='synopsis'></a> SYNOPSIS
@@ -598,6 +599,128 @@ catch { rename ::paul::txmatching {} }
         
 }
 
+#' 
+#' <a name="txpopup"> </a>
+#' *pathName mixin* **txpopup** *?-option value ...?*
+#' 
+#' > Creates and configures the mixin *paul::txpopup* an text editor 
+#'   edit menu popup for a *tkoo::treeview* using the Tk window id _pathName_ and the given *options*. 
+#'
+#' 
+#' > The text widget then supports the typical right click popup operations
+#'   for the text widget like undo/redo, copy, paste, delete etc.
+#'   It comes with a set of default bindings which can be disabled quite easily, 
+#'   see below for an example.
+#'
+#' The following options are available:
+#'
+#' > - *-redokey* *sequence* - the key sequence to redo an operation, default: *Control-y*
+#'   - *-popupkey* *sequence* - the key sequence to open the popup, usually right mouse click, so default: *Button-3*
+#'   - *-toolcommand*  *procname* - the name of a procedure which is called when the tool command is exectued, default emtpy string, none
+#' 
+#' The following public method is available:
+#' 
+#' > - *menu* - show the popup menu, usually the right mouse click, but the user can create additional popup keys.
+#' 
+#' > Example:
+#' 
+#' ```{.tcl eval=true}
+#' # demo: txpopup
+#' set tvp [tkoo::text .tvp -undo true]
+#' $tvp mixin paul::txpopup
+#' $tvp insert end "\nHint\n\nPress right mouse click\n and see the"
+#' $tvp insert end "popup menu with context dependent active or inactive entries!\n\n"
+#' foreach col [list A B C] { 
+#'    $tvp insert  end "# Header $col\n\nSome text\n\n"
+#'    $tvp insert end "Hello\n"
+#'    $tvp insert end "\n\n"
+#' }
+#' $tvp configure -borderwidth 10 -relief flat 
+#' pack $tvp -side top -fill both -expand yes -padx 5 -pady 5
+#' bind $tvp <Enter> { focus -force .tvp }
+#' ```
+#'
+# }
+catch { rename ::paul::txpopup {} }
+
+::oo::class create ::paul::txpopup {
+    variable win
+    method txpopup {args} {
+        set win [my widget]
+        my option -toolcommand ""
+        my configure {*}$args
+        bind $win <Button-3>   [mymethod Menu]
+        bind $win <Control-y>   [mymethod TextRedo]
+    }
+    method Menu {} {
+        catch {destroy .editormenu}
+        menu .editormenu -tearoff 0
+        set state disabled
+        if {[$win cget -undo]} {
+            if {[$win edit canundo]} {
+                set state active
+            }
+            .editormenu add command -label "Undo" -underline 0 -state $state \
+                  -command [mymethod TextUndo] -accelerator Ctrl+z 
+            set state disabled
+            if {[$win edit canredo]} {
+                set state active
+            }
+            .editormenu add command -label "Redo" -underline 0 -state $state \
+                  -command [mymethod TextRedo] -accelerator Ctrl+y
+            .editormenu add separator
+        }
+        set sel [$win tag ranges sel]
+        set state active
+        if {$sel eq ""} {
+            set state disabled
+        }
+        .editormenu add command -label "Cut" -underline 2 -state $state \
+              -command [list tk_textCut $win] -accelerator Ctrl+x
+        
+        .editormenu add command -label "Copy" -underline 0 -state $state \
+              -command [list tk_textCopy $win] -accelerator Ctrl+c
+        .editormenu add command -label "Paste" -underline 0 \
+              -command [list tk_textPaste $win] -accelerator Ctrl+v
+        .editormenu add command -label "Delete" -underline 2 -state $state \
+              -command [mymethod DeleteText $win] -accelerator Del
+        .editormenu add separator
+        .editormenu add command -label "Select All" -underline 7 \
+              -command [list $win tag add sel 1.0 end] -accelerator Ctrl+/
+        if {[my cget -toolcommand] ne ""} {
+            .editormenu add separator
+            my AddTool ;#[list -toolcommand $options(-toolcommand) -accelerator $options(-accelerator) -label $options(-toollabel)]
+        }
+        tk_popup .editormenu [winfo pointerx .] [winfo pointery .]
+    }
+    method TextRedo { } {
+        catch {
+            $win edit redo
+        }
+    }
+    method TextUndo { } {
+        catch {
+            $win edit undo
+        }
+    }
+    method DeleteText {w} {
+        set cuttexts [selection own]
+        if {$cuttexts != "" } {
+            catch {
+                $cuttexts delete sel.first sel.last
+                selection clear
+            }
+        }
+    }
+    method AddTool {} {
+        puts not-yet
+    }
+
+
+
+}
+
+
 #'
 #' <a name="txunicode"></a>**paul::txunicode** -  *oo::objdefine pathName mixin paul::txunicode*
 #' 
@@ -705,8 +828,12 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp txmixins $argv0]} 
     if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
         puts [package version paul]
         destroy .
-    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {
-        set code [::paul::getExampleCode [info script]]
+    } elseif {[llength $argv] >= 1 && [lindex $argv 0] eq "--demo"} {
+        set section ""
+        if {[llength $argv] == 2} {
+            set section [lindex $argv 1]
+        } 
+        set code [::paul::getExampleCode [info script] $section]
         eval $code
     } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {
         set code [::paul::getExampleCode [info script]]
