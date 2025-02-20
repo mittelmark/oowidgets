@@ -2,6 +2,17 @@
 
 __lisi__ - _graphics made easy_ - one graphical application for many terminal tools producing graphics
 
+## SYNOPSIS
+
+```bash
+lisi INPUT-FILENAME ?CMD-LINE?
+```
+
+## INSTALLATION
+
+Copy the file `lisi.tcl` as `lisi` to a folder belonging to your PATH variable
+and make the file `lisi`  executable using `chmod`. You need to have installed
+the packages `oowidgets` and `paul` as Tcl packages as well.
 
 ## DESCRIPTION
 
@@ -10,11 +21,6 @@ create  images  using  some type of  declarative  language using a text editor
 with a live preview.  It was programmed to consolidate  the oowidgets and paul
 megawidget packages by developing an hopefully useful application.
 
-## SYNOPSIS
-
-```bash
-lisi INPUT-FILENAME ?CMD-LINE?
-```
 
 If the argument  `CMD-LINE` is not given it is assumed that in parallel to the
 input  file is a file with the same  basename  but ending  with the  extension
@@ -43,7 +49,9 @@ a single(!) ampersand. See pikchr or abcm2ps for an example:
 
 - Music tools
     - [abcm2ps](https://github.com/lewdlime/abcm2ps/) - convert ABC music into svg or postscript, cairosvg required to convert the output to png - `abcm2ps -g %i&cairosvg Out001.svg -f png -o %b.png`
-
+- Statistic tools 
+    -  [Rscript](https://www.r-project.org)  -  `Rscript  %i %o` - see  the  R
+    section below
 - Math tools:
     - [eqn2graph](https://www.man7.org/linux/man-pages//man1/eqn2graph.1.html) -
       create one line equations - `cat %i | eqn2graph -density 300 2>/dev/null > %o`
@@ -125,6 +133,29 @@ function ltx2png {
 }
 
 ltx2png "$@"
+```
+
+## Rscript
+
+If you like to  create  plots  using one  R script  per plot, an  approach  which is
+helpful for  instance to deliver the code for your  scientific  article  plots,
+your `Rscript` file should have the following outline:
+
+```{.r}
+#!/usr/bin/env Rscript
+### extract the filename argument for the image file
+argv=commandArgs(trailingOnly=TRUE)
+pngfile=argv[1]
+png(pngfile,width=800,height=600) ### change to your needs
+plot(1) ### add your plot command(s) and options
+dev.off()
+```
+
+Your command line which you have to enter in the entry field or which you have
+to give via the command line would then look like this:
+
+```bash
+Rscript %i %o
 ```
 
 ## TODO
