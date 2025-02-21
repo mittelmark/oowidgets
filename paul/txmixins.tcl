@@ -161,9 +161,10 @@ catch { rename ::paul::txautorep {} }
 #' set txt [tkoo::text .txt -background salmon]
 #' $txt mixin ::paul::txblocksel
 #' .txt insert end "\nHint:\n\n* Press Ctrl-Button-1 and then, by holding move the mouse\n"
-#' .txt insert end "to the bottom right.\n* For copy and paste use Control-c and Control-v."
+#' .txt insert end "to the bottom right.\n* For cut, copy and paste use Control-X, Control-C and Control-v.\n"
+#' .txt insert end "Please note the uppercase X and C and the lowercase v!\n"
 #' .txt tag configure hint -foreground #1166ff
-#' .txt tag add hint 1.0 6.end
+#' .txt tag add hint 1.0 8.end
 #' .txt insert end "\n\nBlock selection!\n\n"
 #' foreach col [list A B C] { 
 #'    .txt insert end "# Header $col\n\nSome text\n\n"
@@ -184,39 +185,45 @@ catch { rename ::paul::txblocksel {} }
     variable win
     method txblocksel {args} {
         set win [my widget]
-        ## using text will use this on all text widgets of the 
-        ## application, using $win seems to fail
-        bind Text <Control-ButtonPress-1> [mymethod mouse_down %W %x %y]
-        bind Text <Control-Button1-Motion> [mymethod block_sel %W %x %y]
-        bind Text <Control-Key-x>  [mymethod copy_blocksel %W 1]
-        bind Text <Control-Key-c> [mymethod copy_blocksel %W 0]
+        set spos "1"
+        ## using Text will use this on all text widgets of the 
+        ## application, using $win seems to fail on Ctrl-x and
+        ## Ctrl-c for whatever resaon
+        bind $win <Control-ButtonPress-1> [mymethod Mouse_down %W %x %y]
+        bind $win <Control-Button1-Motion> [mymethod Block_sel %W %x %y]
+        ## using uppercase X and C to avoid clashes with 
+        ## CUA's C-x and C-c
+        bind Text <Control-Key-X>  [mymethod Copy_blocksel %W 1]
+        bind Text <Control-Key-C> [mymethod Copy_blocksel %W 0]
     }
-    method block_sel {wid x y} {
+    method Block_sel {wid x y} {
         $wid tag remove sel 0.0 end
         set fpos [split [$wid index "@$x,$y"] "."]
         for {set sl [lindex $spos 0]} {$sl <= [lindex $fpos 0]} {incr sl} {
             $wid tag add sel "$sl.[lindex $spos 1]" "$sl.[lindex $fpos 1]"
         }
     }
-    method mouse_down {wid x y} {
+    method Mouse_down {wid x y} {
         $wid mark set insert "@$x,$y"
         $wid tag remove sel 0.0 end
         set spos [split [$wid index insert] "."]
     }
-    method copy_blocksel {txt {cutit 0}} {
-        set starttag [$txt index end]
-        set mseltxt ""
-        
-        while {[set curmtag [$txt tag prevrange sel $starttag]] != ""} {
-            set msta [lindex $curmtag 0]
-            set msto [lindex $curmtag 1]
-            set mseltxt "[$txt get $msta $msto]\n$mseltxt"
-            if {$cutit == 1} {$txt delete $msta $msto}
-            set starttag [lindex $curmtag 0]
-        }
-        if {$mseltxt != ""} {
-            clipboard clear
-            clipboard append -- $mseltxt
+    method Copy_blocksel {wid {cutit 0}} {
+        if {$wid eq $win} {
+            set starttag [$wid index end]
+            set mseltxt ""
+            
+            while {[set curmtag [$wid tag prevrange sel $starttag]] != ""} {
+                set msta [lindex $curmtag 0]
+                set msto [lindex $curmtag 1]
+                set mseltxt "[$wid get $msta $msto]\n$mseltxt"
+                if {$cutit == 1} {$wid delete $msta $msto}
+                set starttag [lindex $curmtag 0]
+            }
+            if {$mseltxt != ""} {
+                clipboard clear
+                clipboard append -- $mseltxt
+            }
         }
     }
     

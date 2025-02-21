@@ -10,6 +10,7 @@ manual:
 paul-manual:
 	pandoc paul/header.md -o paul/header.html 	
 	pantcl paul/basegui.tcl paul/basegui.html --css mini.css --no-pandoc
+	pantcl paul/cbmixins.tcl paul/cbmixins.html --css mini.css --no-pandoc	
 	pantcl paul/dlabel.tcl paul/dlabel.html --css mini.css --no-pandoc
 	pantcl paul/imedit.tcl paul/imedit.html --css mini.css --no-pandoc	
 	pantcl paul/labentry.tcl paul/labentry.html --css mini.css --no-pandoc
@@ -22,6 +23,7 @@ paul-manual:
 
 paul-demo:
 	TCLLIBPATH=. $(TCLSH) paul/basegui.tcl --demo
+	TCLLIBPATH=. $(TCLSH) paul/cbmixins.tcl --demo	
 	TCLLIBPATH=. $(TCLSH) paul/dlabel.tcl --demo
 	TCLLIBPATH=. $(TCLSH) paul/imedit.tcl --demo	
 	TCLLIBPATH=. $(TCLSH) paul/labentry.tcl --demo

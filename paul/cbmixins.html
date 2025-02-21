@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="title" content="paul::labentry documentation">
+<meta name="title" content="paul::cb - mixin(s) for the ttk::combobox">
 <meta name="author" content="Detlef Groth, University of Potsdam, Germany">
     
-<title>paul::labentry documentation</title>
+<title>paul::cb - mixin(s) for the ttk::combobox</title>
     
     
 
@@ -21,7 +21,7 @@
 
 
 
-<h1 class="title">paul::labentry documentation</h1>
+<h1 class="title">paul::cb - mixin(s) for the ttk::combobox</h1>
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
 <h2 class="date">2025-02-21</h2>
 
@@ -37,102 +37,84 @@ href="txmixins.html">txmixins</a>
 
 <h2>NAME</h2>
 
-<p><strong>paul::labentry</strong> - labendtry widget for Tk applications based on a ttk::label and a ttk::entryr widget.
-This is a proof of principle example widget, kept as easy as possible.</p>
+<blockquote>
+<p><strong>paul::cb</strong> - mixins for the ttk::combobox</p>
+</blockquote>
 
-<h2><a name='toc'></a>Table of Contents</h2>
+<h2>MIXINS</h2>
+
+<blockquote>
+<p>The following mixins are implemented:</p>
 
 <ul>
-<li><a href="#synopsis">SYNOPSIS</a></li>
-<li><a href="#description">DESCRIPTION</a></li>
-<li><a href="#command">COMMAND</a></li>
-<li><a href="#options">WIDGET OPTIONS</a></li>
-<li><a href="#commands">WIDGET COMMANDS</a></li>
-<li><a href="#example">EXAMPLE</a></li>
-<li><a href="#see">SEE ALSO</a></li>
-<li><a href="#authors">AUTHOR</a></li>
-<li><a href="#copyright">COPYRIGHT</a></li>
-<li><a href="#license">LICENSE</a>
- </li></ul>
+<li><a href="#cbfilter">paul::cbfilter</a> - filters the available entries by the entered text</li></ul>
 
-<h2><a name='synopsis'></a>SYNOPSIS</h2>
+
+</blockquote>
+
+<h2>SYNOPSIS</h2>
 
 <pre class='code'><code>package require paul
-paul::labentry pathName options
-pathName label configure -textvariable varname
-pathName entry configure -textvariable varname</code></pre>
+tkoo::combobox pathName ?-option value ...?
+pathName paul::cbfilter</code></pre>
 
-<h2><a name='description'></a>DESCRIPTION</h2>
+<h2><a name='mixins'></a> MIXINS</h2>
 
-<p><strong>paul::labentry</strong> - is a composite widget consisiting of a ttk::label and a ttk::entry.
-It should serve as an illustration for a simple composite widget based on two widgets packed
-into a ttk::frame. It as well illustrated create new configure options, here --labeltext.
-which are delegated to one of the widgets and adding subwidget commands, here <em>label</em> abd <em>entry</em>.
-One of  the widgets is the main widget where all methods are delegated to.</p>
-
-<h2><a name='command'></a>COMMAND</h2>
-
-<p><strong>paul::labentry</strong> <em>pathName ?options?</em></p>
+<p><a name="cbfilter"> </a> 
+<em>pathName mixin</em> <strong>cbfilter</strong></p>
 
 <blockquote>
-<p>Creates and configures a new paul::labentry widget  using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
+<p>Adds the mixin <em>paul::cbfilter</em> for a <em>tkoo::combombox</em> using the Tk window id <em>pathName</em>.</p>
+
+<p>This mixin filters the given values for the listbox by the already entered text and only
+  displays matching entries.</p>
+
+<p>Example:</p>
 </blockquote>
 
-<h2><a name='options'></a>WIDGET OPTIONS</h2>
+<pre class='code'><code class='tclinn'># demo: combobox
+lappend auto_path .
+package require paul
+wm title . &quot;DGApp&quot;
+pack [label .l0 -text &quot;standard combobox&quot;]
+ttk::combobox .c0 -values [list  done1 done2 dtwo dthree four five six seven]
+pack .c0 -side top
+pack [label .l1 -text &quot;Mixin combobox&quot;]
+tkoo::combobox .c1 -values [list  done1 done2 dtwo dthree four five six seven]
+.c1 mixin paul::cbfilter
+pack .c1 -side top</code></pre><p><a name='example'> </a></p><h2>EXAMPLE</h2>
 
-<p>The <strong>paul::labentry</strong> widget is a composite widget where the options 
-are delegated to the original widgets. In addition to the default options the following option(s)
-are added:</p>
-
-<p><strong>-labeltext</strong> - the text which should be displayed on the label:</p>
-
-<h2><a name='commands'></a>WIDGET COMMANDS</h2>
-
-<p>Each <strong>paul::labentry</strong> widget supports its own as well via the 
-<em>pathName label cmd</em> and <em>pathName entry cmd</em> syntax all the commands of its component widgets.</p>
-
-<p><em>pathName</em> <strong>label</strong> <em>?args?</em></p>
-
-<blockquote>
-<p>Delegates all given methods to the internal label widget, if no argument is
-  given returns the widget itself
-<em>pathName</em> <strong>entry</strong> <em>?args?</em></p>
-
-<p>Delegates all given methods to the internal entry widget, if no argument is
-  given returns the widget itself</p>
-</blockquote>
-
-<h2><a name='example'></a>EXAMPLE</h2>
-
-<pre class='code'><code class='tclinn'>package require paul
-proc getEntry { } {
-   puts &quot;text in entry:[.le entry get]&quot;
-}
-wm title . DGApp
-pack [paul::labentry .le] -side top -fill both -expand yes
-.le label configure -text &quot;Label: &quot;
-.le entry insert 0 hello
-pack [ttk::button .btn -command getEntry -text &quot;Check Entry Text&quot;] -side top -padx 10 -pady 10 -fill x 
+<pre class='code'><code># demo: combobox
+package require paul
+wm title . &quot;DGApp&quot;
+pack [label .l0 -text &quot;standard combobox&quot;]
+ttk::combobox .c0 -values [list  done1 done2 dtwo dthree four five six seven]
+pack .c0 -side top
+pack [label .l1 -text &quot;Mixin combobox&quot;]
+tkoo::combobox .c1 -values [list  done1 done2 dtwo dthree four five six seven]
+.c1 mixin paul::cbfilter
+pack .c1 -side top
 update idletasks
-after 3000 exit</code></pre>
+after 2000</code></pre>
 
-<h2><a name='see'></a>SEE ALSO</h2>
+<h2><a name='see'></a> SEE ALSO</h2>
 
 <ul>
 <li><a href="../oowidgets/oowidgets.html">oowidgets</a></li>
-<li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm">ttk::entry</a></li>
-<li><a href="https://www.tcl.tk/man/tcl8.6/TkCmd/ttk_entry.htm">ttk::label</a>
+<li><a href="basegui.html">paul::basegui.tcl</a>
 </li></ul>
 
-<h2><a name='authors'></a>AUTHOR</h2>
+<h2><a name='authors'></a> AUTHOR</h2>
 
-<p>The <strong>paul::labentry</strong> widget was written by Detlef Groth, University of Potsdam, Germany.</p>
+<p>The <strong>paul::cb</strong> mixin(s) were written by Detlef Groth, University of Potsdam, Germany.
+Much of the code was taken from the <a href="https://wiki.tcl-lang.org/">Tclers Wiki</a> and made usuable in real applications
+by myself by reorganizing the code and fixing possible issues.</p>
 
 <h2><a name='copyright'></a>COPYRIGHT</h2>
 
-<p>Copyright (c) 2019-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<p>Copyright (c) 2018-2025  Detlef Groth, E-mail: dgroth(at)uni(minus)potsdam(dot)de</p>
 
-<h2><a name='license'></a>LICENSE</h2>
+<h2><a name='license'></a>LICENSE </h2>
 
 <pre class='code'><code class='tclout'>BSD 3-Clause License
 

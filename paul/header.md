@@ -1,5 +1,6 @@
 <center>
 [basegui](basegui.html) -
+[cbmixins](cbmixins.html) -
 [dlabel](dlabel.html) -
 [imedit](imedit.html) -
 [labentry](labentry.html) -

@@ -93,7 +93,14 @@ if {![package vsatisfies [package provide Tcl] 8.7]} {
 #    
 #    #$my option $key $value
 #}
-#proc ::oo::define::onconfigure {key value body} { }
+proc ::oo::define::onconfigure {key value body} { 
+    set k [string range $key 1 end]
+    uplevel 1 [list method _configure$k "key value" $body]
+}
+proc ::oo::define::oncget {key body} { 
+    set k [string range $key 1 end]
+    uplevel 1 [list method _cget$k key $body]
+}
 namespace eval ::oowidgets { 
     variable tmp
     set tmp 0
@@ -121,9 +128,11 @@ oo::class create ::oowidgets::BaseWidget {
       variable widget
       variable widgetpath
       variable widgettype
+      variable options
       constructor {path args} {
           array set widgetOptions [list]
           array set parentOptions [list]
+          array set options [list]
           #my configure {*}$args
       }
 
@@ -154,6 +163,11 @@ oo::class create ::oowidgets::BaseWidget {
       method cget { {opt "" }  } {
           if { [string length $opt] == 0 } {
               return -code error "wrong # args: should be [my widget] cget option"
+          }
+          set meths [info object methods [self] -private -all]
+          set k [string range $opt 1 end]
+          if {[lsearch $meths _cget$k] > -1} {
+              my _cget$k $opt
           }
           if { [info exists widgetOptions($opt) ] } {
               return $widgetOptions($opt)
@@ -188,8 +202,16 @@ oo::class create ::oowidgets::BaseWidget {
           # process the new configuration options...
           array set opts $args
           set nargs [list]
+          set meths [info object methods [self] -private -all]
           foreach opt [lsort [array names opts]] {
               set val $opts($opt)
+              set k [string range $opt 1 end]
+              if {[lsearch $meths _configure$k] > -1} {
+                  my _configure$k $opt $val
+                  if {[info exists options($opt)]} {
+                      set val $options($opt)
+                  }
+              }
               # overwrite with new value
               if { [info exists widgetOptions($opt)] } {
                   set widgetOptions($opt) $val
@@ -199,8 +221,8 @@ oo::class create ::oowidgets::BaseWidget {
                   set parentOptions($opt) $val
               } else {
                   return -code error "unknown configuration option: \"$opt\" specified"
-                  
               }
+              
           }
           return [$widget configure {*}$nargs]
       } 
@@ -243,7 +265,7 @@ oo::class create ::oowidgets::BaseWidget {
               return $result
           }
       }
-      unexport unkown option install tkclass
+      unexport unknown option install tkclass
 
 }
 

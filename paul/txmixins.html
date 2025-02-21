@@ -23,10 +23,11 @@
 
 <h1 class="title">paul::tx - mixins for the tk::text widget</h1>
 <h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
-<h2 class="date">2025-02-19</h2>
+<h2 class="date">2025-02-21</h2>
 
 <p><center>
-<a href="basegui.html">basegui</a> - <a href="dlabel.html">dlabel</a> -
+<a href="basegui.html">basegui</a> - <a
+href="cbmixins.html">cbmixins</a> - <a href="dlabel.html">dlabel</a> -
 <a href="imedit.html">imedit</a> - <a href="labentry.html">labentry</a>
 - <a href="notebook.html">notebook</a> - <a
 href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> -
@@ -46,6 +47,7 @@ href="txmixins.html">txmixins</a>
 <li><a href="#txfileproc">paul::txfileproc</a> - file-save, file-new, file-open etc procedures for the text widget</li>
 <li><a href="#txindent">paul::txindent</a> - automatic indentation for text widgets</li>
 <li><a href="#txmatching">paul::txmatching</a> - hilight matching parenthesis, brackets or braces</li>
+<li><a href="#txpopup">paul::txpopup</a> - text editor edit menu popup</li>
 <li><a href="#txunicode">paul::txunicode</a> - entering Unicode characters</li></ul>
 
 
@@ -55,8 +57,8 @@ href="txmixins.html">txmixins</a>
 
 <pre class='code'><code>package require paul
 set txt [tkoo::text pathName ?option value ...?
-oo::objdefine $txt mixin Mixin ?Mixin ...?
-$txtmixinmethod ?option value ...?
+oo::objdefine $txt mixin ?-append? Mixin ?Mixin ...?
+$txt mixin Mixin ?option value ... Mixin option value?
 pack $txt </code></pre>
 
 <h2><a name='example'></a> EXAMPLE</h2>
@@ -102,6 +104,52 @@ foreach col [list A B C] {
 }
 $txt insert end &quot;  * item 1\n  * item 2\n  * Write (DG) and press enter\n  * &quot;
 pack $txt -side top -fill both -expand yes</code></pre>
+
+<p><a name="txblocksel"> </a>
+<em>pathName mixin</em> <strong>txblocksel</strong> <em>?-option value ...?</em></p>
+
+<blockquote>
+<p>Creates and configures the mixin <em>paul::txblocksel</em> for an text editor 
+  created with the <em>tkoo::text</em> widget command using the Tk window id 
+  <em>pathName</em> and the given <em>options</em>.</p>
+
+<p>The text widget supports the block selection of text using 
+  The Control-key together with left mouse down and cursor movement for selecting the text.</p>
+
+<p>So the steps are:</p>
+
+<ul>
+<li>Control-ButtonPress-1 to activate block selection</li>
+<li>Control-Button1-Motion to modify (increase/decrease) the selection</li>
+<li>Control-x to cut selection, Control-c to copy selection to clipboard
+</li></ul>
+
+<p>This mixin widget code is just an adaption from the Wiki code written by Martin Eder here:
+  <a href="https://wiki.tcl-lang.org/page/Simple+Block+Selection+for+Text+Widget">Simple Block Selection for Text Widget</a>.</p>
+
+<p>The widget mixin currently has no options and public methods which should be used.</p>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code class='tclinn'># demo: txblocksel
+catch { destroy .txt}
+set txt [tkoo::text .txt -background salmon]
+$txt mixin ::paul::txblocksel
+.txt insert end &quot;\nHint:\n\n* Press Ctrl-Button-1 and then, by holding move the mouse\n&quot;
+.txt insert end &quot;to the bottom right.\n* For cut, copy and paste use Control-X, Control-C and Control-v.\n&quot;
+.txt insert end &quot;Please note the uppercase X and C and the lowercase v!\n&quot;
+.txt tag configure hint -foreground #1166ff
+.txt tag add hint 1.0 8.end
+.txt insert end &quot;\n\nBlock selection!\n\n&quot;
+foreach col [list A B C] { 
+   .txt insert end &quot;# Header $col\n\nSome text\n\n&quot;
+   .txt insert end &quot;Hello&quot;
+   .txt insert end &quot;\n\n&quot;
+}
+.txt configure -borderwidth 10 -relief flat 
+pack .txt -side top -fill both -expand yes -padx 5 -pady 5
+pack [tk::text .txt2] -side top -fill both -expand yes -padx 5 -pady 5</code></pre>
 
 <p><a name="txfileproc"></a><strong>paul::txfileproc</strong> -  <em>oo::objdefine pathName mixin paul::txfileproc</em></p>
 
@@ -238,6 +286,50 @@ $txt unicode Control-Key-U
 pack $txt -side top -fill both -expand yes
 ### adding your own additional bindings is still possible
 bind $txt &lt;KeyRelease&gt; +[list puts &quot;now pressed %K&quot;]</code></pre>
+
+<p><a name="txpopup"> </a>
+<em>pathName mixin</em> <strong>txpopup</strong> <em>?-option value ...?</em></p>
+
+<blockquote>
+<p>Creates and configures the mixin <em>paul::txpopup</em> for a text editor 
+  providing an edit menu popup for a <em>tkoo::text</em> object using the Tk window 
+  id <em>pathName</em> and the given <em>options</em>.</p>
+
+<p>The text widget then supports the typical right click popup operations
+  for the text widget like undo/redo, copy, paste, delete etc.
+  It comes with a set of default bindings which can be disabled quite easily, 
+  see below for an example.</p>
+
+<p>The following options are available:</p>
+
+<ul>
+<li><em>-redokey</em> <em>sequence</em> - the key sequence to redo an operation, default: <em>Control-y</em></li>
+<li><em>-popupkey</em> <em>sequence</em> - the key sequence to open the popup, usually right mouse click, so default: <em>Button-3</em></li>
+<li><em>-toolcommand</em>  <em>procname</em> - the name of a procedure which is called when the tool command is exectued, default emtpy string, none
+</li></ul>
+
+<p>The following public method is available:</p>
+
+<ul>
+<li><em>menu</em> - show the popup menu, usually the right mouse click, but the user can create additional popup keys.
+</li></ul>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code class='tclinn'># demo: txpopup
+set tvp [tkoo::text .tvp -undo true]
+$tvp mixin paul::txpopup
+$tvp insert end &quot;\nHint\n\nPress right mouse click\n and see the&quot;
+$tvp insert end &quot;popup menu with context dependent active or inactive entries!\n\n&quot;
+foreach col [list A B C] { 
+   $tvp insert  end &quot;# Header $col\n\nSome text\n\n&quot;
+   $tvp insert end &quot;Hello\n&quot;
+   $tvp insert end &quot;\n\n&quot;
+}
+$tvp configure -borderwidth 10 -relief flat 
+pack $tvp -side top -fill both -expand yes -padx 5 -pady 5
+bind $tvp &lt;Enter&gt; { focus -force .tvp }</code></pre>
 
 <p><a name="txunicode"></a><strong>paul::txunicode</strong> -  <em>oo::objdefine pathName mixin paul::txunicode</em></p>
 
