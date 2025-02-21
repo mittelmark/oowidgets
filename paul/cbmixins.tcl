@@ -28,13 +28,12 @@
 #' 
 #' ## NAME
 #'
-#' > **paul::cb** - mixins for the ttk::combobox
+#' > **paul::cbnnn** - mixins for the ttk::combobox
 #' 
-#' ## MIXINS
-#'
 #' > The following mixins are implemented:
 #' 
 #' > - [paul::cbfilter](#cbfilter) - filters the available entries by the entered text
+#' > - [paul::cbhistory](#cbhistory) - adding the current edited item to the values list
 #'
 #' ## SYNOPSIS
 #'
@@ -50,7 +49,7 @@ package require Tk
 package require oowidgets
 
 namespace eval ::paul {}
-catch { rename ::paul::cbfilter {} }
+
 #' ## <a name='mixins'></a> MIXINS
 #'
 #' 
@@ -65,7 +64,7 @@ catch { rename ::paul::cbfilter {} }
 #' > Example:
 #' 
 #' ```{.tcl eval=true}
-#' # demo: combobox
+#' # demo: cbfilter
 #' lappend auto_path .
 #' package require paul
 #' wm title . "DGApp"
@@ -78,15 +77,17 @@ catch { rename ::paul::cbfilter {} }
 #' pack .c1 -side top
 #' ```
 
+catch { rename ::paul::cbfilter {} }
 ::oo::class create ::paul::cbfilter {
     variable Values
     variable win
     method cbfilter {} {
         set win [my widget]
         set Values [my cget -values]
-        my configure -postcommand [mymethod Filter $win]
+        $win configure -postcommand [mymethod Filter $win]
         ### not sure why we need to catch the click event
         ## as we got an error for some non existing variable w
+        bind $win <Button-1> {}
         bind $win <Button-1> [mymethod Click %W %x %y]
     }
     method Click {w x y} {
@@ -98,13 +99,13 @@ catch { rename ::paul::cbfilter {} }
         set text [string map [list {[} {\[} {]} {\]}] [$win get]]
         ${win} configure -values [lsearch -all -inline $Values $text*]
     }
-    onconfigure -values value {
-        set Values $value
-        set options(-values) $value
-        if {[winfo exists $win]} {
-            ${win} configure -values $Values
-        }
-    }
+    #onconfigure -values value {
+    #    set Values $value
+    #    set options(-values) $value
+    #    if {[winfo exists $win]} {
+    #        ${win} configure -values $Values
+    #    }
+    #}
     ### currently not used, just use Down to post the listbox
     method Post {win key} {
         if {$key in [list "Return" "Right"]} { return }
@@ -127,11 +128,74 @@ catch { rename ::paul::cbfilter {} }
         }
     }
 }
+#' <a name="cbhistory"> </a> 
+#' *pathName mixin* **cbhistory** ?-option value ...?
+#' 
+#' > Adds the mixin *paul::cbhistory* for a *tkoo::combombox* using the Tk window id _pathName_.
+#'
+#' > This mixin allows the user to add the currently edited item in the entry filed by pressing Ctrl-Enter.
+#' 
+#' > THe following options are supported:
+#' 
+#' > - _-sort BOOLEAN_ - should the entries in the listbox beeing sorted, default: false
+#'   - _-historykey STRING_ - the key combination to add new entries, default: Control-Enter
+#'
+#' > Example:
+#' 
+#' ```{.tcl eval=true}
+#' # demo: cbhistory
+#' foreach child [winfo children .] { destroy $child }
+#' wm title . "DGApp"
+#' pack [label .l0 -text "standard combobox"]
+#' ttk::combobox .c0 -values [list hello done1 done2 dtwo dthree four five six seven]
+#' pack .c0 -side top
+#' pack [label .l1 -text "history combobox"]
+#' tkoo::combobox .c1 -values [list hello done1 done2 dtwo dthree four five six seven]
+#' .c1 mixin paul::cbhistory -sort true -historykey KeyPress-F2
+#' pack .c1 -side top
+#' ```
+#'
+catch { rename ::paul::cbhistory {} }
+::oo::class create ::paul::cbhistory {
+    variable Values
+    variable win
+    variable options
+    method cbhistory {args} {
+        set win [my widget]
+        bind $win <Button-1> [mymethod Click %W %x %y]
+        array set options [list -historykey "Control-Return" -sort false]
+        if {[llength $args] > 0} {
+            array set options $args
+        }
+        set Values [$win cget -values]
+        set key $options(-historykey)
+        bind $win <$key> [mymethod history_add $win]
+        if {$options(-sort)} {
+            $win configure -values [lsort -ascii $Values]
+        }
+        ### not sure why we need to catch the click event
+        ## as we got an error for some non existing variable w
+    }
+    method history_add {win} {
+        set Values [$win cget -values]
+        if {[lsearch $Values [$win get]] < 0} {
+            lappend Values [$win get]
+            if {$options(-sort)} {
+                set Values [lsort -ascii $Values]
+            }
+            $win configure -values $Values
+        }
+    }
+    method Click {w x y} {
+        catch {ttk::combobox::Press 1 ${w} $x $y} result
+        return -code break
+    }
+}
 #' <a name='example'> </a>
 #' ## EXAMPLE
 #'
 #' ```
-#' # demo: combobox
+#' # demo: combined
 #' package require paul
 #' wm title . "DGApp"
 #' pack [label .l0 -text "standard combobox"]
@@ -139,10 +203,8 @@ catch { rename ::paul::cbfilter {} }
 #' pack .c0 -side top
 #' pack [label .l1 -text "Mixin combobox"]
 #' tkoo::combobox .c1 -values [list  done1 done2 dtwo dthree four five six seven]
-#' .c1 mixin paul::cbfilter
+#' .c1 mixin paul::cbfilter paul::cbhistory -historykey KeyPress-F2 -sort true
 #' pack .c1 -side top
-#' update idletasks
-#' after 2000
 #' ```
 #'
 #' ## <a name='see'></a> SEE ALSO
@@ -167,7 +229,7 @@ catch { rename ::paul::cbfilter {} }
 #' ```
 
 
-if {[info exists argv0] && $argv0 eq [info script] && [regexp combobox $argv0]} {
+if {[info exists argv0] && $argv0 eq [info script] && [regexp cbmixins $argv0]} {
     lappend auto_path [file join [file dirname [info script]] ..]
     package require paul
     if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
@@ -178,7 +240,6 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp combobox $argv0]} 
         if {[llength $argv] == 2} {
             set section [lindex $argv 1]
         } 
-        puts here
         set code [::paul::getExampleCode [info script] $section]
         eval $code
     } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {

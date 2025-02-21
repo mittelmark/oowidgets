@@ -38,16 +38,13 @@ href="txmixins.html">txmixins</a>
 <h2>NAME</h2>
 
 <blockquote>
-<p><strong>paul::cb</strong> - mixins for the ttk::combobox</p>
-</blockquote>
+<p><strong>paul::cbnnn</strong> - mixins for the ttk::combobox</p>
 
-<h2>MIXINS</h2>
-
-<blockquote>
 <p>The following mixins are implemented:</p>
 
 <ul>
-<li><a href="#cbfilter">paul::cbfilter</a> - filters the available entries by the entered text</li></ul>
+<li><a href="#cbfilter">paul::cbfilter</a> - filters the available entries by the entered text</li>
+<li><a href="#cbhistory">paul::cbhistory</a> - adding the current edited item to the values list</li></ul>
 
 
 </blockquote>
@@ -72,7 +69,7 @@ pathName paul::cbfilter</code></pre>
 <p>Example:</p>
 </blockquote>
 
-<pre class='code'><code class='tclinn'># demo: combobox
+<pre class='code'><code class='tclinn'># demo: cbfilter
 lappend auto_path .
 package require paul
 wm title . &quot;DGApp&quot;
@@ -82,9 +79,38 @@ pack .c0 -side top
 pack [label .l1 -text &quot;Mixin combobox&quot;]
 tkoo::combobox .c1 -values [list  done1 done2 dtwo dthree four five six seven]
 .c1 mixin paul::cbfilter
-pack .c1 -side top</code></pre><p><a name='example'> </a></p><h2>EXAMPLE</h2>
+pack .c1 -side top</code></pre><p><a name="cbhistory"> </a> 
+<em>pathName mixin</em> <strong>cbhistory</strong> ?-option value ...?</p>
 
-<pre class='code'><code># demo: combobox
+<blockquote>
+<p>Adds the mixin <em>paul::cbhistory</em> for a <em>tkoo::combombox</em> using the Tk window id <em>pathName</em>.</p>
+
+<p>This mixin allows the user to add the currently edited item in the entry filed by pressing Ctrl-Enter.</p>
+
+<p>THe following options are supported:</p>
+
+<ul>
+<li><em>-sort BOOLEAN</em> - should the entries in the listbox beeing sorted, default: false</li>
+<li><em>-historykey STRING</em> - the key combination to add new entries, default: Control-Enter
+</li></ul>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code class='tclinn'># demo: cbhistory
+foreach child [winfo children .] { destroy $child }
+wm title . &quot;DGApp&quot;
+pack [label .l0 -text &quot;standard combobox&quot;]
+ttk::combobox .c0 -values [list hello done1 done2 dtwo dthree four five six seven]
+pack .c0 -side top
+pack [label .l1 -text &quot;history combobox&quot;]
+tkoo::combobox .c1 -values [list hello done1 done2 dtwo dthree four five six seven]
+.c1 mixin paul::cbhistory -sort true -historykey KeyPress-F2
+pack .c1 -side top</code></pre>
+
+<p><a name='example'> </a></p><h2>EXAMPLE</h2>
+
+<pre class='code'><code># demo: combined
 package require paul
 wm title . &quot;DGApp&quot;
 pack [label .l0 -text &quot;standard combobox&quot;]
@@ -92,10 +118,8 @@ ttk::combobox .c0 -values [list  done1 done2 dtwo dthree four five six seven]
 pack .c0 -side top
 pack [label .l1 -text &quot;Mixin combobox&quot;]
 tkoo::combobox .c1 -values [list  done1 done2 dtwo dthree four five six seven]
-.c1 mixin paul::cbfilter
-pack .c1 -side top
-update idletasks
-after 2000</code></pre>
+.c1 mixin paul::cbfilter paul::cbhistory -historykey KeyPress-F2 -sort true
+pack .c1 -side top</code></pre>
 
 <h2><a name='see'></a> SEE ALSO</h2>
 
