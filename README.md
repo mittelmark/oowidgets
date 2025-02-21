@@ -66,6 +66,9 @@ There is a sample project which uses `TclOO` and `oowidgets` to create mega widg
 
 - [paul::basegui :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/basegui.html) - 
   base class to build Tk applications, [code](paul/basegui.tcl) 
+- [paul::cbmixins :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/cbmixins.html) - 
+  mixin  classes  for the  `ttk::combobox`  to extend  its  functionality  like
+  filtering or history addition [code](paul/cbmixins.tcl) 
 - [paul::dlabel :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - 
   using inheritance to create changed `ttk::label` with dynamic fontsize,  [code](paul/dlabel.tcl) 
 - [paul::imedit :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/imedit.html) - 
