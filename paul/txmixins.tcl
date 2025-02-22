@@ -257,12 +257,12 @@ catch { rename ::paul::txfileproc {} }
     #' package require paul
     #' set txt [tkoo::text .txtfp -background salmon]
     #' oo::objdefine $txt mixin ::paul::txfileproc
-    #' $txt fileproc
+    #' $txt txfileproc
     #' $txt file_open
     #' pack $txt -side top -fill both -expand yes
     #' ```
     #' 
-    method fileproc {args} {
+    method txfileproc {args} {
         set win [my widget]
         array set options [list -filecallback "" -filetypes { {{Text Files} {.txt}} {{All Files} {*.*}} } \
                            -filename new]
@@ -429,10 +429,6 @@ catch { rename ::paul::txfileproc {} }
     #' > Saves  the content of the text widget into the file selected by the user.
     #'
     method file_save_as {{initialfile ""}} {
-        my variable lastdir
-        my variable lastfile
-        my variable options
-        my variable win
         unset -nocomplain savefile
         set filename [tk_getSaveFile -filetypes $options(-filetypes) -initialdir $lastdir -initialfile $initialfile]
         if {$filename != ""} {
@@ -746,12 +742,20 @@ catch { rename ::paul::txpopup {} }
 ::oo::class create ::paul::txpopup {
     variable win
     variable n
+    variable options
     method txpopup {args} {
         set win [my widget]
-        my option -toolcommand ""
-        my configure {*}$args
+        array set options [list -toolcommand ""]
         bind $win <Button-3>   [mymethod Menu]
         bind $win <Control-y>   [mymethod TextRedo]
+        my CreateMenu
+    }
+    method register {w} {
+        set win $w
+        array set options [list -toolcommand ""]
+        bind $win <Button-3>   [mymethod Menu]
+        bind $win <Control-y>   [mymethod TextRedo]
+        my CreateMenu
     }
     method getEditMenu { } {
         if {![winfo exists .editormenu]} {
@@ -793,6 +797,7 @@ catch { rename ::paul::txpopup {} }
     }
     method CreateMenu {} {
         if {[winfo exists .editormenu]} {
+            set n [.editormenu index end]
             my UpdateMenu
         } else {
             set n 0
@@ -825,7 +830,7 @@ catch { rename ::paul::txpopup {} }
             incr n
             .editormenu add command -label "Select All" -underline 7 \
                   -command [list $win tag add sel 1.0 end] -accelerator Ctrl+/
-            if {[my cget -toolcommand] ne ""} {
+            if {$options(-toolcommand) ne ""} {
                 incr n
                 .editormenu add separator
                 incr n

@@ -84,6 +84,10 @@ $txt fileproc
 $txt file_open
 pack $txt -side top -fill both -expand yes</code></pre>
 
+<pre class='code'><code class='tclout'>Error: bad option &quot;fileproc&quot;: must be bbox, cget, compare, configure, count, debug, delete, dlineinfo, dump, edit, get, image, index, insert, mark, peer, pendingsync, replace, scan, search, see, sync, tag, window, xview, or yview
+    while executing
+&quot;$txt fileproc &quot;</code></pre>
+
 <h2><a name='mixins'></a> MIXINS</h2>
 
 <p><a name="txautorep"></a><strong>paul::txautorep</strong> -  <em>oo::objdefine pathName mixin paul::txautorep</em></p>
@@ -175,7 +179,7 @@ pack [tk::text .txt2] -side top -fill both -expand yes -padx 5 -pady 5</code></p
 <pre class='code'><code class='tclinn'>package require paul
 set txt [tkoo::text .txtfp -background salmon]
 oo::objdefine $txt mixin ::paul::txfileproc
-$txt fileproc
+$txt txfileproc
 $txt file_open
 pack $txt -side top -fill both -expand yes</code></pre>
 

@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::imedit documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250214.1122>
+#' Date : <250222.0936>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -109,6 +109,8 @@ oowidgets::widget ::paul::ImEdit {
     variable lastdir 
     variable pw
     variable defaults 
+    variable pw
+    variable pw2
     constructor {path args} {
         # the main widget is the frame
         # add an additional label
@@ -140,36 +142,41 @@ oowidgets::widget ::paul::ImEdit {
         set lbent [paul::labentry $path.tf.lbent]
         $lbent entry configure -width 50
         set btn [ttk::button $path.tf.btn -text " Execute " -command [mymethod execute]]
-        set pw [ttk::panedwindow $path.pw]
-        set pw2 [ttk::panedwindow $path.pw2 -orient horizontal]
+        set pw [ttk::panedwindow $path.pw -width 300]
+        set pw2 [ttk::panedwindow $pw.pw2 -orient horizontal -width 300]
         #set tfr1 [ttk::frame $path.pw.fr]
         ## TODO - add scrollbars via guibaseclass autoscroll?
-        set txt [tkoo::text $pw.txt]
+        set txt [tkoo::text $pw2.txt]
+        bind $txt <KeyPress-F2> [mymethod ToggleLayout]
         $txt configure -background skyblue
-        oo::objdefine  $txt mixin paul::txindent paul::txfileproc
-
-        set peer [$txt peer create $pw2.text]
+        $txt mixin paul::txindent paul::txfileproc -filetypes [my cget -filetypes] paul::txpopup
         set img [ttk::label $path.pw.img -anchor center -image ::paul::devscreen22]
-        set img2 [ttk::label $path.pw2.img2 -anchor center -image ::paul::devscreen22]        
-        $pw add $txt
-        $pw add $img
-        $pw2 add $peer
-        $pw2 add $img2
+        set img2 [ttk::label $pw2.img2 -anchor center -image ::paul::devscreen22]        
+        $pw add $pw2
+        $pw2 add $txt
         #pack $lbent -side top -padx 5 -pady 5
         pack $lbent -side left -fill x -padx 5 -pady 5
         pack $btn -side left -padx 5 -pady 5
         pack $tf -side top -fill x -expand false -anchor center -padx 20
         my configure {*}$args
-        $txt fileproc -filetypes [my cget -filetypes]
         if {[my cget -filename] ne ""} {
             my file_open [my cget -filename]
         }
         if {[my cget -pane] eq "vertical"} {
-            pack $pw -side top -fill both -expand true -padx 5 -pady 5
+            $pw add $img
         } else {
-            pack $pw2 -side top -fill both -expand true -padx 5 -pady 5
+            $pw2 add $img2
         }
-
+        pack $pw -side top -fill both -expand true -padx 5 -pady 5
+    }
+    method ToggleLayout {} {
+        if {[llength [$pw panes]] > 1} {
+            $pw forget [lindex [$pw panes] end]
+            $pw2 add $img2
+        } else {
+            $pw2 forget [lindex [$pw2 panes] end]
+            $pw add $img
+        }
     }
     #' 
     #' ## <a name='commands'></a>WIDGET COMMANDS
@@ -229,7 +236,8 @@ oowidgets::widget ::paul::ImEdit {
                 }
             }
             image create photo appimg -file $imgfile
-            [my label] configure -image appimg
+            $img configure -image appimg
+            $img2 configure -image appimg            
             set out [open $optfile w 0600]
             puts $out $ocmd
             close $out
@@ -449,7 +457,7 @@ oowidgets::widget ::paul::ImEdit {
 #' package require paul
 #' wm title . DGApp
 #' ttk::label .lb -text "..."
-#' pack [paul::imedit .ie -commandline "dot -Tpng %i -o %o" -statuslabel .lb -pane horizontal]  \
+#' pack [paul::imedit .ie -commandline "dot -Tpng %i -o %o" -statuslabel .lb -pane vertical]  \
 #'       -side top -fill both -expand yes \
 #'  
 #' .ie labentry configure -labeltext "Command Line: "

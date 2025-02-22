@@ -87,17 +87,17 @@ proc ::paul::getExampleCode {filename {section ""}} {
                     append code "\n"
                 }
             } else {
-                if {$flag == -1 && [regexp {^#' >? ?```} $line]} {
+                if {$flag == -1 && [regexp {^\s*#' >? ?```} $line]} {
                     set pre 1
-                } elseif {$flag == 1 && [regexp {^#' >? ?```} $line]} {
+                } elseif {$flag == 1 && [regexp {^\s*#' >? ?```} $line]} {
                     break
-                } elseif {$pre == 1 && [regexp {^#' >? ?```} $line]} {
+                } elseif {$pre == 1 && [regexp {^\s*#' >? ?```} $line]} {
                     set pre 0
                 } elseif {$pre == 1 && [regexp "#' # demo: $section\s*$" $line]} {
                     
                     set flag 1
-                } elseif {$flag == 1 && [regexp {^#' } $line]} {
-                    append code [string range $line 3 end]
+                } elseif {$flag == 1 && [regexp {^\s*#' } $line]} {
+                    append code [regsub {^\s*#' ?} $line ""]
                     append code "\n"
                 }
             }

@@ -851,8 +851,13 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp basegui $argv0]} {
     if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
         puts [package version paul]
         destroy .
-    } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--demo"} {
-        set code [::paul::getExampleCode [info script]]
+    } elseif {[llength $argv] >= 1 && [lindex $argv 0] eq "--demo"} {
+        set section ""
+        if {[llength $argv] == 2} {
+            set section [lindex $argv 1]
+        } 
+        set code [::paul::getExampleCode [info script] $section]
+        puts "evaluating $code"
         eval $code
     } elseif {[llength $argv] == 1 && [lindex $argv 0] eq "--code"} {
         set code [::paul::getExampleCode [info script]]

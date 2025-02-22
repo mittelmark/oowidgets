@@ -205,7 +205,7 @@ all the commands of its component widgets.</p>
 <pre class='code'><code class='tclinn'>package require paul
 wm title . DGApp
 ttk::label .lb -text &quot;...&quot;
-pack [paul::imedit .ie -commandline &quot;dot -Tpng %i -o %o&quot; -statuslabel .lb -pane horizontal]  \
+pack [paul::imedit .ie -commandline &quot;dot -Tpng %i -o %o&quot; -statuslabel .lb -pane vertical]  \
       -side top -fill both -expand yes \
  
 .ie labentry configure -labeltext &quot;Command Line: &quot;
