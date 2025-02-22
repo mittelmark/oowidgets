@@ -745,6 +745,7 @@ catch { rename ::paul::txpopup {} }
 
 ::oo::class create ::paul::txpopup {
     variable win
+    variable n
     method txpopup {args} {
         set win [my widget]
         my option -toolcommand ""
@@ -752,45 +753,90 @@ catch { rename ::paul::txpopup {} }
         bind $win <Button-3>   [mymethod Menu]
         bind $win <Control-y>   [mymethod TextRedo]
     }
-    method Menu {} {
-        catch {destroy .editormenu}
-        menu .editormenu -tearoff 0
+    method getEditMenu { } {
+        if {![winfo exists .editormenu]} {
+            my CreateMenu
+        }
+        return .editormenu
+    }
+    #[$app getMenu main] insert 2 cascade -label "Edit" -menu [$t getEditMenu] -underline 0
+    method UpdateMenu { } {
+        set stateundo disabled
+        set stateredo disabled
         set state disabled
         if {[$win cget -undo]} {
             if {[$win edit canundo]} {
-                set state active
+                set stateundo active
             }
-            .editormenu add command -label "Undo" -underline 0 -state $state \
-                  -command [mymethod TextUndo] -accelerator Ctrl+z 
-            set state disabled
             if {[$win edit canredo]} {
-                set state active
-            }
-            .editormenu add command -label "Redo" -underline 0 -state $state \
-                  -command [mymethod TextRedo] -accelerator Ctrl+y
-            .editormenu add separator
+                set stateredo active
+            } 
         }
         set sel [$win tag ranges sel]
-        set state active
-        if {$sel eq ""} {
-            set state disabled
+        if {$sel ne ""} {
+            set state active
         }
-        .editormenu add command -label "Cut" -underline 2 -state $state \
-              -command [list tk_textCut $win] -accelerator Ctrl+x
-        
-        .editormenu add command -label "Copy" -underline 0 -state $state \
-              -command [list tk_textCopy $win] -accelerator Ctrl+c
-        .editormenu add command -label "Paste" -underline 0 \
-              -command [list tk_textPaste $win] -accelerator Ctrl+v
-        .editormenu add command -label "Delete" -underline 2 -state $state \
-              -command [mymethod DeleteText $win] -accelerator Del
-        .editormenu add separator
-        .editormenu add command -label "Select All" -underline 7 \
-              -command [list $win tag add sel 1.0 end] -accelerator Ctrl+/
-        if {[my cget -toolcommand] ne ""} {
+        for {set i 0} {$i < $n} {incr i 1} {
+            if {[.editormenu type $i] eq "command"} {
+                if {[.editormenu entrycget $i -label] in [list "Cut" "Copy" "Delete"]} {
+                    .editormenu entryconfigure $i -state $state
+                }
+                if {[.editormenu entrycget $i -label] eq "Undo"} {
+                    .editormenu entryconfigure $i -state $stateundo
+                }
+                if {[.editormenu entrycget $i -label] eq "Redo"} {
+                    .editormenu entryconfigure $i -state $stateredo
+                }
+
+            }
+        }
+    }
+    method CreateMenu {} {
+        if {[winfo exists .editormenu]} {
+            my UpdateMenu
+        } else {
+            set n 0
+            catch {destroy .editormenu}
+            menu .editormenu -tearoff 0 -postcommand [mymethod UpdateMenu]
+            set state active
+            if {[$win cget -undo]} {
+                incr n
+                .editormenu add command -label "Undo" -underline 0 -state $state \
+                      -command [mymethod TextUndo] -accelerator Ctrl+z 
+                incr n
+                .editormenu add command -label "Redo" -underline 0 -state $state \
+                      -command [mymethod TextRedo] -accelerator Ctrl+y
+                .editormenu add separator
+            }
+            incr n
+            .editormenu add command -label "Cut" -underline 2 -state $state \
+                  -command [list tk_textCut $win] -accelerator Ctrl+x
+            incr n
+            .editormenu add command -label "Copy" -underline 0 -state $state \
+                  -command [list tk_textCopy $win] -accelerator Ctrl+c
+            incr n
+            .editormenu add command -label "Paste" -underline 0 \
+                  -command [list tk_textPaste $win] -accelerator Ctrl+v
+            incr n
+            .editormenu add command -label "Delete" -underline 2 -state $state \
+                  -command [mymethod DeleteText $win] -accelerator Del
+            incr n
             .editormenu add separator
-            my AddTool ;#[list -toolcommand $options(-toolcommand) -accelerator $options(-accelerator) -label $options(-toollabel)]
+            incr n
+            .editormenu add command -label "Select All" -underline 7 \
+                  -command [list $win tag add sel 1.0 end] -accelerator Ctrl+/
+            if {[my cget -toolcommand] ne ""} {
+                incr n
+                .editormenu add separator
+                incr n
+                my AddTool ;#[list -toolcommand $options(-toolcommand) -accelerator $options(-accelerator) -label $options(-toollabel)]
+            }
+            my UpdateMenu
         }
+        
+    }
+    method Menu {} {
+        my CreateMenu
         tk_popup .editormenu [winfo pointerx .] [winfo pointery .]
     }
     method TextRedo { } {

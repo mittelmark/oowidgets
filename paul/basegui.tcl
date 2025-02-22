@@ -1,7 +1,7 @@
 #' ---
 #' title: paul::basegui base class for building Tk applications
-#' author: Detlef Groth, Schwielowsee, Germany
-#' Date : 2024-12-23
+#' author: Detlef Groth, University of Potsdam, Germany
+#' Date : 2025-02-22
 #' header-includes: 
 #' - | 
 #'     ```{=html}
@@ -34,8 +34,8 @@
 #'  - [SYNOPSIS](#synopsis)
 #'  - [DESCRIPTION](#description)
 #'  - [COMMAND](#command)
-#'  - [TYPE OPTIONS](#options)
-#'  - [TYPE COMMANDS](#commands)
+#'  - [CLASS OPTIONS](#options)
+#'  - [CLASS COMMANDS](#commands)
 #'  - [EXAMPLE](#example)
 #'  - [INHERITANCE](#inheritance)
 #'  - [SEE ALSO](#see)
@@ -98,23 +98,29 @@ oo::class create ::paul::basegui {
     #' Alternatively widgets can be added to existing applications as well.
     #' > The following methods are available:
     #' 
-    #' >  - [about](#about)
-    #'    - [addStatusBar](#addStatusBar)
-    #'    - [autoscroll](#autoscroll)
-    #'    - [balloon](#balloon)
-    #'    - [cballoon](#cballoon)
-    #'    - [center](#center)
-    #'    - [cget](#cget)
-    #'    - [configure](#configure)
-    #'    - [console](#console)
-    #'    - [exit](#exit)
-    #'    - [fontDecrease](#fontDecrease)
-    #'    - [fontIncrease](#fontIncrease)
-    #'    - [fontSizeBind](#fontSizeBind)
-    #'    - [getFrame](#getFrame)
-    #'    - [getMenu](#getMenu)    
-    #'    - [splash](#splash)
-    #'    - [timer](#timer)
+    #' >  - [about](#about) - display an About message box
+    #'    - [addStatusBar](#addStatusBar) - display a statusbar at the application bottom
+    #'    - [autoscroll](#autoscroll) - add scrollbars to widgets which autohide if not required
+    #'    - [balloon](#balloon) - mouse hover ballon for widgets
+    #'    - [cballoon](#cballoon) - mouse hover ballon for canvas items
+    #'    - [center](#center) - center a window
+    #'    - [cget](#cget) - retrieve application options
+    #'    - [configure](#configure) - configure application options
+    #'    - [console](#console) - display a simple Tcl console
+    #'    - [exit](#exit) - finish the application with message box
+    #'    - [fontDecrease](#fontDecrease) - globally decrease all font sizes
+    #'    - [fontIncrease](#fontIncrease) - globally increase all font sizes
+    #'    - [fontSizeBind](#fontSizeBind) - bind keys for font size changes
+    #'    - [getFrame](#getFrame) - get the main application frame
+    #'    - [getMenu](#getMenu) - get or and insert a menu entry 
+    #'    - [message](#message) - display message in statusbar
+    #'    - [pngSize](#pngSize) - width and height of a PNG image
+    #'    - [pngWrite](#pngWrite) - write a simple PNG image
+    #'    - [progress](#progress) - set a progressbar value in the statusbar
+    #'    - [setAppname](#setAppname) - set the application title
+    #'    - [splash](#splash) - display an application splash window
+    #'    - [status](#status) - sets message and value for the statusbar
+    #'    - [timer](#timer) - benchmarking tool
     #' 
     variable var
     variable gui
@@ -136,7 +142,7 @@ oo::class create ::paul::basegui {
         set var(appname) BaseGuiApp
         set var(author) "Detlef Groth"
         set var(revision) [package version paul]
-        set var(year) 2023
+        set var(year) 2025
         if {[info exists ::starkit::topdir]} {
             set var(helpfile) [file join $::starkit::topdir lib app-$var(appname) html-$var(appname) index.html]
             set var(iconfile) [file join $::starkit::topdir lib app-$var(appname) $var(appname).ico]
@@ -166,6 +172,7 @@ oo::class create ::paul::basegui {
         $t.mbar.fl add command -label Exit -command [callback exit] -underline 1
         
         $t.mbar.hlp add command -label About -command [callback about] -underline 0
+        set var(menu,main) $t.mbar
         set var(menu,file) $t.mbar.fl
         set var(menu,help) $t.mbar.hlp
         set gui(frame) [ttk::frame $t.frame]
@@ -386,7 +393,7 @@ oo::class create ::paul::basegui {
                 if {[catch {
                      set result [uplevel #0 "$code"]
                 } err]} then {
-                     $c insert end \n {"} $err failure \n
+                     $c insert end \n {"} $err failure \n ;#"
                 } else {
                     $c insert end \n {} $result success \n
                 }
@@ -394,7 +401,7 @@ oo::class create ::paul::basegui {
                 if {[catch {
                      set result [uplevel #0 [$c get end-1lines+2chars end-1chars]]
                 } err]} then {
-                     $c insert end \n {"} $err failure \n
+                     $c insert end \n {"} $err failure \n ;#"
                 } else {
                     $c insert end \n {} $result success \n
                 }
@@ -533,6 +540,67 @@ oo::class create ::paul::basegui {
         }
     }
     #'
+    #' <a name="pngSize"> </a>
+    #' *cmdName* **pngSize**  *filename* 
+    #' 
+    #' > returns the width and height of the given png file in pixels. Code by
+    #'   Donal Fellows from the [Tclers Wiki](https://wiki.tcl-lang.org/page/Reading+PNG+image+dimensions)
+    #'
+    #' > Example:
+    #'
+    #' ```{.tcl eval=true}
+    #' set app [::paul::basegui new -style clam]
+    #' if {[file exists test.png]} {
+    #'    puts [$app pngSize test.png]
+    #' }
+    #' destroy .app
+    #' ```
+    #'
+    method pngSize {filename} {
+        return [PNG::size $filename]
+    }
+    #'
+    #' <a name="pngWrite"> </a>
+    #' *cmdName* **pngWrite**  *filename palette image* 
+    #' 
+    #' > writes the given image data using the color palette into the given filename.
+    #'   Code is taken from [Tclers Wiki](https://wiki.tcl-lang.org/page/Write+PNG+File+%28without+using+Tk%29)
+    #'
+    #' > Example:
+    #'
+    #' ```{.tcl eval=true}
+    #' set palette {FFFFFF 000000 FF0000 00FF00 0000FF FFFF00 FF00FF}
+    #' set image {
+    #' {1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1}
+    #' {1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 1 1 1 1 1 1 1 1 0 0 0 3 3 3 3 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 1 1 1 1 1 1 1 1 0 0 3 3 3 3 3 3 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 3 3 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 3 3 0 0 2 2 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 3 3 3 3 0 0 2 2 2 2 2 2 2 0 0 0 1}
+    #' {1 0 0 0 0 0 1 1 0 0 0 0 0 0 3 3 3 3 0 0 0 2 2 2 2 2 2 2 0 0 0 1}
+    #' {1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+    #' {1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+    #' {1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1}
+    #' }
+    #' $app pngWrite test.png ${palette} ${image}
+    #' destroy .app
+    #' ```
+    #'
+    #' > &nbsp;&nbsp;&nbsp;&nbsp;![](../test.png)
+    #'
+    method pngWrite  {filename palette image} {
+        ::PNG::write $filename $palette $image
+        return ""
+    }
+    #' <a name="progress"> </a>
     #' *cmdName* **progress**  *value* 
     #' 
     #' > Displays the given *value* within the progressbar in the statusbar widget. 
@@ -540,6 +608,7 @@ oo::class create ::paul::basegui {
     method progress {value} {
         $gui(statusbar) progress $value
     }
+    #' <a name="setAppname"> </a>
     #' **setAppname** *appname revision author year*
     #' 
     #' > Sets meta information about the application, useful to change the about message.
@@ -658,6 +727,7 @@ oo::class create ::paul::basegui {
 #' of the *paul::basegui* snit type. The code can be executed directly using the *--demo* commandline switch.
 #' 
 #' ```{.tcl eval=true}
+#' catch { foreach child [winfo children .] { destroy $child } }
 #' set app [::paul::basegui new]
 #' puts "Startup in [$app timer time] seconds!"
 #' $app timer reset
@@ -675,7 +745,9 @@ oo::class create ::paul::basegui {
 #' $app balloon $btn "This is the hover message!\nNice ?"
 #' pack $btn -side top
 #' set tf [ttk::frame $f.tframe]
-#' set t [text $tf.text -wrap none]
+#' set t [tkoo::text $tf.text -wrap none -undo true]
+#' $t mixin paul::txpopup
+#' [$app getMenu main] insert 2 cascade -label "Edit" -menu [$t getEditMenu] -underline 0
 #' $app autoscroll $t
 #' for {set i 0} {$i < 30} {incr i} {
 #'     $t insert end "Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
@@ -760,11 +832,11 @@ oo::class create ::paul::basegui {
 #'
 #' ## <a name='authors'>AUTHOR</a>
 #'
-#' The **paul::basegui** command was written by Detlef Groth, Schwielowsee, Germany.
+#' The **paul::basegui** command was written by Detlef Groth, University of Potsdam, Germany.
 #'
 #' ## <a name='copyright'>COPYRIGHT</a>
 #'
-#' Copyright (c) 2019-2024  Dr. Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2019-2025  Detlef Groth, University of Potsdam Germany E-mail: dgroth(at)uni(minus)potsdam(dot)de
 #'
 #' ## <a name='license'>LICENSE</a>
 #' 
@@ -797,7 +869,7 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp basegui $argv0]} {
         puts "\n    -------------------------------------"
         puts "     The paul::basegui class for Tcl"
         puts "    -------------------------------------\n"
-        puts "Copyright (c) 2019-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de\n"
+        puts "Copyright (c) 2019-2025  Detlef Groth, E-mail: dgroth(at)uni(minus)potsdam(dot)de\n"
         puts "License: BSD - License see manual page"
         puts "\nThe paul::basegui class provides a basic application framework for"
         puts "                       building Tk applications."

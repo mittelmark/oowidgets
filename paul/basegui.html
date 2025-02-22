@@ -4,7 +4,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="title" content="paul::basegui base class for building Tk applications">
-<meta name="author" content="Detlef Groth, Schwielowsee, Germany">
+<meta name="author" content="Detlef Groth, University of Potsdam, Germany">
     
 <title>paul::basegui base class for building Tk applications</title>
     
@@ -22,8 +22,8 @@
 
 
 <h1 class="title">paul::basegui base class for building Tk applications</h1>
-<h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
-<h2 class="date">2025-02-21</h2>
+<h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
+<h2 class="date">2025-02-22</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a
@@ -47,8 +47,8 @@ href="txmixins.html">txmixins</a>
 <li><a href="#synopsis">SYNOPSIS</a></li>
 <li><a href="#description">DESCRIPTION</a></li>
 <li><a href="#command">COMMAND</a></li>
-<li><a href="#options">TYPE OPTIONS</a></li>
-<li><a href="#commands">TYPE COMMANDS</a></li>
+<li><a href="#options">CLASS OPTIONS</a></li>
+<li><a href="#commands">CLASS COMMANDS</a></li>
 <li><a href="#example">EXAMPLE</a></li>
 <li><a href="#inheritance">INHERITANCE</a></li>
 <li><a href="#see">SEE ALSO</a></li>
@@ -101,23 +101,29 @@ Alternatively widgets can be added to existing applications as well.
 
 <blockquote>
 <ul>
-<li><a href="#about">about</a></li>
-<li><a href="#addStatusBar">addStatusBar</a></li>
-<li><a href="#autoscroll">autoscroll</a></li>
-<li><a href="#balloon">balloon</a></li>
-<li><a href="#cballoon">cballoon</a></li>
-<li><a href="#center">center</a></li>
-<li><a href="#cget">cget</a></li>
-<li><a href="#configure">configure</a></li>
-<li><a href="#console">console</a></li>
-<li><a href="#exit">exit</a></li>
-<li><a href="#fontDecrease">fontDecrease</a></li>
-<li><a href="#fontIncrease">fontIncrease</a></li>
-<li><a href="#fontSizeBind">fontSizeBind</a></li>
-<li><a href="#getFrame">getFrame</a></li>
-<li><a href="#getMenu">getMenu</a><br/></li>
-<li><a href="#splash">splash</a></li>
-<li><a href="#timer">timer</a></li></ul>
+<li><a href="#about">about</a> - display an About message box</li>
+<li><a href="#addStatusBar">addStatusBar</a> - display a statusbar at the application bottom</li>
+<li><a href="#autoscroll">autoscroll</a> - add scrollbars to widgets which autohide if not required</li>
+<li><a href="#balloon">balloon</a> - mouse hover ballon for widgets</li>
+<li><a href="#cballoon">cballoon</a> - mouse hover ballon for canvas items</li>
+<li><a href="#center">center</a> - center a window</li>
+<li><a href="#cget">cget</a> - retrieve application options</li>
+<li><a href="#configure">configure</a> - configure application options</li>
+<li><a href="#console">console</a> - display a simple Tcl console</li>
+<li><a href="#exit">exit</a> - finish the application with message box</li>
+<li><a href="#fontDecrease">fontDecrease</a> - globally decrease all font sizes</li>
+<li><a href="#fontIncrease">fontIncrease</a> - globally increase all font sizes</li>
+<li><a href="#fontSizeBind">fontSizeBind</a> - bind keys for font size changes</li>
+<li><a href="#getFrame">getFrame</a> - get the main application frame</li>
+<li><a href="#getMenu">getMenu</a> - get or and insert a menu entry </li>
+<li><a href="#message">message</a> - display message in statusbar</li>
+<li><a href="#pngSize">pngSize</a> - width and height of a PNG image</li>
+<li><a href="#pngWrite">pngWrite</a> - write a simple PNG image</li>
+<li><a href="#progress">progress</a> - set a progressbar value in the statusbar</li>
+<li><a href="#setAppname">setAppname</a> - set the application title</li>
+<li><a href="#splash">splash</a> - display an application splash window</li>
+<li><a href="#status">status</a> - sets message and value for the statusbar</li>
+<li><a href="#timer">timer</a> - benchmarking tool</li></ul>
 
 
 </blockquote>
@@ -266,11 +272,69 @@ $fmenu insert 0 command -label Open -underline 0 -command { puts Opening }</code
   Only useful if statusbar is displayed using the <em>addStatusBar</em> command.</p>
 </blockquote>
 
-<p><em>cmdName</em> <strong>progress</strong>  <em>value</em></p>
+<p><a name="pngSize"> </a>
+<em>cmdName</em> <strong>pngSize</strong>  <em>filename</em></p>
+
+<blockquote>
+<p>returns the width and height of the given png file in pixels. Code by
+  Donal Fellows from the <a href="https://wiki.tcl-lang.org/page/Reading+PNG+image+dimensions">Tclers Wiki</a></p>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code class='tclinn'>set app [::paul::basegui new -style clam]
+if {[file exists test.png]} {
+   puts [$app pngSize test.png]
+}
+destroy .app</code></pre>
+
+<pre class='code'><code class='tclout'>32 18</code></pre>
+
+<p><a name="pngWrite"> </a>
+<em>cmdName</em> <strong>pngWrite</strong>  <em>filename palette image</em></p>
+
+<blockquote>
+<p>writes the given image data using the color palette into the given filename.
+  Code is taken from <a href="https://wiki.tcl-lang.org/page/Write+PNG+File+%28without+using+Tk%29">Tclers Wiki</a></p>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code class='tclinn'>set palette {FFFFFF 000000 FF0000 00FF00 0000FF FFFF00 FF00FF}
+set image {
+{1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1}
+{1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+{1 0 0 1 1 1 1 1 1 1 1 0 0 0 3 3 3 3 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 1 1 1 1 1 1 1 1 0 0 3 3 3 3 3 3 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 3 3 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 0 0 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 0 0 3 3 0 0 2 2 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 3 3 3 3 3 3 0 0 2 2 2 2 2 2 2 0 0 0 1}
+{1 0 0 0 0 0 1 1 0 0 0 0 0 0 3 3 3 3 0 0 0 2 2 2 2 2 2 2 0 0 0 1}
+{1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+{1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1}
+{1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1}
+}
+$app pngWrite test.png ${palette} ${image}
+destroy .app</code></pre>
+
+<blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACAAAAASCAMAAAANFixgAAADAFBMVEX///8AAAD/AAAA/wAAAP///wD/AP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADs81UpAAAASUlEQVR42r3SQQoAIAhE0V9z/ztHRQVKuSiajYseaCIpCIljHoHZDiQJyHkDpC4MqLWX+hgCfIvvIBhyfLPFg7UoC86rvgXBwRRVSwEplXDViQAAAABJRU5ErkJggg=="></img></p>
+</blockquote>
+
+<p><a name="progress"> </a>
+<em>cmdName</em> <strong>progress</strong>  <em>value</em></p>
 
 <blockquote>
 <p>Displays the given <em>value</em> within the progressbar in the statusbar widget. 
    Only useful if statusbar is displayed using the <em>addStatusBar</em> command.
+<a name="setAppname"> </a>
 <strong>setAppname</strong> <em>appname revision author year</em></p>
 
 <p>Sets meta information about the application, useful to change the about message.</p>
@@ -333,7 +397,8 @@ The two modes are <em>reset</em> and <em>time</em>, the first measured time is i
 <p>The following example demonstrates a few features for creating new standalone applications using the faciltities of 
 of the <em>paul::basegui</em> snit type. The code can be executed directly using the <em>--demo</em> commandline switch.</p>
 
-<pre class='code'><code class='tclinn'>set app [::paul::basegui new]
+<pre class='code'><code class='tclinn'>catch { foreach child [winfo children .] { destroy $child } }
+set app [::paul::basegui new]
 puts &quot;Startup in [$app timer time] seconds!&quot;
 $app timer reset
 set fmenu [$app getMenu &quot;File&quot;]
@@ -350,7 +415,9 @@ set btn [ttk::button $f.btn -text &quot;Hover me!&quot;]
 $app balloon $btn &quot;This is the hover message!\nNice ?&quot;
 pack $btn -side top
 set tf [ttk::frame $f.tframe]
-set t [text $tf.text -wrap none]
+set t [tkoo::text $tf.text -wrap none -undo true]
+$t mixin paul::txpopup
+[$app getMenu main] insert 2 cascade -label &quot;Edit&quot; -menu [$t getEditMenu] -underline 0
 $app autoscroll $t
 for {set i 0} {$i &lt; 30} {incr i} {
     $t insert end &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
@@ -437,11 +504,11 @@ after implementing it in <code>your::basegui</code> type. If you follow this app
 
 <h2><a name='authors'>AUTHOR</a></h2>
 
-<p>The <strong>paul::basegui</strong> command was written by Detlef Groth, Schwielowsee, Germany.</p>
+<p>The <strong>paul::basegui</strong> command was written by Detlef Groth, University of Potsdam, Germany.</p>
 
 <h2><a name='copyright'>COPYRIGHT</a></h2>
 
-<p>Copyright (c) 2019-2024  Dr. Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<p>Copyright (c) 2019-2025  Detlef Groth, University of Potsdam Germany E-mail: dgroth(at)uni(minus)potsdam(dot)de</p>
 
 <h2><a name='license'>LICENSE</a></h2>
 
