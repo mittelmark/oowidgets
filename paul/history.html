@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="title" content="paul::history">
+<meta name="author" content="Detlef Groth, University of Potsdam, Germany">
+    
+<title>paul::history</title>
+    
+    
+
+<style>
+@import url("data:text/css;base64,ICAgIGh0bWwgewogICAgICAgIG92ZXJmbG93LXk6IHNjcm9sbDsKICAgIH0KICAgIGJvZHkgewogICAgICAgIGNvbG9yOiAjNDQ0OwogICAgICAgIGZvbnQtZmFtaWx5OiBHZW9yZ2lhLCBQYWxhdGlubywgJ1BhbGF0aW5vIExpbm90eXBlJywgVGltZXMsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZjsKICAgICAgICBsaW5lLWhlaWdodDogMS4yOwogICAgICAgIHBhZGRpbmc6IDFlbTsKICAgICAgICBtYXJnaW46IGF1dG87CiAgICAgICAgbWF4LXdpZHRoOiAgMTAwMHB4OwogICAgfQogICAgYSB7CiAgICAgICAgY29sb3I6ICMwNjQ1YWQ7CiAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogICAgfQogICAgYTp2aXNpdGVkIHsKICAgICAgICBjb2xvcjogIzBiMDA4MDsKICAgIH0KICAgIGE6aG92ZXIgewogICAgICAgIGNvbG9yOiAjMDZlOwogICAgfQogICAgYTphY3RpdmUgewogICAgICAgIGNvbG9yOiAjZmFhNzAwOwogICAgfQogICAgYTpmb2N1cyB7CiAgICAgICAgb3V0bGluZTogdGhpbiBkb3R0ZWQ7CiAgICB9CiAgICAjYWJzdHJhY3QgewogICAgICAgIG1hcmdpbjogMi41ZW07CiAgICAgICAgZm9udC1zaXplOiA3MCU7CiAgICB9CiAgICBwIHsKICAgICAgICBtYXJnaW46IDAuNWVtIDA7CiAgICB9CiAgICBwLmRhdGUgewogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgIH0KICAgIGltZyB7CiAgICAgICAgbWF4LXdpZHRoOiAxMDAlOwogICAgfQogICAgCiAgICBoMSwgaDIsIGgzLCBoNCwgaDUsIGg2IHsKICAgICAgICBjb2xvcjogIzExMTsKICAgICAgICBsaW5lLWhlaWdodDogMTE1JTsKICAgICAgICBtYXJnaW4tdG9wOiAxZW07CiAgICAgICAgZm9udC13ZWlnaHQ6IG5vcm1hbDsKICAgIH0KICAgIGgxIHsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9CiAgICBoNC5hdXRob3IsIGg0LmRhdGUsIHAuYXV0aG9yLCBwLmRhdGUgewogICAgICAgIGZvbnQtc2l6ZTogMTEwJTsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9CiAgICBoMi5hdXRob3IsIGgyLmRhdGUsIHAuYXV0aG9yLCBwLmRhdGUgewogICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgIH0KICAgIAogICAgcHJlLCBibG9ja3F1b3RlIHByZSB7CiAgICAgICAgYm9yZGVyLXRvcDogMC4xZW0gIzlhYyBzb2xpZDsKICAgICAgICBiYWNrZ3JvdW5kOiAjZTlmNmZmOwogICAgICAgIHBhZGRpbmc6IDEwcHg7CiAgICAgICAgbWFyZ2luLWxlZnQ6IDUwcHg7CiAgICAgICAgYm9yZGVyLWJvdHRvbTogMC4xZW0gIzlhYyBzb2xpZDsKICAgIH0KICAgIAogICAgYmxvY2txdW90ZSB7CiAgICAgICAgbWFyZ2luOiAwOwogICAgICAgIHBhZGRpbmctbGVmdDogM2VtOyAKICAgIH0KICAgIAogICAgaHIgewogICAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICAgIGhlaWdodDogMnB4OwogICAgICAgIGJvcmRlcjogMDsKICAgICAgICBib3JkZXItdG9wOiAxcHggc29saWQgI2FhYTsKICAgICAgICBib3JkZXItYm90dG9tOiAxcHggc29saWQgI2VlZTsKICAgICAgICBtYXJnaW46IDFlbSAwOwogICAgICAgIHBhZGRpbmc6IDA7CiAgICB9CiAgICAKICAgIHByZSwgY29kZSwga2JkLCBzYW1wIHsKICAgICAgICBjb2xvcjogIzAwMDsKICAgICAgICBmb250LWZhbWlseTogTW9uYWNvLCAnY291cmllciBuZXcnLCBtb25vc3BhY2U7CiAgICAgICAgZm9udC1zaXplOiA5MCU7IAogICAgfQogICAgY29kZS5yIHsKICAgICAgICBjb2xvcjogIzc3MDAwMDsKICAgIH0KICAgIHByZSB7CiAgICAgICAgd2hpdGUtc3BhY2U6IHByZTsKICAgICAgICB3aGl0ZS1zcGFjZTogcHJlLXdyYXA7CiAgICAgICAgd29yZC13cmFwOiBicmVhay13b3JkOwogICAgfQogICAgLyogZml4LCBkbyBub3QgbGlrZSBib2xkIGZvciBldmVyeSBrZXl3b3JkICovCiAgICBjb2RlIHNwYW4ua3cgeyBjb2xvcjogIzAwNzAyMDsgZm9udC13ZWlnaHQ6IG5vcm1hbDsgfSAvKiBLZXl3b3JkICovCiAgICAgcHJlLnNvdXJjZUNvZGUgewogICAgICAgIGJhY2tncm91bmQ6ICNmZmY2ZjY7CiAgICB9IAogICAgZmlndXJlLCBwLmF1dGhvciB7CiAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyOwogICAgfQogICAgdGggeyBiYWNrZ3JvdW5kLWNvbG9yOiAjZGRkIDsgIH0KICAgIHRoZWFkIHRyIHsgYm9yZGVyLWJvdHRvbTogMnB4IHNvbGlkOyB9CiAgICB0YWJsZSB7ICAKICAgICAgICBib3JkZXItY29sbGFwc2U6IGNvbGxhcHNlOyAKICAgICAgICBib3JkZXItYm90dG9tOiAycHggc29saWQ7CiAgICAgICAgYm9yZGVyLXRvcDogMnB4IHNvbGlkOwogICAgfQogICAgICB0aDpmaXJzdC1jaGlsZCB7CgogICAgICB9CiAgICB0aCwgdGQgewogICAgICAgIHRleHQtYWxpZ246IGxlZnQ7CiAgICAgICAgcGFkZGluZzogOHB4OwogICAgfQoKICAgIHRyOm50aC1jaGlsZChldmVuKSB7YmFja2dyb3VuZC1jb2xvcjogI2YyZjJmMjt9Cg==");
+</style>
+
+    
+</head>
+<body>
+    
+
+
+
+<h1 class="title">paul::history</h1>
+<h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
+<h2 class="date">2025-02-25</h2>
+
+<p><center>
+<a href="basegui.html">basegui</a> - <a
+href="cbmixins.html">cbmixins</a> - <a href="dlabel.html">dlabel</a> -
+<a href="history.html">history</a> - <a href="imedit.html">imedit</a> -
+<a href="labentry.html">labentry</a> - <a
+href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a> -
+<a href="statusbar.html">statusbar</a> - <a
+href="tvmixins.html">tvmixins</a> - <a href="txmixins.html">txmixins</a>
+</center></p>
+
+<h2>NAME</h2>
+
+<p><strong>paul::history</strong> - an oo class history command.</p>
+
+<h2><a name='toc'></a>TABLE OF CONTENTS</h2>
+
+<ul>
+<li><a href="#synopsis">SYNOPSIS</a></li>
+<li><a href="#description">DESCRIPTION</a></li>
+<li><a href="#command">COMMAND</a></li>
+<li><a href="#options">OPTIONS</a></li>
+<li><a href="#commands">METHODS</a></li>
+<li><a href="#example">EXAMPLE</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#author">AUTHOR</a></li>
+<li><a href="#copyright">COPYRIGHT</a></li>
+<li><a href="#license">LICENSE</a>
+ </li></ul>
+
+<h2><a name='synopsis'>SYNOPSIS</a></h2>
+
+<pre class='code'><code>package require paul
+::paul::history create cmd ?option value?
+cmd back 
+cmd canBackward
+cmd canForward
+cmd canFirst
+cmd canLast
+cmd cget option
+cmd configure option value
+cmd current
+cmd first
+cmd forward
+cmd getHistory
+cmd home
+cmd insert value
+cmd last
+cmd resetHistory</code></pre>
+
+<h2><a name='description'>DESCRIPTION</a></h2>
+
+<p>The <strong>paul::history</strong> command provides a data structure to allow
+the storage of text strings in a history. 
+This can be useful to store for instance a browser history or a
+move history in a board game like Chess or Go.</p>
+
+<h2><a name='options'>OPTIONS</a></h2>
+
+<p><strong>-home</strong> value</p>
+
+<blockquote>
+<p>The value which is set as the home, it is stored in principle
+as the first item in the history. Defaults to an empty string.</p>
+</blockquote>
+
+<h2><a name='commands'>METHODS</a></h2>
+
+<p>The <strong>paul::history</strong> class supports a few methods to navigate in a history list.</p>
+
+<p><em>cmd</em> <strong>back</strong></p>
+
+<blockquote>
+<p>Walks back in history one step and retrieves the value of the history at this position.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>canBackward</strong></p>
+
+<blockquote>
+<p>Returns true if the current position in history is not the first value in history
+  and if the length of history is greater than 1.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>canFirst</strong></p>
+
+<blockquote>
+<p>Returns true if the current position in history is not the first value in history
+  and if history length is greater than 1.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>canForward</strong></p>
+
+<blockquote>
+<p>Returns true if the current position in history is not the last value in history.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>canLast</strong></p>
+
+<blockquote>
+<p>Returns true if the current position in history is not the last value in history.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>cget</strong> <em>option</em></p>
+
+<blockquote>
+<p>Retrieves the given option value for the shistory type. Curently only the <em>-home</em> 
+  option is available for <em>cget</em>.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>configure</strong> <em>option value ?option value ...?</em></p>
+
+<blockquote>
+<p>Configures the given option for the shistory type. 
+Curently only the <em>-home</em> option is available for <em>configure</em>.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>current</strong></p>
+
+<blockquote>
+<p>Retrieves the current value of the history.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>first</strong></p>
+
+<blockquote>
+<p>Jumps to the first entry in history and returns it.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>forward</strong></p>
+
+<blockquote>
+<p>Gos one step forward in history and returns the value there.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>getHistory</strong></p>
+
+<blockquote>
+<p>Returns the history, a list of text entries.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>insert</strong>  <em>value</em></p>
+
+<blockquote>
+<p>Inserts the value in the history at the actual index.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>home</strong></p>
+
+<blockquote>
+<p>Returns the home index value which was set using the <em>-home</em> option.</p>
+</blockquote>
+
+<p><em>cmd</em> <strong>last</strong></p>
+
+<blockquote>
+<p>Jumps to the last value in history and returns the value there.</p>
+</blockquote>
+
+<h2><a name='example'>EXAMPLE</a></h2>
+
+<pre class='code'><code class='tclinn'>lappend auto_path .
+package require paul
+### using create cmd args
+::paul::history create hs -home i
+hs insert x
+puts &quot;hs: last [hs last]&quot;
+### using new args 
+set sh [::paul::history new -home h]
+$sh insert a
+$sh insert a ;# should not give duplicates
+$sh insert a
+$sh insert b
+puts &quot;canback: [$sh canBackward]&quot;
+puts &quot;canforw: [$sh canForward]&quot;
+$sh back
+$sh insert z
+puts &quot;getHistory: [$sh getHistory]&quot;
+puts &quot;home: [$sh home]&quot;
+puts &quot;last: [$sh last]&quot;</code></pre>
+
+<pre class='code'><code class='tclout'>hs: last x
+canback: true
+canforw: false
+getHistory: a z b
+home: h
+last: b</code></pre>
+
+<h2><a name='todo'>TODO</a></h2>
+
+<ul>
+<li>move tests to tests directory
+</li></ul>
+
+<h2><a name='author'>AUTHOR</a></h2>
+
+<p>The <strong>paul::history</strong> class was written Detlef Groth, University of Potsdam, Germany.</p>
+
+<h2><a name='copyright'></a>COPYRIGHT</h2>
+
+<p>Copyright (c) 2018-2025  Detlef Groth, E-mail: dgroth(at)uni(minus)potsdam(dot)de</p>
+
+<h2><a name='license'></a>LICENSE </h2>
+
+<pre class='code'><code class='tclout'>BSD 3-Clause License
+
+Copyright (c) 2021-2025, Detlef Groth, University of Potsdam, Germany
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
+
+
+
+</body>
+</html>
+

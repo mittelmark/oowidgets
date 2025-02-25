@@ -1,0 +1,86 @@
+package require tcltest
+package require paul
+set argv [list] 
+tcltest::test dummy-1.1 {
+    Calling my proc should always return a list of at least length 3
+} -body {
+    set result 1
+} -result {1}
+
+tcltest::test history-1.1 {
+    Starting a history
+} -body {
+    set sh [::paul::history new -home h]
+    return [$sh home]
+} -result {h}
+tcltest::test history-1.2 {
+    insert a value
+} -body {
+    $sh insert a
+    return [$sh current]
+} -result {a}
+tcltest::test history-1.3 {
+    insert a value repeated
+} -body {
+    $sh insert a
+    $sh insert a
+    $sh insert a
+    llength [$sh getHistory]
+} -result {1}
+tcltest::test history-1.4 {
+    can back with 1 item
+} -body {
+     $sh canBackward
+} -result {false}
+tcltest::test history-1.5 {
+    can back with 2 items
+} -body {
+    $sh insert b
+    $sh canBackward
+} -result {true}
+tcltest::test history-1.6 {
+    can forward at the end?
+} -body {
+    $sh canForward
+} -result {false}
+tcltest::test history-1.7 {
+    can forward if going back?
+} -body {
+    $sh back
+    $sh canForward
+} -result {true}
+tcltest::test history-1.8 {
+    insert in the middle
+} -body {
+    $sh insert c
+    $sh insert c
+    $sh getHistory
+} -result {a c b}
+tcltest::test history-1.9 {
+    check first
+} -body {
+    $sh first
+} -result {a}
+tcltest::test history-1.10 {
+    canBackward at first
+} -body {
+    $sh canBackward
+} -result {false}
+tcltest::test history-1.11 {
+    canForward at first
+} -body {
+    $sh canForward
+} -result {true}
+tcltest::test history-1.12 {
+    canForward at end
+} -body {
+    $sh last
+    $sh canForward
+} -result {false}
+tcltest::test history-1.13 {
+    canBackward at last
+} -body {
+    $sh canBackward
+} -result {true}
+
+tcltest::cleanupTests
