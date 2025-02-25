@@ -28,7 +28,7 @@
 #' 
 #  Created By    : Dr. Detlef Groth
 #  Created       : Mon Nov 5 07:21:48 2018
-#  Last Modified : <250225.1036>
+#  Last Modified : <250225.1047>
 #
 #' ## NAME
 #'
@@ -47,7 +47,7 @@
 #'  - [COPYRIGHT](#copyright)
 #'  - [LICENSE](#license)
 #'  
-#' ## <a name='synopsis'>SYNOPSIS</a>
+#' ## <a name='synopsis'> </a>SYNOPSIS
 #' 
 #' ```
 #' package require paul
@@ -69,14 +69,14 @@
 #' cmd resetHistory
 #' ```
 #'
-#' ## <a name='description'>DESCRIPTION</a>
+#' ## <a name='description'> </a>DESCRIPTION
 #'
 #' The **paul::history** command provides a data structure to allow
 #' the storage of text strings in a history. 
 #' This can be useful to store for instance a browser history or a
 #' move history in a board game like Chess or Go.
 #'
-#' ## <a name='options'>OPTIONS</a>
+#' ## <a name='options'> </a>OPTIONS
 #'
 
 
@@ -100,7 +100,7 @@ oo::class create ::paul::history {
         set history [list]
     }
     #' 
-    #' ## <a name='commands'>METHODS</a>
+    #' ## <a name='commands'> </a>METHODS
     #' 
     #' The **paul::history** class supports a few methods to navigate in a history list.
     #'
@@ -263,7 +263,7 @@ oo::class create ::paul::history {
 
 
 #' 
-#' ## <a name='example'>EXAMPLE</a>
+#' ## <a name='example'> </a>EXAMPLE
 #'
 #' ```{.tcl eval=true}
 #' lappend auto_path .
@@ -287,11 +287,11 @@ oo::class create ::paul::history {
 #' puts "last: [$sh last]"
 #' ```
 #'
-#' ## <a name='todo'>TODO</a>
+#' ## <a name='todo'> </a>TODO
 #'
 #' * move tests to tests directory
 #'
-#' ## <a name='author'>AUTHOR</a>
+#' ## <a name='author'> </a>AUTHOR
 #'
 #' The **paul::history** class was written Detlef Groth, University of Potsdam, Germany.
 #'

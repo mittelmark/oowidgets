@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-22 13:58:37
-#  Last Modified : <250225.0749>
+#  Last Modified : <250225.1459>
 #
 #  Description	 :
 #
@@ -186,10 +186,10 @@ oowidgets::widget ::paul::Htext {
                               $w insert end "$i " "plain $dtx"
                           }
                       }
-                      $w insert end \n------\n {} $indexLabel link " - " {} $searchLabel link
-                      if [llength $history] {
-                          $w insert end " - " {} $historyLabel link " - " {} $backLabel link
-                      }
+                      #$w insert end \n------\n {} $indexLabel link " - " {} $searchLabel link
+                      #if [llength $history] {
+                      #    $w insert end " - " {} $historyLabel link " - " {} $backLabel link
+                      #}
                   }
               }
           $w insert end \n
