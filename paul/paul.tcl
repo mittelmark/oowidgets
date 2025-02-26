@@ -14,6 +14,7 @@ namespace eval ::paul {
     ttk::style configure ToolButton -borderwidth 2
     ttk::style configure ToolButton -padding {2 2 2 2} 
     ttk::style configure Treeview -background white
+    ttk::style configure TEntry -padding {2 2 2 2} 
     catch {
         option add *Text.background    white
     }
@@ -114,6 +115,7 @@ source [file join [file dirname [info script]] png.tcl]
 source [file join [file dirname [info script]] basegui.tcl] 
 source [file join [file dirname [info script]] cbmixins.tcl] 
 source [file join [file dirname [info script]] dlabel.tcl] 
+source [file join [file dirname [info script]] history.tcl] 
 source [file join [file dirname [info script]] images.tcl] 
 source [file join [file dirname [info script]] imedit.tcl] 
 source [file join [file dirname [info script]] labentry.tcl] 

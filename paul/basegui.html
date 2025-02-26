@@ -23,16 +23,16 @@
 
 <h1 class="title">paul::basegui base class for building Tk applications</h1>
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
-<h2 class="date">2025-02-22</h2>
+<h2 class="date">2025-02-26</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a
 href="cbmixins.html">cbmixins</a> - <a href="dlabel.html">dlabel</a> -
-<a href="imedit.html">imedit</a> - <a href="labentry.html">labentry</a>
-- <a href="notebook.html">notebook</a> - <a
-href="rotext.html">rotext</a> - <a href="statusbar.html">statusbar</a> -
-<a href="tvmixins.html">tvmixins</a> - <a
-href="txmixins.html">txmixins</a>
+<a href="history.html">history</a> - <a href="htext.html">htext</a> - <a
+href="imedit.html">imedit</a> - <a href="labentry.html">labentry</a> -
+<a href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a>
+- <a href="statusbar.html">statusbar</a> - <a
+href="tvmixins.html">tvmixins</a> - <a href="txmixins.html">txmixins</a>
 </center></p>
 
 <h2>NAME</h2>
@@ -92,12 +92,19 @@ a statusbar and splash screen or facility to center a window on the screen.</p>
    Use <code>ttk::style theme names</code> within an interactive wish session to find out which themes are available on your machine. Default: clam</p>
 </blockquote>
 
+<p><strong>-toplevel</strong> <em>bool</em></p>
+
+<blockquote>
+<p>Should a new application toplevel being create, if ths is false you can just use some of these these methods metioned below within your 
+   own application, default: true.</p>
+</blockquote>
+
 <h2><a name='method'>CLASS METHODS</a></h2>
 
 <p>The <strong>paul::basegui</strong> command supports the following public methods to be used
 within inheriting applications to extend the basic application.
 Alternatively widgets can be added to existing applications as well.
-&gt; The following methods are available:</p>
+&gt; The following methods are available if argument <em>-toplevel</em> was given as true:</p>
 
 <blockquote>
 <ul>
@@ -123,10 +130,26 @@ Alternatively widgets can be added to existing applications as well.
 <li><a href="#setAppname">setAppname</a> - set the application title</li>
 <li><a href="#splash">splash</a> - display an application splash window</li>
 <li><a href="#status">status</a> - sets message and value for the statusbar</li>
-<li><a href="#timer">timer</a> - benchmarking tool</li></ul>
+<li><a href="#timer">timer</a> - benchmarking tool
+</li></ul>
 
-
+<p>The following methods are available if argument <em>-toplevel</em> was given as false:</p>
 </blockquote>
+
+<ul>
+<li><a href="#autoscroll">autoscroll</a> - add scrollbars to widgets which autohide if not required</li>
+<li><a href="#balloon">balloon</a> - mouse hover ballon for widgets</li>
+<li><a href="#cballoon">cballoon</a> - mouse hover ballon for canvas items</li>
+<li><a href="#center">center</a> - center a window</li>
+<li><a href="#console">console</a> - display a simple Tcl console</li>
+<li><a href="#fontDecrease">fontDecrease</a> - globally decrease all font sizes</li>
+<li><a href="#fontIncrease">fontIncrease</a> - globally increase all font sizes</li>
+<li><a href="#fontSizeBind">fontSizeBind</a> - bind keys for font size changes</li>
+<li><a href="#pngSize">pngSize</a> - width and height of a PNG image</li>
+<li><a href="#pngWrite">pngWrite</a> - write a simple PNG image</li>
+<li><a href="#splash">splash</a> - display an application splash window</li>
+<li><a href="#timer">timer</a> - benchmarking tool
+</li></ul>
 
 <p><a name="about"> </a>
 <em>cmdName</em>  <strong>about</strong></p>
@@ -288,7 +311,7 @@ if {[file exists test.png]} {
 }
 destroy .app</code></pre>
 
-<pre class='code'><code class='tclout'>83 155</code></pre>
+<pre class='code'><code class='tclout'>32 18</code></pre>
 
 <p><a name="pngWrite"> </a>
 <em>cmdName</em> <strong>pngWrite</strong>  <em>filename palette image</em></p>

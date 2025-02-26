@@ -28,10 +28,10 @@
 <p><center>
 <a href="basegui.html">basegui</a> - <a
 href="cbmixins.html">cbmixins</a> - <a href="dlabel.html">dlabel</a> -
-<a href="history.html">history</a> - <a href="imedit.html">imedit</a> -
-<a href="labentry.html">labentry</a> - <a
-href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a> -
-<a href="statusbar.html">statusbar</a> - <a
+<a href="history.html">history</a> - <a href="htext.html">htext</a> - <a
+href="imedit.html">imedit</a> - <a href="labentry.html">labentry</a> -
+<a href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a>
+- <a href="statusbar.html">statusbar</a> - <a
 href="tvmixins.html">tvmixins</a> - <a href="txmixins.html">txmixins</a>
 </center></p>
 
@@ -54,7 +54,7 @@ href="tvmixins.html">tvmixins</a> - <a href="txmixins.html">txmixins</a>
 <li><a href="#license">LICENSE</a>
  </li></ul>
 
-<h2><a name='synopsis'>SYNOPSIS</a></h2>
+<h2><a name='synopsis'> </a>SYNOPSIS</h2>
 
 <pre class='code'><code>package require paul
 ::paul::history create cmd ?option value?
@@ -74,14 +74,14 @@ cmd insert value
 cmd last
 cmd resetHistory</code></pre>
 
-<h2><a name='description'>DESCRIPTION</a></h2>
+<h2><a name='description'> </a>DESCRIPTION</h2>
 
 <p>The <strong>paul::history</strong> command provides a data structure to allow
 the storage of text strings in a history. 
 This can be useful to store for instance a browser history or a
 move history in a board game like Chess or Go.</p>
 
-<h2><a name='options'>OPTIONS</a></h2>
+<h2><a name='options'> </a>OPTIONS</h2>
 
 <p><strong>-home</strong> value</p>
 
@@ -90,7 +90,7 @@ move history in a board game like Chess or Go.</p>
 as the first item in the history. Defaults to an empty string.</p>
 </blockquote>
 
-<h2><a name='commands'>METHODS</a></h2>
+<h2><a name='commands'> </a>METHODS</h2>
 
 <p>The <strong>paul::history</strong> class supports a few methods to navigate in a history list.</p>
 
@@ -182,7 +182,7 @@ Curently only the <em>-home</em> option is available for <em>configure</em>.</p>
 <p>Jumps to the last value in history and returns the value there.</p>
 </blockquote>
 
-<h2><a name='example'>EXAMPLE</a></h2>
+<h2><a name='example'> </a>EXAMPLE</h2>
 
 <pre class='code'><code class='tclinn'>lappend auto_path .
 package require paul
@@ -211,13 +211,13 @@ getHistory: a z b
 home: h
 last: b</code></pre>
 
-<h2><a name='todo'>TODO</a></h2>
+<h2><a name='todo'> </a>TODO</h2>
 
 <ul>
 <li>move tests to tests directory
 </li></ul>
 
-<h2><a name='author'>AUTHOR</a></h2>
+<h2><a name='author'> </a>AUTHOR</h2>
 
 <p>The <strong>paul::history</strong> class was written Detlef Groth, University of Potsdam, Germany.</p>
 

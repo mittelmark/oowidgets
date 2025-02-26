@@ -73,7 +73,7 @@
 #' $txt insert end "  * item 1\n  * item 2 (press return here)"
 #' oo::objdefine $txt mixin paul::txindent paul::txfileproc
 #' $txt indent
-#' $txt fileproc 
+#' $txt txfileproc 
 #' $txt file_open
 #' pack $txt -side top -fill both -expand yes
 #' ```

@@ -71,6 +71,10 @@ There is a sample project which uses `TclOO` and `oowidgets` to create mega widg
   filtering or history addition [code](paul/cbmixins.tcl) 
 - [paul::dlabel :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/dlabel.html) - 
   using inheritance to create changed `ttk::label` with dynamic fontsize,  [code](paul/dlabel.tcl) 
+- [paul::history :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/history.html) - 
+  class to provide history facilities to applications,  [code](paul/history.tcl) 
+- [paul::htext :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/htext.html) - 
+  composite widget providing a simple hypertext text widget to add help to Tk applications,  [code](paul/htext.tcl) 
 - [paul::imedit :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/imedit.html) - 
   show case using composition of composed widgets like `paul::labentry`, `tk.Text` and `ttk.Label` to create a larger megawidget,  [code](paul/imedit.tcl) 
 - [paul::labentry :blue_book:](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mittelmark/oowidgets/master/paul/labentry.html) - 

@@ -1,0 +1,50 @@
+## Start
+
+
+- *this* is a start section
+- and here comes another item
+- we can write more
+- we can link to [Next] section
+
+### TOC
+
+* [Start]
+* [Next] 
+* [Last]
+
+## Next
+
+This is the next section which contains more text. 
+Please go to [Last] now.
+
+Here comes the final paragraph in the *Next* page.
+ 
+## Last
+
+This is the last section where we link to [Start]  and [Next].
+
+Let's add as well an [image:../images/imedit-dot.png]
+
+![](images/imedit-dot.png)
+
+## Dead end section
+
+This section can never be reached.
+
+It contains some indented text which is not formatted in any way like this:
+
+
+   Some text
+   spread over several lines
+   where line breaks are kept
+   and formatting like *bold* or
+   ~italic~ is not done.
+   
+Now the same text but unindented:
+
+Some text
+spread over several lines
+where line breaks are kept
+and formatting like *bold* or
+~italic~ is not done.
+

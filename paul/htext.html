@@ -3,10 +3,10 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="title" content="paul::dlabel - label with dynamic font size">
-<meta name="author" content="Detlef Groth, Schwielowsee, Germany">
+<meta name="title" content="paul::htext documentation">
+<meta name="author" content="Detlef Groth, University of Potsdam, Germany">
     
-<title>paul::dlabel - label with dynamic font size</title>
+<title>paul::htext documentation</title>
     
     
 
@@ -21,8 +21,8 @@
 
 
 
-<h1 class="title">paul::dlabel - label with dynamic font size</h1>
-<h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
+<h1 class="title">paul::htext documentation</h1>
+<h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
 <h2 class="date">2025-02-26</h2>
 
 <p><center>
@@ -37,64 +37,172 @@ href="tvmixins.html">tvmixins</a> - <a href="txmixins.html">txmixins</a>
 
 <h2>NAME</h2>
 
-<blockquote>
-<p><strong>paul::dlabel</strong> - label with fontsize adaptation</p>
-</blockquote>
+<p><strong>paul::htext</strong> - hypertext widget for browsing Markdown like documentation.
+This is adaption of the <a href="https://wiki.tcl-lang.org/page/htext">htext</a> widget 
+programmed initially by <a href="https://wiki.tcl-lang.org/page/suchenwi">Richard Suchenwirth</a>.</p>
 
-<h2><a name='synopsis'></a> SYNOPSIS</h2>
-
-<pre class='code'><code>package require paul
-paul::dlabel pathName -text TEXT ?-option value ...?
-pack cmdName</code></pre>
-
-<h2>COMMAND</h2>
-
-<p><a name="dlabel"></a>
-<strong>paul::dlabel</strong> <em>pathName</em></p>
-
-<blockquote>
-<p>Creates a ttk::label where the font size is dynamically adjusted to the widget size.</p>
-</blockquote>
-
-<h2>OPTIONS</h2>
-
-<p>All options of a standard ttk::label are supported.</p>
-
-<h2>METHODS</h2>
-
-<p>All methods of a standard ttk::label are supported.</p>
-
-<h2>EXAMPLE</h2>
-
-<pre class='code'><code class='tclinn'>package require paul
-wm title . DGApp
-set app [paul::basegui new]
-font create title -family Helvetica -size 10
-puts [winfo children .]
-set frame [$app getFrame]
-set txt &quot; Some Title &quot;
-set dlab [paul::dlabel $frame.l -text $txt]
-pack  $dlab -expand 1 -fill both
-wm geometry . 400x300+0+0</code></pre>
-
-<pre class='code'><code class='tclout'>.mbar .#mbar .frame .sep .stb</code></pre>
-
-<h2><a name='see'></a> SEE ALSO</h2>
+<h2><a name='toc'></a>Table of Contents</h2>
 
 <ul>
-<li><a href="../oowidgets/oowidgets.html">oowidgets</a></li>
-<li><a href="basegui.html">paul::basegui.tcl</a>
+<li><a href="#synopsis">SYNOPSIS</a></li>
+<li><a href="#description">DESCRIPTION</a></li>
+<li><a href="#command">COMMAND</a></li>
+<li><a href="#options">WIDGET OPTIONS</a></li>
+<li><a href="#commands">WIDGET COMMANDS</a></li>
+<li><a href="#format">FILE FORMAT</a></li>
+<li><a href="#example">EXAMPLE</a></li>
+<li><a href="#see">SEE ALSO</a></li>
+<li><a href="#authors">AUTHOR</a></li>
+<li><a href="#copyright">COPYRIGHT</a></li>
+<li><a href="#license">LICENSE</a>
+ </li></ul>
+
+<h2><a name='synopsis'></a>SYNOPSIS</h2>
+
+<pre class='code'><code>package require paul
+paul::htext pathName -option value ?-option value?
+pathName file_read FILENAME</code></pre>
+
+<h2><a name='description'></a>DESCRIPTION</h2>
+
+<p><strong>paul::htext</strong> - is a composite widget consisting of a toolbar with button for
+naviagation and a text widget with hypertext facilities.
+The widget can be used to add help facilitites to your application. It supports the following
+features:</p>
+
+<ul>
+<li>hyperlinks</li>
+<li>headers</li>
+<li>item lists</li>
+<li>formatting bold and italics</li>
+<li>image embedding</li>
+<li>verbatim text</li>
+<li>searching</li>
+<li>history navigation</li>
+<li>document reloading</li>
+<li>browser like button bar
 </li></ul>
 
-<h2><a name='authors'></a> AUTHOR</h2>
+<h2><a name='command'></a>COMMAND</h2>
 
-<p>The <strong>paul::statusbar</strong> widget was written by Detlef Groth, Schwielowsee, Germany.</p>
+<p><strong>paul::htext</strong> <em>pathName ?options?</em></p>
+
+<blockquote>
+<p>Creates and configures a new paul::htextwidget  using the Tk window id <em>pathName</em> and the given <em>options</em>.</p>
+</blockquote>
+
+<h2><a name='options'></a>WIDGET OPTIONS</h2>
+
+<p>The <strong>paul::htext</strong> widget is a composite widget useful for embedding navigating help documents
+of Tk applications.
+It supports the followingt options the following options:</p>
+
+<ul>
+<li><strong>-filename</strong> <em>STRING</em> - the filename from which the documentation should be loaded.</li>
+<li><strong>-toolbar</strong> <em>BOOL</em> - should a browser like toolbar been show on top of the widget
+
+</li></ul>
+
+<h2><a name='commands'></a>WIDGET COMMANDS</h2>
+
+<p>Each <strong>paul::htext</strong> widget supports the following methods.</p>
+
+<p><em>pathName</em> <strong>file_read</strong> <em>filename</em></p>
+
+<blockquote>
+<p>Open the given filename and display the first section into the text widget.</p>
+</blockquote>
+
+<p><em>pathName</em> <strong>show</strong> <em>section</em></p>
+
+<blockquote>
+<p>Display the given section in the help widget.</p>
+</blockquote>
+
+<h2><a name='format'></a>FILE FORMAT</h2>
+
+<p>The widget supports the following format options:</p>
+
+<ul>
+<li>sections which are displayed on separate pages are starting with two hash marks <code>## TITLE</code></li>
+<li>subsection within the same page are starting with three hash marks <code>### SUBSECTION</code></li>
+<li>hyperlinks to other pages are embedded within brackets like this <code>[SECTIONNAME]</code></li>
+<li>bold text is emphasized using starts <code>*bold*</code></li>
+<li>italic text is emphasized usng the tilde <code>~italic~</code></li>
+<li>lists are started with stars at the first line</li>
+<li>paragraph breaks created by empty lines</li>
+<li>images are declared like Markdown images, but only one image currently per line
+</li></ul>
+
+<p>Here an example for a help file:</p>
+
+<pre class='code'><code>## Section One
+
+### Subsection formatted text
+
+Some text written on *bold* and ~italics~. 
+
+### Subsection list items
+
+Let's follow this by a list:
+
+- item 1
+- item 2
+- item 3
+
+### Paragraphs
+
+Paragraphs are created by adding empty lines between your text.
+
+This starts a new paragraph.
+
+### Hyperlinks
+
+Hyperlinks are create by placing a section name into brackets like this
+[Section Two]
+
+## Sectin Two
+
+Text which is indented with whitespaces will be shown like it is:
+
+  This text will be not formatted in any way
+  and this line as well.
+
+## Final Section
+
+This is the final section where we can link to [Section One].
+
+Let's add an image example:
+
+&lt;img src=&quot;path/to/image.png&quot;&gt;&lt;/img&gt;
+
+Currently only PNG and GIF images are supported.</code></pre>
+
+<h2><a name='example'></a>EXAMPLE</h2>
+
+<pre class='code'><code class='tclinn'>package require paul
+paul::htext .ht
+.ht file_read [file rootname [info script]].txt
+pack .ht -side top -fill both -expand true
+update idletasks
+## after 3000 exit</code></pre>
+
+<h2><a name='see'></a>SEE ALSO</h2>
+
+<ul>
+<li><a href="../oowidgets/oowidgets.html">oowidgets</a>
+</li></ul>
+
+<h2><a name='authors'></a>AUTHOR</h2>
+
+<p>The <strong>paul::htext</strong> widget was written by Detlef Groth, University of Potsdam, Germany. 
+The initial code was based on code from the Tclers Wiki mainly started by <a href="https://wiki.tcl-lang.org/page/suchenwi">Richard Suchenwirth</a>.</p>
 
 <h2><a name='copyright'></a>COPYRIGHT</h2>
 
-<p>Copyright (c) 2021-2024  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<p>Copyright (c) 2019-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
 
-<h2><a name='license'></a>LICENSE </h2>
+<h2><a name='license'></a>LICENSE</h2>
 
 <pre class='code'><code class='tclout'>BSD 3-Clause License
 

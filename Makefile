@@ -12,6 +12,8 @@ paul-manual:
 	pantcl paul/basegui.tcl paul/basegui.html --css mini.css --no-pandoc
 	pantcl paul/cbmixins.tcl paul/cbmixins.html --css mini.css --no-pandoc	
 	pantcl paul/dlabel.tcl paul/dlabel.html --css mini.css --no-pandoc
+	pantcl paul/history.tcl paul/history.html --css mini.css --no-pandoc	
+	pantcl paul/htext.tcl paul/htext.html --css mini.css --no-pandoc	
 	pantcl paul/imedit.tcl paul/imedit.html --css mini.css --no-pandoc	
 	pantcl paul/labentry.tcl paul/labentry.html --css mini.css --no-pandoc
 	pantcl paul/rotext.tcl paul/rotext.html --css mini.css --no-pandoc
@@ -25,6 +27,8 @@ paul-demo:
 	TCLLIBPATH=. $(TCLSH) paul/basegui.tcl --demo
 	TCLLIBPATH=. $(TCLSH) paul/cbmixins.tcl --demo	
 	TCLLIBPATH=. $(TCLSH) paul/dlabel.tcl --demo
+	TCLLIBPATH=. $(TCLSH) paul/history.tcl --demo	
+	TCLLIBPATH=. $(TCLSH) paul/htext.tcl --demo		
 	TCLLIBPATH=. $(TCLSH) paul/imedit.tcl --demo	
 	TCLLIBPATH=. $(TCLSH) paul/labentry.tcl --demo
 	TCLLIBPATH=. $(TCLSH) paul/notebook.tcl --demo	

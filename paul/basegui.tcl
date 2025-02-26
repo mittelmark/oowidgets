@@ -91,12 +91,17 @@ oo::class create ::paul::basegui {
     #'  > Configures the ttk style for all widgets within the application. 'clam' and 'default' should be supported on all platforms. 
     #'    Use `ttk::style theme names` within an interactive wish session to find out which themes are available on your machine. Default: clam
     #' 
+    #'   __-toplevel__ _bool_ 
+    #' 
+    #'  > Should a new application toplevel being create, if ths is false you can just use some of these these methods metioned below within your 
+    #'    own application, default: true.
+    #' 
     #' ## <a name='method'>CLASS METHODS</a>
     #' 
     #' The **paul::basegui** command supports the following public methods to be used
     #' within inheriting applications to extend the basic application.
     #' Alternatively widgets can be added to existing applications as well.
-    #' > The following methods are available:
+    #' > The following methods are available if argument _-toplevel_ was given as true:
     #' 
     #' >  - [about](#about) - display an About message box
     #'    - [addStatusBar](#addStatusBar) - display a statusbar at the application bottom
@@ -122,6 +127,21 @@ oo::class create ::paul::basegui {
     #'    - [status](#status) - sets message and value for the statusbar
     #'    - [timer](#timer) - benchmarking tool
     #' 
+    #' > The following methods are available if argument _-toplevel_ was given as false:
+    #'
+    #'    - [autoscroll](#autoscroll) - add scrollbars to widgets which autohide if not required
+    #'    - [balloon](#balloon) - mouse hover ballon for widgets
+    #'    - [cballoon](#cballoon) - mouse hover ballon for canvas items
+    #'    - [center](#center) - center a window
+    #'    - [console](#console) - display a simple Tcl console
+    #'    - [fontDecrease](#fontDecrease) - globally decrease all font sizes
+    #'    - [fontIncrease](#fontIncrease) - globally increase all font sizes
+    #'    - [fontSizeBind](#fontSizeBind) - bind keys for font size changes
+    #'    - [pngSize](#pngSize) - width and height of a PNG image
+    #'    - [pngWrite](#pngWrite) - write a simple PNG image
+    #'    - [splash](#splash) - display an application splash window
+    #'    - [timer](#timer) - benchmarking tool
+    #'
     variable var
     variable gui
     variable x
@@ -130,12 +150,14 @@ oo::class create ::paul::basegui {
     variable timer
     variable options
     constructor {args} { 
-        array set options [list -style clam {*}$args]
+        array set options [list -style clam -toplevel true {*}$args]
         set timer [::paul::Timer new]
         set path .
         set top $path ;# $path
-        my Init
-        my Gui
+        if {$options(-toplevel)} {
+            my Init
+            my Gui
+        }
     }
     # main private methods
     method Init {} {

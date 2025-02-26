@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 19:59:58
-#  Last Modified : <250217.1137>
+#  Last Modified : <250225.1824>
 #
 #  Description	 :
 #
@@ -239,4 +239,63 @@ namespace eval ::paul {
         NQ0KqSBEZXZlbENvciAxOTk3LDE5OTguIEFsbCByaWdodHMgcmVzZXJ2ZWQu
         DQpodHRwOi8vd3d3LmRldmVsY29yLmNvbQA7
     }
+            image create photo navforward16 -data {
+            R0lGODlhEAAQAIUAAPwCBAwyTBRObAw2VDR+nCRKZOzy/KTe7Pz+/KTK3Nzu
+            /Lze7FS+1AyexAyuzBSavAyOtBSmzOTy/BRqjNTm9IzO5ETS3ETa5By61Ayi
+            xByixBRmjAQGDBxCXGSivCySrCSWtBTC3AQOHAQWHAxWdEze7AQKFBRCXAwq
+            PAQCBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAZj
+            QIBwSCwahYGjUjBQGgWEpHNYMBCaT4G2UDggos+EwmBYMBpf6VBgYDgeEMgj
+            IpmoAQVKxXLBPDIXGhscRB0eHyAgDSGBGyJFASMiIiMkJYImUwAnmJqbjp4A
+            KCmhAKSlTn5BACH+aENyZWF0ZWQgYnkgQk1QVG9HSUYgUHJvIHZlcnNpb24g
+            Mi41DQqpIERldmVsQ29yIDE5OTcsMTk5OC4gQWxsIHJpZ2h0cyByZXNlcnZl
+            ZC4NCmh0dHA6Ly93d3cuZGV2ZWxjb3IuY29tADs=
+        }
+        image create photo ::paul::navhome16 -data {
+            R0lGODlhEAAQAIUAAPwCBDw6PBQWFCQiJAQCBFxeXMTCxJyanDwyLDQqLFRS
+            VLSytJSSlISChCQmJERGRFRWVGxubKSmpJyenGRmZLy+vOzq7OTi5Ly6vGRi
+            ZPTy9Pz6/OTm5ExOTPT29BwaHNza3NS6tJRqRGQqBNy6pIyKjDwGBPTe1JSW
+            lDQyNOTGrNRiBGwmBIRaLNymdLxWBHxGFNySXCwqLKyqrNR6LKxGBNTS1NTW
+            1Jw+BEweDDQ2NAAAAAAAAAAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAao
+            QIBwCAgIiEjAgAAoGA6I5DBBUBgWjIZDqnwYGgVIoTGQQgyRiGRCgZCR1nTF
+            csFkHm9hBp2paDYbHAsZHW9eERkYGh4eGx4ag3gfSgMTIBshIiMkGyAlCCZT
+            EpciJyQjGxcoKUQBEhcbIiorLB4XEltDrhcaLS4vtbcJra8bMDHAGrcyrTMX
+            HjA0NSypEsO6EzY3IzU4OdoTzK0BCAkDMgkIOjJlAH5BACH+aENyZWF0ZWQg
+            YnkgQk1QVG9HSUYgUHJvIHZlcnNpb24gMi41DQqpIERldmVsQ29yIDE5OTcs
+            MTk5OC4gQWxsIHJpZ2h0cyByZXNlcnZlZC4NCmh0dHA6Ly93d3cuZGV2ZWxj
+            b3IuY29tADs=
+        }
+        image create photo ::paul::nav1leftarrow16 -data {
+            R0lGODlhEAAQAIAAAP///wAAACH5BAEAAAAALAAAAAAQABAAAAIdhI+pyxqd
+            woNGTmgvy9px/IEWBWRkKZ2oWrKu4hcAIf5oQ3JlYXRlZCBieSBCTVBUb0dJ
+            RiBQcm8gdmVyc2lvbiAyLjUNCqkgRGV2ZWxDb3IgMTk5NywxOTk4LiBBbGwg
+            cmlnaHRzIHJlc2VydmVkLg0KaHR0cDovL3d3dy5kZXZlbGNvci5jb20AOw==
+        }
+        image create photo ::paul::nav1rightarrow16 -data {
+            R0lGODlhEAAQAIAAAPwCBAQCBCH5BAEAAAAALAAAAAAQABAAAAIdhI+pyxCt
+            woNHTmpvy3rxnnwQh1mUI52o6rCu6hcAIf5oQ3JlYXRlZCBieSBCTVBUb0dJ
+            RiBQcm8gdmVyc2lvbiAyLjUNCqkgRGV2ZWxDb3IgMTk5NywxOTk4LiBBbGwg
+            cmlnaHRzIHJlc2VydmVkLg0KaHR0cDovL3d3dy5kZXZlbGNvci5jb20AOw==
+        }
+        image create photo ::paul::textblock16 -data {
+            R0lGODlhEAAQAIAAAPwCBAQCBCH5BAEAAAAALAAAAAAQABAAAAIahI+py40B
+            o5SOzRvrwlgrfnkJOIkPaaaJXwAAIf5oQ3JlYXRlZCBieSBCTVBUb0dJRiBQ
+            cm8gdmVyc2lvbiAyLjUNCqkgRGV2ZWxDb3IgMTk5NywxOTk4LiBBbGwgcmln
+            aHRzIHJlc2VydmVkLg0KaHR0cDovL3d3dy5kZXZlbGNvci5jb20AOw==
+        }
+        image create photo ::paul::actreload16 -data {
+            R0lGODlhEAAQAIUAAPwCBCRaJBxWJBxOHBRGBCxeLLTatCSKFCymJBQ6BAwm
+            BNzu3AQCBAQOBCRSJKzWrGy+ZDy+NBxSHFSmTBxWHLTWtCyaHCSSFCx6PETK
+            NBQ+FBwaHCRKJMTixLy6vExOTKyqrFxaXDQyNDw+PBQSFHx6fCwuLJyenDQ2
+            NISChLSytJSSlFxeXAwODCQmJBweHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAAALAAAAAAQABAAAAaB
+            QIBQGBAMBALCcCksGA4IQkJBUDIDC6gVwGhshY5HlMn9DiCRL1MyYE8iiapa
+            SKlALBdMRiPckDkdeXt9HgxkGhWDXB4fH4ZMGnxcICEiI45kQiQkDCUmJZsk
+            mUIiJyiPQgyoQwwpH35LqqgMKiEjq5obqh8rLCMtowAkLqovuH5BACH+aENy
+            ZWF0ZWQgYnkgQk1QVG9HSUYgUHJvIHZlcnNpb24gMi41DQqpIERldmVsQ29y
+            IDE5OTcsMTk5OC4gQWxsIHJpZ2h0cyByZXNlcnZlZC4NCmh0dHA6Ly93d3cu
+            ZGV2ZWxjb3IuY29tADs=
+        }
+
+
 }
