@@ -2,6 +2,8 @@
 [basegui](basegui.html) -
 [cbmixins](cbmixins.html) -
 [dlabel](dlabel.html) -
+[history](history.html) -
+[htext](htext.html) -
 [imedit](imedit.html) -
 [labentry](labentry.html) -
 [notebook](notebook.html) -
