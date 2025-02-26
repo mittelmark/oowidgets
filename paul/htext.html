@@ -25,15 +25,7 @@
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
 <h2 class="date">2025-02-26</h2>
 
-<p><center>
-<a href="basegui.html">basegui</a> - <a
-href="cbmixins.html">cbmixins</a> - <a href="dlabel.html">dlabel</a> -
-<a href="history.html">history</a> - <a href="htext.html">htext</a> - <a
-href="imedit.html">imedit</a> - <a href="labentry.html">labentry</a> -
-<a href="notebook.html">notebook</a> - <a href="rotext.html">rotext</a>
-- <a href="statusbar.html">statusbar</a> - <a
-href="tvmixins.html">tvmixins</a> - <a href="txmixins.html">txmixins</a>
-</center></p>
+<p>Cannot open paul/header.html</p>
 
 <h2>NAME</h2>
 
@@ -113,6 +105,14 @@ It supports the followingt options the following options:</p>
 <p>Open the given filename and display the first section into the text widget.</p>
 </blockquote>
 
+<p><em>pathName</em> <strong>sections</strong></p>
+
+<blockquote>
+<p>Returns all sections in the order they appear in the file.
+  This list can be used to create a browse table of contents for 
+  instance in a tk::listbox widget.</p>
+</blockquote>
+
 <p><em>pathName</em> <strong>show</strong> <em>section</em></p>
 
 <blockquote>
@@ -146,9 +146,9 @@ Some text written on *bold* and ~italics~.
 
 Let's follow this by a list:
 
-- item 1
-- item 2
-- item 3
+* item 1
+* item 2
+* item 3
 
 ### Paragraphs
 
@@ -180,12 +180,16 @@ Currently only PNG and GIF images are supported.</code></pre>
 
 <h2><a name='example'></a>EXAMPLE</h2>
 
-<pre class='code'><code class='tclinn'>package require paul
+<pre class='code'><code class='tclinn'>lappend auto_path .
+package require paul
 paul::htext .ht
-.ht file_read [file rootname [info script]].txt
+.ht file_read paul/htext.txt
 pack .ht -side top -fill both -expand true
+puts [.ht sections]
 update idletasks
 ## after 3000 exit</code></pre>
+
+<pre class='code'><code class='tclout'>Start Next Last Dead end section</code></pre>
 
 <h2><a name='see'></a>SEE ALSO</h2>
 

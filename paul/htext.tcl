@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::htext documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250226.0650>
+#' Date : <250226.0711>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -110,6 +110,7 @@ oowidgets::widget ::paul::Htext {
     variable filename
     variable btnforward
     variable btnback
+    variable sections
     constructor {path args} {
         # Create the text widget; turn off its insert cursor
         set app [paul::basegui new -toplevel false]
@@ -169,6 +170,7 @@ oowidgets::widget ::paul::Htext {
         if {[my cget -toolbar]} {
             pack $path.bb -side top -fill x -expand false -before $path.txt
         }
+        set sections [list]
         if {[my cget -filename] ne ""} {
             my file_read [my cget -filename]
         }
@@ -188,12 +190,14 @@ oowidgets::widget ::paul::Htext {
         } else {
             set title Main
             set first ""
+            set sections [list]
             while {[gets $infh line] >= 0} {
                 if {[regexp {^## (.+)} $line -> title]} {
                     if {$first eq ""} {
                         set first $title
                     }
                     set doc($title) "\n"
+                    lappend sections $title
                 } else {
                     append doc($title) "$line\n"
                 }
@@ -212,6 +216,16 @@ oowidgets::widget ::paul::Htext {
         set link [eval $w get $range]
         my show $link
     }
+    #' *pathName* **sections** 
+    #' 
+    #' > Returns all sections in the order they appear in the file.
+    #'   This list can be used to create a browse table of contents for 
+    #'   instance in a tk::listbox widget.
+    #'
+    method sections { } {
+        return $sections
+    }
+    
     #' *pathName* **show** *section*
     #' 
     #' > Display the given section in the help widget.
@@ -439,11 +453,13 @@ oowidgets::widget ::paul::Htext {
 #' 
 #' ## <a name='example'></a>EXAMPLE
 #' 
-#' ```{.tcl eval=true results="hide"}
+#' ```{.tcl eval=true}
+#' lappend auto_path .
 #' package require paul
 #' paul::htext .ht
-#' .ht file_read [file rootname [info script]].txt
+#' .ht file_read paul/htext.txt
 #' pack .ht -side top -fill both -expand true
+#' puts [.ht sections]
 #' update idletasks
 #' ## after 3000 exit
 #' ```
