@@ -185,11 +185,15 @@ package require paul
 paul::htext .ht
 .ht file_read paul/htext.txt
 pack .ht -side top -fill both -expand true
-puts [.ht sections]
-update idletasks
-## after 3000 exit</code></pre>
+foreach section [.ht sections] {
+   puts $section
+}
+update idletasks</code></pre>
 
-<pre class='code'><code class='tclout'>Start Next Last Dead end section</code></pre>
+<pre class='code'><code class='tclout'>Start
+Next
+Last
+Dead end section</code></pre>
 
 <h2><a name='see'></a>SEE ALSO</h2>
 
@@ -204,7 +208,7 @@ The initial code was based on code from the Tclers Wiki mainly started by <a hre
 
 <h2><a name='copyright'></a>COPYRIGHT</h2>
 
-<p>Copyright (c) 2019-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de</p>
+<p>Copyright (c) 2025  Detlef Groth, E-mail: dgroth(at)uni(minus)potsdam(dot)de</p>
 
 <h2><a name='license'></a>LICENSE</h2>
 

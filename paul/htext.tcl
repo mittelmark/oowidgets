@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::htext documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250226.0711>
+#' Date : <250226.0715>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -459,9 +459,10 @@ oowidgets::widget ::paul::Htext {
 #' paul::htext .ht
 #' .ht file_read paul/htext.txt
 #' pack .ht -side top -fill both -expand true
-#' puts [.ht sections]
+#' foreach section [.ht sections] {
+#'    puts $section
+#' }
 #' update idletasks
-#' ## after 3000 exit
 #' ```
 #' 
 #' ## <a name='see'></a>SEE ALSO
@@ -475,7 +476,7 @@ oowidgets::widget ::paul::Htext {
 #'
 #' ## <a name='copyright'></a>COPYRIGHT
 #'
-#' Copyright (c) 2019-2025  Detlef Groth, E-mail: detlef(at)dgroth(dot)de
+#' Copyright (c) 2025  Detlef Groth, E-mail: dgroth(at)uni(minus)potsdam(dot)de
 #' 
 #' ## <a name='license'></a>LICENSE
 #'
