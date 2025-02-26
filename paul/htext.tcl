@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::htext documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250226.0715>
+#' Date : <250226.1127>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -111,6 +111,7 @@ oowidgets::widget ::paul::Htext {
     variable btnforward
     variable btnback
     variable sections
+    variable sectionheader
     constructor {path args} {
         # Create the text widget; turn off its insert cursor
         set app [paul::basegui new -toplevel false]
@@ -153,6 +154,7 @@ oowidgets::widget ::paul::Htext {
         set seen {}
         set search hello
         array set doc [list]
+        array set sectionheader [list]
         $win tag config link -foreground blue -underline 1
         $win tag config seen -foreground purple4 -underline 1
         $win tag bind link <1> [mymethod Click $win %x %y]
@@ -174,6 +176,12 @@ oowidgets::widget ::paul::Htext {
         if {[my cget -filename] ne ""} {
             my file_read [my cget -filename]
         }
+        bind $win <Key-space> [list tk::TextScrollPages $win +1 ]
+        bind $win <Key-BackSpace> [list tk::TextScrollPages $win -1 ]
+        bind $win <Key-Next> [list tk::TextScrollPages $win +1 ]
+        bind $win <Key-Prior> [list tk::TextScrollPages $win -1 ]
+        bind $win <Control-h> [mymethod Back]
+        bind $win <Control-l> [mymethod Forward]
     }
     #' 
     #' ## <a name='commands'></a>WIDGET COMMANDS
@@ -193,6 +201,10 @@ oowidgets::widget ::paul::Htext {
             set sections [list]
             while {[gets $infh line] >= 0} {
                 if {[regexp {^## (.+)} $line -> title]} {
+                    set title [string trim $title]
+                    set otitle $title
+                    set title [regsub { -.+} $title ""]
+                    set sectionheader($title) $otitle
                     if {$first eq ""} {
                         set first $title
                     }
@@ -234,7 +246,11 @@ oowidgets::widget ::paul::Htext {
         set w $win
         $w config -state normal
         $w delete 1.0 end
-        $w insert end $title hdr \n
+        if {[info exists sectionheader($title)]} {
+            $w insert end $sectionheader($title) hdr \n
+        } else {
+            $w insert end $title hdr \n
+        }
         switch -- $title {
             Back    {my Back; return}
             History {my Listpage $phi getHistory}
@@ -351,7 +367,8 @@ oowidgets::widget ::paul::Htext {
     method Dosearch {} {
         set w $win
         $w config -state normal
-        $w insert end "\n\n" {} [msgcat::mc "Search results for '%s':" $search] {} \n {}
+        $w delete 1.0 end
+        $w insert end "\n" {} [msgcat::mc "Search results for '%s':" $search] {} \n {}
         foreach i [lsort [array names doc]] {
             if [regexp -nocase $search $i] {
                 $w insert end \n; my Showlink $i ;# found in title
@@ -386,7 +403,7 @@ oowidgets::widget ::paul::Htext {
         if {[info exists doc(Main)]} {
             my show Main
         } elseif {$first ne ""} {
-            my Show $first
+            my show $first
         }
     }
 }

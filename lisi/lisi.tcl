@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250222.0800>
+#  Last Modified : <250226.1118>
 #
 #  Description	 :
 #
@@ -88,6 +88,8 @@ proc ::lisi::gui {args} {
     $mfile insert 4 command -command [list $ie file_save] -label "Save" -underline 0
     $mfile insert 5 command -command [list $ie file_save_as] -label "Save As ..." -underline 1    
     [$app getMenu main] insert 2 cascade -label "Edit" -menu [$ie text getEditMenu] -underline 0
+    set mhelp [$app getMenu "Help"]
+    $mhelp insert 0 command -command ::lisi::gui_help -label "Help" -underline 0
     $app addStatusBar
     set txt [$ie text]
     if {$opts(-filename) eq ""} {
@@ -103,7 +105,23 @@ proc ::lisi::gui {args} {
 
 
 }
-
+proc ::lisi::gui_help {{topic ""}} {
+    variable lisi
+    if {[winfo exists .help]} {
+        wm deiconify .help
+    } else {
+        toplevel .help
+        wm title .help "Lisi - Help"
+        paul::htext .help.ht
+        .help.ht file_read [file join [file rootname ${lisi}].txt]
+        pack .help.ht -side top -fill both -expand true
+        pack [ttk::button .help.btn -text Dismiss -command [list destroy .help]] \
+              -side top -fill x -expand false -padx 20 -pady 10
+    }
+    if {$topic ne ""} {
+        .help.ht show $topic
+    }
+}
 proc ::lisi::main {argv} {
     variable defaults
     if {[llength $argv] == 0} {

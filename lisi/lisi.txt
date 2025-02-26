@@ -1,0 +1,64 @@
+## Lisi - graphics made easy 
+
+An  graphical  application  to use  command  line  tools  which  are  creating
+graphics.
+
+The basic outline of the application is as follows:
+
+  +----------------------------------------+
+  | Menu                    cEE            |
+  +----------------------------------------+     
+  | Label  CLI-Entry  Execute-Button       | 
+  +----------------------------------------+
+  |                                        | 
+  |                                        |
+  |  tk.Text widget to enter the           |
+  |  code for creating the image           |
+  |                                        |
+  |                                        |
+  |                                        |
+  +----------------------------------------+ 
+  |                                        |
+  |                                        |
+  | ttk.Label to display the image         |
+  |                                        |
+  +----------------------------------------+
+  | ttk.Label (Statusbar)  ttk.Progressbar |                 
+  +----------------------------------------+
+
+The use enters the text into the  ~tk.Text~  widget and the  required  command
+line to process the code into the command  line  interface  (CLI)  ~ttk.Entry~
+widget.  Pressing  the  execute  Button  beside  of the CLI entry  widget.  If
+everything runs smooth the created image is displayed in the ~ttk.Label~  widget
+below of the ~tk.Text~ widget.
+
+The following place holders for input and output filenames can be used with in
+the CLI entry.
+
+* ~%i~ - the input filename
+* ~%o~ - the output filename
+* ~%b~ - the basename of the input filename
+
+See the next pages for a few examples to process the following file types:
+
+* [GraphViz] dot files
+* [PlantUML] pml files
+* [GO Game] sgf files
+
+## GraphViz - diagrams
+
+GraphViz dot diagram files
+
+Back to the main page [Lisi].
+
+## PlantUML - diagrams
+
+PlantUML pml diagram files
+
+Back to the main page [Lisi].
+
+## GO Game - board positions
+
+Go Board game sgf text files.
+
+Back to the main page [Lisi].
