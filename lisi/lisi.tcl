@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250227.1036>
+#  Last Modified : <250227.1630>
 #
 #  Description	 :
 #
@@ -47,7 +47,14 @@ namespace eval ::lisi {
         {{All Files}          *      }
     }
 }
-
+proc ::lisi::file_changed {} {
+    global ie
+    set file [[$ie text] file_get]
+    if {[file exists [file rootname $file].png]} {
+        $ie image_display [file rootname $file].png
+    }
+    wm title . "Lisi - [file tail $file]"
+}
 proc ::lisi::usage {app} {
     if {[file tail $app] eq "tclmain"} {
         set app "tclmain -m lisi"
@@ -67,6 +74,7 @@ proc ::lisi::help {app argv} {
     usage $app
 }
 proc ::lisi::gui {args} { 
+    global ie
     set app [::paul::basegui new -style clam]
     $app fontSizeBind ;# for Ctrl-plus / Ctrl-minus for fontsize"
     array set opts [list -commandline "dot -Tpng %i -o %o" -filename ""]
@@ -89,6 +97,8 @@ proc ::lisi::gui {args} {
     $mfile insert 3 separator    
     $mfile insert 4 command -command [list $ie file_save] -label "Save" -underline 0
     $mfile insert 5 command -command [list $ie file_save_as] -label "Save As ..." -underline 1    
+    $mfile insert 6 separator
+    $mfile insert 7 cascade -label "Recent Files ..." -menu [$ie text getFileRecentMenu] -underline 0
     [$app getMenu main] insert 2 cascade -label "Edit" -menu [$ie text getEditMenu] -underline 0
     [$app getMenu main] insert 3 cascade -label "Templates" -menu [$ie text getTemplateMenu] -underline 0    
     set mhelp [$app getMenu "Help"]
@@ -105,8 +115,7 @@ proc ::lisi::gui {args} {
         }
     }
     wm title . "Lisi - [$ie cget -filename]"
-
-
+    bind all <<FileChanged>> ::lisi::file_changed
 }
 proc ::lisi::gui_help {{topic ""}} {
     variable lisi

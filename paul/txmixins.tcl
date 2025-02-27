@@ -244,11 +244,12 @@ catch { rename ::paul::txfileproc {} }
     variable lastdir
     variable options
     variable win
-    #' - _cmdName_ - __fileproc__ _?args?_ 
+    #' - _cmdName_ - __txfileproc__ _?args?_ 
     #' 
-    #' > initialize the fileproc mixin with the given arguments the following arguments are supported:
+    #' > initialize the txfileproc mixin with the given arguments the following arguments are supported:
     #'
     #' > - _filecallback_ - the command  executed if a file is loaded or saved, default: empty string
+    #'   - _filerecentcommand_ - the command to be executed for opening a recent file, default: empty string, so just file is opened
     #'   - _filetypes_ - the default file type list for opening and saving files
     #'   - _filename_ - the file to load per default, if the string new is given, will create a new empty file 
     #'
@@ -266,7 +267,7 @@ catch { rename ::paul::txfileproc {} }
     method txfileproc {args} {
         set win [my widget]
         array set options [list -filecallback "" -filetypes { {{Text Files} {.txt}} {{All Files} {*.*}} } \
-                           -filename new]
+                           -filename new -filerecentcommand ""]
         foreach {key val} $args {
             set options($key) $val
         }
@@ -382,7 +383,7 @@ catch { rename ::paul::txfileproc {} }
     }
     #' - _cmdName_ - **file_recent** 
     #' 
-    #' > Returns a list of the recently edited files.
+    #' > Returns a list of the recently edited/opened files.
     #'
     method file_recent {} {
         my variable lastfiles
@@ -420,7 +421,7 @@ catch { rename ::paul::txfileproc {} }
             if {$options(-filecallback) ne ""} {
                 eval $options(-filecallback) save $lastfile
             }
-            my  PushFile
+            my PushFile
             event generate $win <<FileSaved>> 
         }
         return $file
@@ -447,6 +448,54 @@ catch { rename ::paul::txfileproc {} }
             event generate $win <<FileSaved>>
         }
         return $filename
+    }
+    #' - _cmdName_ - **menu_file_recent** 
+    #' 
+    #' > Creates a recent file menu at the .recent hierarchy.
+    #'
+
+    method menu_file_recent { } {
+        set files [my file_recent]
+        if {![winfo exists .recent]} {
+            menu .recent -tearoff false -postcommand [mymethod UpdateFileRecent]
+            for {set i 1} {$i < 11} {incr i 1} {
+                .recent add command -label "$i ..." -underline 0  -state disabled
+            }
+        } 
+        my UpdateFileRecent
+    }
+    method UpdateFileRecent {} {
+        set files [my file_recent]
+        for {set i 1} {$i < 11} {incr i 1} {
+            if {$i == 10} {
+                set und 1
+            } else {
+                set und 0
+            }
+            if {[llength $files] >= $i} {
+                set file [lindex $files [expr {$i-1}]]
+                if {$options(-filerecentcommand) eq ""} {
+                    .recent entryconfigure [expr {$i-1}] -label "$i [file tail $file]" -underline $und  \
+                          -state active -command [mymethod file_open $file]
+                } else {
+                    .recent entryconfigure [expr {$i-1}] -label "$i [file tail $file]" -underline $und  \
+                          -state active -command [list $options(-filerecentcommand) $file]
+                    
+                }
+            } else {
+                .recent entryconfigure [expr {$i-1}] -label "$i ..." -underline $und  \
+                      -state disabled
+            }
+        }
+    } 
+    #' - _cmdName_ - **getFileRecentMenu** 
+    #' 
+    #' > Returns the file recent menu path, can be used to integrate the file recent
+    #' menu a File menu entry cascade of a Tk application
+    #'
+    method getFileRecentMenu { } {
+        my menu_file_recent 
+        return .recent
     }
     method PushFile {} {
         my variable lastfiles
@@ -719,7 +768,7 @@ catch { rename ::paul::txmatching {} }
 #' 
 #' > - *editMenu* - show the popup menu, usually the right mouse click is bound to
 #'     to display the menu, but the user can create additional key bindings.
-#'   - *getEditMenu* -returns the edit menu path, can be used to integrate the edit menu
+#'   - *getEditMenu* - returns the edit menu path, can be used to integrate the edit menu
 #'     into the main menubar of a Tk application
 #'
 #' > Example:

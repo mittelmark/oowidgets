@@ -157,14 +157,15 @@ pack [tk::text .txt2] -side top -fill both -expand yes -padx 5 -pady 5</code></p
 <p>Adds methods to load and save the content of the text widget from and to files. The following methods are available</p>
 
 <ul>
-<li><em>cmdName</em> - <strong>fileproc</strong> <em>?args?</em> 
+<li><em>cmdName</em> - <strong>txfileproc</strong> <em>?args?</em> 
 </li></ul>
 
 <blockquote>
-<p>initialize the fileproc mixin with the given arguments the following arguments are supported:</p>
+<p>initialize the txfileproc mixin with the given arguments the following arguments are supported:</p>
 
 <ul>
 <li><em>filecallback</em> - the command  executed if a file is loaded or saved, default: empty string</li>
+<li><em>filerecentcommand</em> - the command to be executed for opening a recent file, default: empty string, so just file is opened</li>
 <li><em>filetypes</em> - the default file type list for opening and saving files</li>
 <li><em>filename</em> - the file to load per default, if the string new is given, will create a new empty file</li></ul>
 
@@ -223,7 +224,7 @@ pack $txt -side top -fill both -expand yes</code></pre>
 </li></ul>
 
 <blockquote>
-<p>Returns a list of the recently edited files.</p>
+<p>Returns a list of the recently edited/opened files.</p>
 </blockquote>
 
 <ul>
@@ -242,6 +243,23 @@ pack $txt -side top -fill both -expand yes</code></pre>
 
 <blockquote>
 <p>Saves  the content of the text widget into the file selected by the user.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <strong>menu<em>file</em>recent</strong> 
+</li></ul>
+
+<blockquote>
+<p>Creates a recent file menu at the .recent hierarchy.</p>
+</blockquote>
+
+<ul>
+<li><em>cmdName</em> - <strong>getFileRecentMenu</strong> 
+</li></ul>
+
+<blockquote>
+<p>Returns the file recent menu path, can be used to integrate the file recent
+menu a File menu entry cascade of a Tk application</p>
 </blockquote>
 
 <p><a name="txindent"></a><strong>paul::txindent</strong> -  <em>oo::objdefine pathName mixin paul::txindent</em></p>
@@ -314,7 +332,7 @@ bind $txt &lt;KeyRelease&gt; +[list puts &quot;now pressed %K&quot;]</code></pre
 <ul>
 <li><em>editMenu</em> - show the popup menu, usually the right mouse click is bound to
 to display the menu, but the user can create additional key bindings.</li>
-<li><em>getEditMenu</em> -returns the edit menu path, can be used to integrate the edit menu
+<li><em>getEditMenu</em> - returns the edit menu path, can be used to integrate the edit menu
 into the main menubar of a Tk application
 </li></ul>
 
