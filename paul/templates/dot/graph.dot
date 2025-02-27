@@ -1,0 +1,7 @@
+graph g {
+scale=1.5
+layout=neato
+node[shape=circle,style=filled,fillcolor=salmon]
+edge[penwidth=3]
+A -- B -- C -- D -- E -- A
+}

@@ -36,6 +36,7 @@
 #'   - [paul::txindent](#txindent) - automatic indentation for text widgets
 #'   - [paul::txmatching](#txmatching) - hilight matching parenthesis, brackets or braces
 #'   - [paul::txpopup](#txpopup) - text editor edit menu popup
+#'   - [paul::txtemplate](#txtemplate) - text editor file templates
 #'   - [paul::txunicode](#txunicode) - entering Unicode characters
 #'
 #' ## <a name='synopsis'></a> SYNOPSIS
@@ -716,8 +717,11 @@ catch { rename ::paul::txmatching {} }
 #' 
 #' > The following public method is available:
 #' 
-#' > - *menu* - show the popup menu, usually the right mouse click, but the user can create additional popup keys.
-#' 
+#' > - *editMenu* - show the popup menu, usually the right mouse click is bound to
+#'     to display the menu, but the user can create additional key bindings.
+#'   - *getEditMenu* -returns the edit menu path, can be used to integrate the edit menu
+#'     into the main menubar of a Tk application
+#'
 #' > Example:
 #' 
 #' ```{.tcl eval=true}
@@ -746,7 +750,7 @@ catch { rename ::paul::txpopup {} }
     method txpopup {args} {
         set win [my widget]
         array set options [list -toolcommand ""]
-        bind $win <Button-3>   [mymethod Menu]
+        bind $win <Button-3>   [mymethod editMenu]
         bind $win <Control-y>   [mymethod TextRedo]
         my CreateMenu
     }
@@ -757,6 +761,7 @@ catch { rename ::paul::txpopup {} }
         bind $win <Control-y>   [mymethod TextRedo]
         my CreateMenu
     }
+    
     method getEditMenu { } {
         if {![winfo exists .editormenu]} {
             my CreateMenu
@@ -840,7 +845,7 @@ catch { rename ::paul::txpopup {} }
         }
         
     }
-    method Menu {} {
+    method editMenu {} {
         my CreateMenu
         tk_popup .editormenu [winfo pointerx .] [winfo pointery .]
     }
@@ -869,6 +874,110 @@ catch { rename ::paul::txpopup {} }
 
 
 
+}
+
+#' 
+#' <a name="txtemplate"> </a>
+#' *pathName mixin* **txtemplate** *?-option value ...?*
+#' 
+#' > Creates and configures the mixin *paul::txtemplate* for a text editor 
+#'   providing a file template menu popup for a *tkoo::text* object using the Tk window 
+#'   id _pathName_ and the given *options*. 
+#' 
+#' > The text widget then text insertion by using the files in a given folder
+#'   as text snippets, files can be as well placed within subdirectories of this
+#'   main folder creating additional sub menues.
+#'   see below for an example.
+#'
+#' > The following options are available:
+#'
+#' > - *-templatedir* *directory* - the root directory of all template files, 
+#'     defaults to the template folder of the package directory
+#'   - *-keybinding* *keybinding* - the key binding to show the menu, 
+#'     defaults to Control-Button-3, so mouse right click with Control key 
+#'     pressed should popup the template menu within the text widget
+#'
+#' > The following public method is available:
+#' 
+#' > - *getTemplateMenu* - returns the path to the template menu, this can be used to
+#'     embed the menu into a sub menu of the main menu bar
+#'   - *templateInsert* *filename* - inserts the given filename at the current
+#'     cursor position, this function is usually called via the appropiate menu entry
+#'   - *templateMenu* - show the popup menu, per default the Ctrl-Button-3 key is bound to display the popop
+#'   - *templateMenuRefresh* - refreshes the menu, useful if you add or remove
+#'     files with your template directory
+#' 
+#' > Example:
+#' 
+#' ```{.tcl eval=true}
+#' # demo: txtemplate
+#' set tvt [tkoo::text .tvt -undo true]
+#' $tvt mixin paul::txtemplate -keybinding Control-Button-1
+#' $tvt insert end "\nHint\n\nPress Control + right mouse click\n and see the"
+#' $tvt insert end "popup menu with template files which can be inserted at\n"
+#' $tvt insert end "the current cursor position!\n\n"
+#' $tvt configure -borderwidth 10 -relief flat 
+#' pack $tvt -side top -fill both -expand yes -padx 5 -pady 5
+#' ```
+#'
+catch { rename ::paul::txtemplate {} }
+
+::oo::class create ::paul::txtemplate {
+    variable win
+    method txtemplate {args} {
+        set win [my widget]
+        my option -templatedir [file join $::paul::packagefolder templates]
+        my option -keybinding Control-Button-3
+        my configure {*}$args
+        set key [my cget -keybinding]
+        bind $win <$key> [mymethod templateMenu]
+        my CreateTemplateMenu
+    }
+    method getTemplateMenu { } {
+        if {![winfo exists .templatemenu]} {
+            my CreateTemplateMenu
+        }
+        return .templatemenu
+    }
+    method CreateTemplateMenu {} {
+        if {[winfo exists .templatemenu]} {
+            return
+        } else {
+            catch {destroy .templatemenu}
+            menu .templatemenu -tearoff 0;# -postcommand [mymethod UpdateMenu]
+            foreach dir [glob -nocomplain -types d -directory [my cget -templatedir] *] {
+                set d [file tail $dir]
+                menu .templatemenu.$d -tearoff 0
+                set mnu .templatemenu.$d
+                .templatemenu add cascade -menu $mnu -label $d -underline 0
+                foreach file [glob -nocomplain -types f -directory ${dir} {*.*[a-z]}] {
+                    $mnu add command -label [file tail $file] -underline 0 -command [mymethod templateInsert $file]
+                }
+            }
+            foreach file [glob -nocomplain -types f [my cget -templatedir]*] {
+                .templatemenu add command -label [file tail $file] -underline 0 -command [mymethod templateInsert $file]
+            }
+            .templatemenu add command -label "Refresh Menu" -underline 0 -command [mymethod templateMenuRefresh]
+        }
+        
+    }
+    method templateInsert {filename} {
+        if [catch {open $filename r} infh] {
+            return -code error "Cannot open $filename: $infh"
+        } else {
+            set cnt [read $infh]
+            close $infh
+            $win insert current $cnt
+        }
+    }
+    method templateMenu {} {
+        my CreateTemplateMenu
+        tk_popup .templatemenu [winfo pointerx .] [winfo pointery .]
+    }
+    method templateMenuRefresh {} {
+        destroy .templatemenu
+        my CreateTemplateMenu
+    }
 }
 
 

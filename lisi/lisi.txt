@@ -1,3 +1,11 @@
+## Table of Contents
+
+* [Lisi] Introduction
+* [Lisi Shortcuts]
+* [GraphViz] graphics
+* [PlantUML] graphics
+* [GO board] graphics
+
 ## Lisi - graphics made easy 
 
 An  graphical  application  to use  command  line  tools  which  are  creating
@@ -45,20 +53,61 @@ See the next pages for a few examples to process the following file types:
 * [PlantUML] pml files
 * [GO Game] sgf files
 
+Back to [Table of Contents].
+
 ## GraphViz - diagrams
 
-GraphViz dot diagram files
+GraphViz -  https://graphviz.org  - is a set of programs  which can be used to
+draw graphs or  flowcharts. To see what tools are available  call the man page
+for  graphviz.  Let's  here  shorty  describe  the use of the tool dot to draw
+directed graphs. The usual command line for a graphviz dot file is:
 
-Back to the main page [Lisi].
+  dot -Tpng %i -o%o
+  
+where ~%i~ stands for the current input file and ~%o~ for the output file. You
+have to enter this line into the ttk entry field on top. At the bottom you can
+enter  some code for the graph you would  like to render as an image.  Here an
+example:
+
+  digraph g {
+    rankdir="LR"
+    node[shape=box,style=filled,fillcolor=skyblue]
+    A -> B -> C
+  }
+
+If you enter these  lines, save the file and then press the create  button you
+should see the created image at the display label.
+
+Back to [Table of Contents].
 
 ## PlantUML - diagrams
 
-PlantUML pml diagram files
+PlantUML  -  https://www.plantuml.com  - is a Java command line application  which  can be
+usually  installed  using  your  package  manager.  It is used to  create  UML
+diagrams  for  programs,  database  schemas and much more types. For a list of
+diagrams  you should  consult  the  PlantUML  webpage.  If you have  installed
+PlantUML properly you usually can call it like this:
 
-Back to the main page [Lisi].
+  plantuml -tpng %i
+  
+The output file is automatically chosen based on the input filename.
+
+Back to [Table of Contents].
 
 ## GO Game - board positions
 
-Go Board game sgf text files.
+Go / IGo / Baduk / Weiqi is a  several  thousand  year old board  game  famous
+mostly in Asia. There are many tools which allow you to create  images of game
+positions.   Here  I  show   as  an   example   the   use  of   sgf-render   -
+https://github.com/julianandrews/sgf-render  - which  provides  downloads  for
+Linux, MacOS and Windows platforms.
 
-Back to the main page [Lisi].
+It converts  mostly used game record  format for GO into svg or png images. We
+use the png output as this can be displayed  without any  conversion  directly
+inside of our ~ttk::label~ widget. The command would then look like this:
+
+  sgf-render %i --format png --outfile %o \
+    --width 500 --move-numbers=1
+
+Back to [Table of Contents].
+

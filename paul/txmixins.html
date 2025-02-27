@@ -23,7 +23,7 @@
 
 <h1 class="title">paul::tx - mixins for the tk::text widget</h1>
 <h2 class="author">Detlef Groth, Schwielowsee, Germany</h2>
-<h2 class="date">2025-02-26</h2>
+<h2 class="date">2025-02-27</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a
@@ -48,6 +48,7 @@ href="tvmixins.html">tvmixins</a> - <a href="txmixins.html">txmixins</a>
 <li><a href="#txindent">paul::txindent</a> - automatic indentation for text widgets</li>
 <li><a href="#txmatching">paul::txmatching</a> - hilight matching parenthesis, brackets or braces</li>
 <li><a href="#txpopup">paul::txpopup</a> - text editor edit menu popup</li>
+<li><a href="#txtemplate">paul::txtemplate</a> - text editor file templates</li>
 <li><a href="#txunicode">paul::txunicode</a> - entering Unicode characters</li></ul>
 
 
@@ -311,7 +312,10 @@ bind $txt &lt;KeyRelease&gt; +[list puts &quot;now pressed %K&quot;]</code></pre
 <p>The following public method is available:</p>
 
 <ul>
-<li><em>menu</em> - show the popup menu, usually the right mouse click, but the user can create additional popup keys.
+<li><em>editMenu</em> - show the popup menu, usually the right mouse click is bound to
+to display the menu, but the user can create additional key bindings.</li>
+<li><em>getEditMenu</em> -returns the edit menu path, can be used to integrate the edit menu
+into the main menubar of a Tk application
 </li></ul>
 
 <p>Example:</p>
@@ -330,6 +334,53 @@ foreach col [list A B C] {
 $tvp configure -borderwidth 10 -relief flat 
 pack $tvp -side top -fill both -expand yes -padx 5 -pady 5
 bind $tvp &lt;Enter&gt; { focus -force .tvp }</code></pre>
+
+<p><a name="txtemplate"> </a>
+<em>pathName mixin</em> <strong>txtemplate</strong> <em>?-option value ...?</em></p>
+
+<blockquote>
+<p>Creates and configures the mixin <em>paul::txtemplate</em> for a text editor 
+  providing a file template menu popup for a <em>tkoo::text</em> object using the Tk window 
+  id <em>pathName</em> and the given <em>options</em>.</p>
+
+<p>The text widget then text insertion by using the files in a given folder
+  as text snippets, files can be as well placed within subdirectories of this
+  main folder creating additional sub menues.
+  see below for an example.</p>
+
+<p>The following options are available:</p>
+
+<ul>
+<li><em>-templatedir</em> <em>directory</em> - the root directory of all template files, 
+defaults to the template folder of the package directory</li>
+<li><em>-keybinding</em> <em>keybinding</em> - the key binding to show the menu, 
+defaults to Control-Button-3, so mouse right click with Control key 
+pressed should popup the template menu within the text widget
+</li></ul>
+
+<p>The following public method is available:</p>
+
+<ul>
+<li><em>getTemplateMenu</em> - returns the path to the template menu, this can be used to
+embed the menu into a sub menu of the main menu bar</li>
+<li><em>templateInsert</em> <em>filename</em> - inserts the given filename at the current
+cursor position, this function is usually called via the appropiate menu entry</li>
+<li><em>templateMenu</em> - show the popup menu, per default the Ctrl-Button-3 key is bound to display the popop</li>
+<li><em>templateMenuRefresh</em> - refreshes the menu, useful if you add or remove
+files with your template directory
+</li></ul>
+
+<p>Example:</p>
+</blockquote>
+
+<pre class='code'><code class='tclinn'># demo: txtemplate
+set tvt [tkoo::text .tvt -undo true]
+$tvt mixin paul::txtemplate -keybinding Control-Button-1
+$tvt insert end &quot;\nHint\n\nPress Control + right mouse click\n and see the&quot;
+$tvt insert end &quot;popup menu with template files which can be inserted at\n&quot;
+$tvt insert end &quot;the current cursor position!\n\n&quot;
+$tvt configure -borderwidth 10 -relief flat 
+pack $tvt -side top -fill both -expand yes -padx 5 -pady 5</code></pre>
 
 <p><a name="txunicode"></a><strong>paul::txunicode</strong> -  <em>oo::objdefine pathName mixin paul::txunicode</em></p>
 

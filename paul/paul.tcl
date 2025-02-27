@@ -7,6 +7,8 @@ package provide paul 0.6.0
 # some generic utilities
 
 namespace eval ::paul {
+    variable packagefolder
+    set packagefolder [file dirname [info script]]
     # styles
     ttk::style layout ToolButton [ttk::style layout TButton]
     ttk::style configure ToolButton [ttk::style configure TButton]

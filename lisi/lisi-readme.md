@@ -44,7 +44,7 @@ a single(!) ampersand. See pikchr or abcm2ps for an example:
     - [Pikchr](https://pikchr.org/)  - `fossil pikchr %i  %b.svg&magick -density 72 %b.svg %o`
 
 - Board Game tools:
-    - [sgf-render](https://github.com/julianandrews/sgf-render) - GO/Weiqi/Baduk diagrams - `sgf-render %s --format png --outfile %s --width 500 --move-numbers=1`
+    - [sgf-render](https://github.com/julianandrews/sgf-render) - GO/Weiqi/Baduk diagrams - `sgf-render %i --format png --outfile %o --width 500 --move-numbers=1`
     - [fen2pgn](https://fen2png.com/) - example on how to use a webservice using a wrapper script
 
 - Music tools

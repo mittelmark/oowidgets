@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250226.1118>
+#  Last Modified : <250227.1036>
 #
 #  Description	 :
 #
@@ -75,7 +75,9 @@ proc ::lisi::gui {args} {
     set ie [paul::imedit $f.ie -commandline $opts(-commandline)  \
             -statuslabel [$app message] -pane horizontal -filetypes $::lisi::types]
     oo::objdefine [$ie text] mixin -append paul::txpopup
+    oo::objdefine [$ie text] mixin -append paul::txtemplate
     [$ie text] txpopup
+    [$ie text] txtemplate    
     $ie optfile_init
     $ie configure -labeltext "Command Line: "
     pack $ie -side top -fill both -expand true -padx 5 -pady 5
@@ -88,6 +90,7 @@ proc ::lisi::gui {args} {
     $mfile insert 4 command -command [list $ie file_save] -label "Save" -underline 0
     $mfile insert 5 command -command [list $ie file_save_as] -label "Save As ..." -underline 1    
     [$app getMenu main] insert 2 cascade -label "Edit" -menu [$ie text getEditMenu] -underline 0
+    [$app getMenu main] insert 3 cascade -label "Templates" -menu [$ie text getTemplateMenu] -underline 0    
     set mhelp [$app getMenu "Help"]
     $mhelp insert 0 command -command ::lisi::gui_help -label "Help" -underline 0
     $app addStatusBar

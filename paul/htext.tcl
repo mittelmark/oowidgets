@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::htext documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250226.1127>
+#' Date : <250227.0814>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -160,14 +160,14 @@ oowidgets::widget ::paul::Htext {
         $win tag bind link <1> [mymethod Click $win %x %y]
         $win tag bind link <Enter> "$win configure -cursor hand2"
         $win tag bind link <Leave> "$win configure -cursor {}"
-        $win tag config hdr -font {Times 18 bold}
-        $win tag config hdr2 -font {Tahoma 16 bold}        
-        $win tag config fix -font {Courier 12}
-        $win tag config italic -font {Times 14 italic}
-        $win tag config bold   -font {Times 14 bold}
-        $win tag config plain  -font {Times 14}
+        $win tag config hdr -font {"DejaVu Sans" 18 bold}
+        $win tag config hdr2 -font {"DejaVu Sans" 16 bold}        
+        $win tag config fix -font {"DejaVu Sans Mono" 12}
+        $win tag config italic -font {"DejaVu Sans" 14 italic}
+        $win tag config bold   -font {"DejaVu Sans" 14 bold}
+        $win tag config plain  -font {"DejaVu Sans" 14}
         $win tag config dtx    -lmargin1 20 -lmargin2 20
-        $win tag config bullet -font {Courier 10 bold} -offset 3 -lmargin1 10
+        $win tag config bullet -font {"DejaVu Sans Mono" 10 bold} -offset 3 -lmargin1 10
         my configure {*}$args
         if {[my cget -toolbar]} {
             pack $path.bb -side top -fill x -expand false -before $path.txt
