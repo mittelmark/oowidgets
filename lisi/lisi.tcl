@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250227.1630>
+#  Last Modified : <250227.1907>
 #
 #  Description	 :
 #
@@ -26,11 +26,27 @@
 ##############################################################################
 package require paul
 package provide lisi 0.0.2
+package require inifile
 
 namespace eval ::lisi { 
     variable lisi
     variable lastdir 
+    variable lastfiles
     variable types
+    variable ini
+    variable inifile
+    set inifile [file join $::env(HOME) .config lisi lisi.ini]
+    if {[file exists $inifile]} {
+        set ini [ini::open $inifile]
+    } else {
+        if {[file isdirectory [file join $::env(HOME) .config lisi]]} {
+            file mkdir [file join $::env(HOME) .config lisi]
+            set out [open [file join $::env(HOME) .config lisi lisi.ini] w 0600]
+            puts $out ""
+            close $out
+        }
+        set ini [ini::open $inifile]
+    }
     set lisi [info script]
     set lastdir [pwd]
     set types {
@@ -46,12 +62,28 @@ namespace eval ::lisi {
         {{Text Files}         {.txt} }
         {{All Files}          *      }
     }
+    set lastfiles [list]
+    
+    set sections [ini::sections $ini]
+    if {"LAST" in $sections} {
+        set lastdir [file dirname [ini::value $ini LAST FILE1 [file join [pwd] test.txt]]]
+        for {set i 1} {$i < 11} {incr i 1} {
+            if {[ini::exists $ini LAST FILE$i]} {
+                set file [ini::value $ini LAST FILE$i]
+                if {$file ne "" && [file exists $file]} {
+                    lappend lastfiles $file
+                }
+            }
+        }
+    }
 }
 proc ::lisi::file_changed {} {
     global ie
     set file [[$ie text] file_get]
+    $ie configure -filename $file
     if {[file exists [file rootname $file].png]} {
         $ie image_display [file rootname $file].png
+        $ie optfile_read
     }
     wm title . "Lisi - [file tail $file]"
 }
@@ -73,9 +105,22 @@ proc ::lisi::help {app argv} {
     puts "  See https://github.com/mittelmark/oowidgets\n"
     usage $app
 }
+proc ::lisi::exit {} {
+    variable ini
+    global ie
+    set lastfiles [$ie text file_recent]
+    set i 0
+    foreach file $lastfiles {
+        incr i
+        ::ini::set $ini LAST FILE$i $file
+    }
+    ::ini::commit $ini
+    ::ini::close $ini
+}
 proc ::lisi::gui {args} { 
     global ie
-    set app [::paul::basegui new -style clam]
+    variable lastfiles
+    set app [::paul::basegui new -style clam -onexit ::lisi::exit]
     $app fontSizeBind ;# for Ctrl-plus / Ctrl-minus for fontsize"
     array set opts [list -commandline "dot -Tpng %i -o %o" -filename ""]
     array set opts $args
@@ -116,6 +161,7 @@ proc ::lisi::gui {args} {
     }
     wm title . "Lisi - [$ie cget -filename]"
     bind all <<FileChanged>> ::lisi::file_changed
+    [$ie text] file_recent $lastfiles
 }
 proc ::lisi::gui_help {{topic ""}} {
     variable lisi

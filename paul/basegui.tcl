@@ -86,14 +86,18 @@ namespace eval paul { }
 catch {rename ::paul::basegui ""}
 oo::class create ::paul::basegui {
     #' 
-    #'   __-style__ _styleName_ 
+    #'  __-onexit__ _command_
+    #'
+    #'  > Executes the given command before exiting the application.
+    #'
+    #'  __-style__ _styleName_ 
     #' 
     #'  > Configures the ttk style for all widgets within the application. 'clam' and 'default' should be supported on all platforms. 
     #'    Use `ttk::style theme names` within an interactive wish session to find out which themes are available on your machine. Default: clam
     #' 
     #'   __-toplevel__ _bool_ 
     #' 
-    #'  > Should a new application toplevel being create, if ths is false you can just use some of these these methods metioned below within your 
+    #'  > Should a new application toplevel being created, if ths is false you can just use some of these these methods metioned below within your 
     #'    own application, default: true.
     #' 
     #' ## <a name='method'>CLASS METHODS</a>
@@ -150,7 +154,7 @@ oo::class create ::paul::basegui {
     variable timer
     variable options
     constructor {args} { 
-        array set options [list -style clam -toplevel true {*}$args]
+        array set options [list -style clam -toplevel true -onexit "" {*}$args]
         set timer [::paul::Timer new]
         set path .
         set top $path ;# $path
@@ -441,6 +445,9 @@ oo::class create ::paul::basegui {
         if {$ask} {
             set answer [tk_messageBox -title "Question!" -message "Really quit application ?" -type yesno -icon question]
             if { $answer } {
+                if {$options(-onexit) ne ""} {
+                    $options(-onexit)
+                }
                 exit 0
             } 
         }

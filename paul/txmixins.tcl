@@ -381,16 +381,21 @@ catch { rename ::paul::txfileproc {} }
         }
         return $filename
     }
-    #' - _cmdName_ - **file_recent** 
+    #' - _cmdName_ - **file_recent** *?files?*
     #' 
-    #' > Returns a list of the recently edited/opened files.
+    #' > Returns a list of the recently edited/opened files or if a list of
+    #'   files is given loads these files as recent files.
     #'
-    method file_recent {} {
-        my variable lastfiles
-        set t {}
-        foreach i $lastfiles {if {[lsearch -exact $t $i]==-1} {lappend t $i}}
-        set lastfiles $t
-        return $t
+    method file_recent {{files {}}} {
+        if {[llength $files] > 0} {
+            set lastfiles $files
+            set lastfile [lindex $files 0]
+        } else {
+            set t {}
+            foreach i $lastfiles {if {[lsearch -exact $t $i]==-1} {lappend t $i}}
+            set lastfiles $t
+            return $t
+        }
     }
     
     #' - _cmdName_ - **file_save**
@@ -401,9 +406,6 @@ catch { rename ::paul::txfileproc {} }
     #'
     method file_save {{filename ""}} {
         variable lastfile
-        my variable lastdir
-        my variable options
-        my variable win
         if {$lastfile in [list "*new*" "new"]} {
             set file [my file_save_as]
         } elseif {$filename eq ""} {

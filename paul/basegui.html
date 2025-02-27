@@ -85,6 +85,12 @@ a statusbar and splash screen or facility to center a window on the screen.</p>
 
 <p>The <strong>paul::basegui</strong> class supports the following options:</p>
 
+<p><strong>-onexit</strong> <em>command</em></p>
+
+<blockquote>
+<p>Executes the given command before exiting the application.</p>
+</blockquote>
+
 <p><strong>-style</strong> <em>styleName</em></p>
 
 <blockquote>
@@ -95,7 +101,7 @@ a statusbar and splash screen or facility to center a window on the screen.</p>
 <p><strong>-toplevel</strong> <em>bool</em></p>
 
 <blockquote>
-<p>Should a new application toplevel being create, if ths is false you can just use some of these these methods metioned below within your 
+<p>Should a new application toplevel being created, if ths is false you can just use some of these these methods metioned below within your 
    own application, default: true.</p>
 </blockquote>
 
@@ -311,7 +317,7 @@ if {[file exists test.png]} {
 }
 destroy .app</code></pre>
 
-<pre class='code'><code class='tclout'>83 155</code></pre>
+<pre class='code'><code class='tclout'>32 18</code></pre>
 
 <p><a name="pngWrite"> </a>
 <em>cmdName</em> <strong>pngWrite</strong>  <em>filename palette image</em></p>
