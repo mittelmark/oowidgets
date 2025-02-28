@@ -41,18 +41,18 @@ The basic outline of the application is as follows:
     | ttk.Label (Statusbar)  ttk.Progressbar |                 
     +----------------------------------------+
 
-The use enters the text into the  ~tk.Text~  widget and the  required  command
-line to process the code into the command  line  interface  (CLI)  ~ttk.Entry~
+The use enters the text into the  _tk.Text_  widget and the  required  command
+line to process the code into the command  line  interface  (CLI)  _ttk.Entry_
 widget.  Pressing  the  execute  Button  beside  of the CLI entry  widget.  If
-everything runs smooth the created image is displayed in the ~ttk.Label~  widget
-below of the ~tk.Text~ widget.
+everything runs smooth the created image is displayed in the _ttk.Label_  widget
+below of the _tk.Text_ widget.
 
 The following place holders for input and output filenames can be used with in
 the CLI entry.
 
-* ~%i~ - the input filename
-* ~%o~ - the output filename
-* ~%b~ - the basename of the input filename
+* _%i_ - the input filename
+* _%o_ - the output filename
+* _%b_ - the basename of the input filename
 
 See the next pages for a few examples to process the following file types:
 
@@ -79,8 +79,8 @@ directed graphs. The usual command line for a graphviz dot file is:
 
      dot -Tpng %i -o%o
   
-where ~%i~ stands for the current input file and ~%o~ for the output file. You
-have to enter this line into the ttk entry field on top. At the bottom you can
+where _%i_ stands for the current input file and ~%o~ for the output file. You
+have to enter this line into the _ttk::entry_ field on top. At the bottom you can
 enter  some code for the graph you would  like to render as an image.  Here an
 example:
 
@@ -121,7 +121,7 @@ Linux, MacOS and Windows platforms.
 
 It converts  mostly used game record  format for GO into svg or png images. We
 use the png output as this can be displayed  without any  conversion  directly
-inside of our ~ttk::label~ widget. The command would then look like this:
+inside of our _ttk::label_ widget. The command would then look like this:
 
     sgf-render %i --format png --outfile %o \
       --width 500 --move-numbers=1
