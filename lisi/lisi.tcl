@@ -5,7 +5,7 @@
 #  Author        : $Author$
 #  Created By    : MicroEmacs User
 #  Created       : 2025-02-06 06:12:50
-#  Last Modified : <250227.1907>
+#  Last Modified : <250228.1019>
 #
 #  Description	 :
 #
@@ -171,7 +171,7 @@ proc ::lisi::gui_help {{topic ""}} {
         toplevel .help
         wm title .help "Lisi - Help"
         paul::htext .help.ht
-        .help.ht file_read [file join [file rootname ${lisi}].txt]
+        .help.ht file_read [file join [file rootname ${lisi}].md]
         pack .help.ht -side top -fill both -expand true
         pack [ttk::button .help.btn -text Dismiss -command [list destroy .help]] \
               -side top -fill x -expand false -padx 20 -pady 10

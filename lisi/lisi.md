@@ -2,12 +2,12 @@
 ## Table of Contents
 
 * __Lisi application__
-  - [Lisi](#Lisi) introduction
-  - [Lisi Shortcuts](#shortcuts)
+    - [Lisi](#Lisi) introduction
+    - [Lisi Shortcuts](#shortcuts)
 * Filetypes  
-  - [GraphViz](#graphviz) graphics
-  - [PlantUML](#plantuml) graphics
-  - [GO Game](#gogame) board graphics
+    - [GraphViz](#graphviz) graphics
+    - [PlantUML](#plantuml) graphics
+    - [GO Game](#gogame) board graphics
 
 Formatting: __bold__, _italics_ and `typewriter` can be seen as typewriter and
 __bold__ again!
@@ -56,9 +56,9 @@ the CLI entry.
 
 See the next pages for a few examples to process the following file types:
 
-* [GraphViz] dot files
-* [PlantUML] pml files
-* [GO Game] sgf files
+* [GraphViz](#graphviz) dot files
+* [PlantUML](#plantuml) pml files
+* [GO Game](#gogame) sgf files
 
 Back to [Table of Contents](#toc).
 

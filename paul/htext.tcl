@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::htext documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250227.0814>
+#' Date : <250228.1022>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -200,7 +200,10 @@ oowidgets::widget ::paul::Htext {
             set first ""
             set sections [list]
             while {[gets $infh line] >= 0} {
-                if {[regexp {^## (.+)} $line -> title]} {
+                if {[regexp {^\s*<a name} $line]} {
+                    continue
+                }
+                if {[regexp {^##? (.+)} $line -> title]} {
                     set title [string trim $title]
                     set otitle $title
                     set title [regsub { -.+} $title ""]
@@ -263,12 +266,28 @@ oowidgets::widget ::paul::Htext {
                     set var 0
                     set dtx {}
                     foreach i [split $doc($title) \n] {
+                        if {[regexp {<a name.+>} $i]} {
+                            continue
+                        }
+                        set i [regsub -all {\(#[A-Za-z0-9]+\)} $i ""]
                         if { ![string compare $dtx {}] } {
-                            if [regexp {^[ \t]+} $i] {
+                            if [regexp {^[ \t]{4,}[^-*]} $i] {
                                 $w insert end $i\n fix
                                 set var 0
                                 continue
                             }
+                        }
+                        if { ![string compare $dtx {}] } {
+                            if [regexp {^[ \t]*[+|]} $i] {
+                                $w insert end $i\n fix
+                                set var 0
+                                continue
+                            }
+                        }
+                        if { [regexp {^    [-*] (.*)} $i -> i] } {
+                            if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
+                            $w insert end "  - " bullet
+                            set dtx dtx
                         }
                         set i [string trim $i]
                         if {[regexp {^### (.+)} $i -> header]} {
@@ -292,20 +311,22 @@ oowidgets::widget ::paul::Htext {
                             continue
                         }
                         
-                        if { [regexp {^[*] (.*)} $i -> i] } {
+                        if { [regexp {^[-*] (.*)} $i -> i] } {
                             if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
                             $w insert end "o " bullet
                             set dtx dtx
                         }
-                        
                         set var 1
                         regsub -all {]} $i {[} i
-                        while {[regexp {([^[~*]*)([*~[])([^~[*]+)(\2)(.*)} $i \
+                        regsub -all {__([^_]+?)__} $i {*\1*} i
+                        regsub -all {_([^_]+?)_} $i {~\1~} i                        
+                        while {[regexp {([^[`~*]*)([`*~[])([^~[´*]+)(\2)(.*)} $i \
                             -> before type marked junked after]} {
                             $w insert end $before "plain $dtx"
                             switch $type {
                                 {~} { $w insert end $marked "italic $dtx" }
                                 {*} { $w insert end $marked "bold   $dtx" }
+                                {`} { $w insert end $marked "fix   $dtx" }                                
                                 {[} { my Showlink $marked "plain  $dtx" }
                             }
                             set i $after
