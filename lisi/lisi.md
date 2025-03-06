@@ -1,22 +1,54 @@
 <a name="toc"> </a>
 ## Table of Contents
 
-* __Lisi application__
+* __Lisi application__ 
     - [Lisi](#Lisi) introduction
     - [Lisi Shortcuts](#shortcuts)
-* Filetypes  
+* Filetypes
     - [GraphViz](#graphviz) graphics
     - [PlantUML](#plantuml) graphics
     - [GO Game](#gogame) board graphics
 
-Formatting: __bold__, _italics_ and `typewriter` can be seen as typewriter and
-__bold__ again!
+![](test.png) some text ![](test.png)
 
 <a name="lisi"></a>
 ## Lisi - graphics made easy 
 
-An  graphical  application  to use  command  line  tools  which  are  creating
-graphics.
+__lisi__ - _graphics made easy_ - one graphical application for many terminal tools producing graphics
+
+### SYNOPSIS
+
+    lisi ?INPUT-FILENAME? ?CMD-LINE?
+
+### INSTALLATION
+
+Copy the file `lisi.tcl` as `lisi` to a folder belonging to your PATH variable
+and make the file `lisi`  executable using `chmod`. You need to have installed
+the packages `oowidgets`, `paul` and `inifile` as Tcl packages as well.
+
+### DESCRIPTION
+
+__lisi__ - is a graphical  application to allow to use many command line applications  which
+can create  images using  some type of  declarative  language using a text editor
+with a live preview.  It was programmed to consolidate  the `oowidgets` and `paul`
+Tcl megawidget packages by developing a, hopefully useful, application.
+
+If the argument  `CMD-LINE` is not given it is assumed that in parallel to the
+input  file is a file with the same  basename  but ending  with the  extension
+`.opt` which contains the required command line arguments.
+
+Here a few  examples  for tools and some  possible  command  lines  where _%i_
+stands always for the input file and _%o_ stands for an optional  output file.
+The _%o_ can be  omitted  if the file is  automatically  created  based on the
+input file name but with the png extension.  Furthermore there is _%b_ for the
+input file name without the file extension.
+
+Either the tools can be supported  directly or by using small wrapper  scripts
+which are required if the tool can't output  directly the PNG image format. If
+the default  output is svg I use usually  cairosvg to convert from svg to png.
+In simple cases for two required commands these commands can be conbined using
+a single(!) ampersand. See pikchr or abcm2ps for an example:
+
 
 The basic outline of the application is as follows:
 
@@ -78,7 +110,7 @@ for  graphviz.  Let's  here  shorty  describe  the use of the tool dot to draw
 directed graphs. The usual command line for a graphviz dot file is:
 
      dot -Tpng %i -o%o
-  
+
 where _%i_ stands for the current input file and ~%o~ for the output file. You
 have to enter this line into the _ttk::entry_ field on top. At the bottom you can
 enter  some code for the graph you would  like to render as an image.  Here an

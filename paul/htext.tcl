@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::htext documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250228.1022>
+#' Date : <250306.0818>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -166,8 +166,10 @@ oowidgets::widget ::paul::Htext {
         $win tag config italic -font {"DejaVu Sans" 14 italic}
         $win tag config bold   -font {"DejaVu Sans" 14 bold}
         $win tag config plain  -font {"DejaVu Sans" 14}
-        $win tag config dtx    -lmargin1 20 -lmargin2 20
+        #$win tag config dtx    -lmargin1 0 -lmargin2 0
+        ##$win tag config dtx2    -lmargin1 0 -lmargin2 0        
         $win tag config bullet -font {"DejaVu Sans Mono" 10 bold} -offset 3 -lmargin1 10
+        $win tag config bullet2 -font {"DejaVu Sans Mono" 10 bold} -offset 6 -lmargin1 20
         my configure {*}$args
         if {[my cget -toolbar]} {
             pack $path.bb -side top -fill x -expand false -before $path.txt
@@ -229,7 +231,9 @@ oowidgets::widget ::paul::Htext {
     method Click {w x y} {
         set range [$w tag prevrange link [$w index @$x,$y]]
         set link [eval $w get $range]
-        my show $link
+        if {$link ne ""} {
+            my show $link
+        }
     }
     #' *pathName* **sections** 
     #' 
@@ -263,76 +267,7 @@ oowidgets::widget ::paul::Htext {
                 if {![info exists doc($title)]} {
                     $w insert end [msgcat::mc "This page was referenced but not written yet."]
                 } else {
-                    set var 0
-                    set dtx {}
-                    foreach i [split $doc($title) \n] {
-                        if {[regexp {<a name.+>} $i]} {
-                            continue
-                        }
-                        set i [regsub -all {\(#[A-Za-z0-9]+\)} $i ""]
-                        if { ![string compare $dtx {}] } {
-                            if [regexp {^[ \t]{4,}[^-*]} $i] {
-                                $w insert end $i\n fix
-                                set var 0
-                                continue
-                            }
-                        }
-                        if { ![string compare $dtx {}] } {
-                            if [regexp {^[ \t]*[+|]} $i] {
-                                $w insert end $i\n fix
-                                set var 0
-                                continue
-                            }
-                        }
-                        if { [regexp {^    [-*] (.*)} $i -> i] } {
-                            if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
-                            $w insert end "  - " bullet
-                            set dtx dtx
-                        }
-                        set i [string trim $i]
-                        if {[regexp {^### (.+)} $i -> header]} {
-                            $w insert end $header hdr2
-                            continue
-                        }
-                        if {[regexp {^!\[\]\((.+)\)} $i -> imgfile]} {
-                            set imgname [image create photo -file $imgfile]
-                            set end0 [$w index end]
-                            $w insert end "\n"
-                            $w image create end -image $imgname
-                            $w insert end "\n"
-                            $w tag add centered $end0 end-1c
-                            continue
-                        }
-
-                        if { ![string length $i] } {
-                            $w insert end "\n" plain
-                            if { $var } { $w insert end "\n" plain }
-                            set dtx {}
-                            continue
-                        }
-                        
-                        if { [regexp {^[-*] (.*)} $i -> i] } {
-                            if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
-                            $w insert end "o " bullet
-                            set dtx dtx
-                        }
-                        set var 1
-                        regsub -all {]} $i {[} i
-                        regsub -all {__([^_]+?)__} $i {*\1*} i
-                        regsub -all {_([^_]+?)_} $i {~\1~} i                        
-                        while {[regexp {([^[`~*]*)([`*~[])([^~[´*]+)(\2)(.*)} $i \
-                            -> before type marked junked after]} {
-                            $w insert end $before "plain $dtx"
-                            switch $type {
-                                {~} { $w insert end $marked "italic $dtx" }
-                                {*} { $w insert end $marked "bold   $dtx" }
-                                {`} { $w insert end $marked "fix   $dtx" }                                
-                                {[} { my Showlink $marked "plain  $dtx" }
-                            }
-                            set i $after
-                        }
-                        $w insert end "$i " "plain $dtx"
-                    }
+                    my Md2Text $title
                 }
             }
         }
@@ -350,6 +285,164 @@ oowidgets::widget ::paul::Htext {
             $btnforward configure -state disabled
         }
             
+    }
+    method Htext {title} {
+        set var 0
+        set dtx {}
+        set list false
+        foreach i [split $doc($title) \n] {
+            if {[regexp {<a name.+>} $i]} {
+                continue
+            }
+            set i [regsub -all {\(#[A-Za-z0-9]+\)} $i ""]
+            if { ![string compare $dtx {}] } {
+                if {[regexp {^[ \t]{4,}[^-*]} $i] || [regexp {^[ \t]*[+|]} $i]}  {
+                    $w insert end $i\n fix
+                    set var 0
+                    continue
+                }
+
+            }
+            if { [regexp {^    [-*] (.*)} $i -> i] } {
+                if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
+                $w insert end "  - " bullet
+                set dtx dtx
+            }
+            set i [string trim $i]
+            if {[regexp {^### (.+)} $i -> header]} {
+                $w insert end "\n$header" hdr2
+                continue
+            }
+            if {[regexp {^!\[\]\((.+)\)} $i -> imgfile]} {
+                set imgname [image create photo -file $imgfile]
+                set end0 [$w index end]
+                $w insert end "\n"
+                $w image create end -image $imgname
+                $w insert end "\n"
+                $w tag add centered $end0 end-1c
+                continue
+            }
+
+            if { ![string length $i] } {
+                $w insert end "\n" plain
+                #if { $var } { $w insert end "\n" plain }
+                set dtx {}
+                if {$list} {
+                    $w insert end "\n" plain
+                }
+                set list false
+                continue
+            }
+            
+            if { [regexp {^[-*] (.*)} $i -> i] } {
+                if {!$list} {
+                    $w insert end "\n" plain
+                }
+                if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
+                $w insert end "o " bullet
+                set dtx dtx
+                set list true
+            }
+            set var 1
+            regsub -all {]} $i {[} i
+            regsub -all {__([^_]+?)__} $i {*\1*} i
+            regsub -all {_([^_]+?)_} $i {~\1~} i                        
+            while {[regexp {([^[`~*]*)([`*~[])([^~[`*]+)(\2)(.*)} $i \
+                -> before type marked junked after]} {
+                $w insert end $before "plain $dtx"
+                switch $type {
+                    {~} { $w insert end $marked "italic $dtx" }
+                    {*} { $w insert end $marked "bold   $dtx" }
+                    {`} { $w insert end $marked "fix   $dtx" }                                
+                    {[} { my Showlink $marked "plain  $dtx" }
+                }
+                set i $after
+            }
+            $w insert end "$i " "plain $dtx"
+        }
+    }
+    method Md2Text {title} {
+        set w $win
+        set list false
+        set listlist false
+        set pre false
+        set plain true
+        set dtx ""
+        foreach i [split $doc($title) \n] {
+            if {$pre && [regexp "^\\s*$" $i]} {
+                set pre false
+                $w insert end "\n"
+                set plain true
+            } elseif {$pre} {
+                $w insert end $i\n fix
+            } elseif {$plain} {
+                if {[regexp {^[ \t]{4,}[^-*]} $i] || [regexp {^[ \t]*[+|]} $i]}  {
+                    $w insert end \n$i\n fix
+                    set pre true
+                    set plain false
+                    continue
+                }
+                if {[regexp {<a name.+>} $i]} {
+                    continue
+                }
+                if {[regexp {^### (.+)} $i -> header]} {
+                    $w insert end "\n$header\n" hdr2
+                    continue
+                }
+                if {[regexp "^\\s*$" $i]} {
+                    if {$list} {
+                        $w insert end "\n" plain
+                    }
+                    set list false
+                    set listlist false
+                    set dtx ""
+                    $w insert end "\n" plain
+                }
+                # remove Md links
+                set i [regsub -all {\(#[A-Za-z0-9]+\)} $i ""]
+                # image(s) - best leave them alone on a line
+                while {[regexp {^(.*?)!\[\]\((.+?)\)(.*)$} $i -> before imgfile after]} {
+                    set imgname [image create photo -file $imgfile]
+                    $w insert end "$before" plain
+                    set end0 [$w index end]
+                    $w image create end -image $imgname
+                    $w tag add centered $end0 end-1c
+                    set i $after 
+                }
+                ## formatting
+                ## [links]
+                regsub -all {]} $i {[} i
+                ## __bold __ or *bold*
+                regsub -all {__([^_]+?)__} $i {*\1*} i
+                ## italic _italic_ or ~italic~
+                regsub -all {_([^_]+?)_} $i {~\1~} i
+                
+                if {[regexp {^[-*] (.+)} $i -> i]} {
+                    $w insert end "\no " bullet
+                    set dtx dtx
+                    set list true
+                    
+                } elseif {[regexp {^    [-*] (.*)} $i -> i]} {
+                    set dtx dtx2
+                    $w insert end "\n- " "bullet2 $dtx"
+                    set listlist true
+                }
+                while {[regexp {([^[`~*]*)([`*~[])([^~[`*]+)(\2)(.*)} $i \
+                   -> before type marked junked after]} {
+                   $w insert end $before "plain $dtx"
+                   switch $type {
+                      {~} { $w insert end $marked "italic $dtx" }
+                      {*} { $w insert end $marked "bold   $dtx" }
+                      {`} { $w insert end $marked "fix   $dtx" }                                
+                      {[} { my Showlink $marked "plain  $dtx" }
+                   }
+                   set i $after
+                }
+            $w insert end "$i " "plain $dtx"
+            
+        }
+            
+        }
     }
     method Back { } {
         set w $win
@@ -528,6 +621,9 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp htext $argv0]} {
     if {[llength $argv] == 1 && [lindex $argv 0] eq "--version"} {    
         puts [package version paul]
         destroy .
+    } elseif {[llength $argv] == 1 && [file exists [lindex $argv 0]]} {
+        pack [paul::htext .phtext -filename [lindex $argv 0]] -side top -fill both -expand true
+        pack [ttk::button .btn -text "Close" -command exit] -side bottom -fill x -padx 20 -pady 20
     } elseif {[llength $argv] >= 1 && [lindex $argv 0] eq "--demo"} {
         set section ""
         if {[llength $argv] == 2} {
@@ -555,7 +651,9 @@ if {[info exists argv0] && $argv0 eq [info script] && [regexp htext $argv0]} {
         puts "\nThe paul::htext widget provides a hypertext widget"
         puts "with an optional browser like toolbar."
         puts ""
-        puts "Usage: [info nameofexe] [info script] option\n"
+        puts "Usage: [info nameofexe] [info script] [FILENAME] options\n"
+        puts "    Arguments:"
+        puts "        FILENAME  : documentation file with basic markdown\n"
         puts "    Valid options are:\n"
         puts "        --help    : printing out this help page"
         puts "        --demo    : runs a small demo application."
