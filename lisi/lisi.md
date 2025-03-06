@@ -11,6 +11,9 @@
 
 ![](test.png) some text ![](test.png)
 
+
+![](dummy.png)
+
 <a name="lisi"></a>
 ## Lisi - graphics made easy 
 

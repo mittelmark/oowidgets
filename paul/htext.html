@@ -23,7 +23,7 @@
 
 <h1 class="title">paul::htext documentation</h1>
 <h2 class="author">Detlef Groth, University of Potsdam, Germany</h2>
-<h2 class="date">2025-02-27</h2>
+<h2 class="date">2025-03-06</h2>
 
 <p><center>
 <a href="basegui.html">basegui</a> - <a
@@ -70,14 +70,24 @@ naviagation and a text widget with hypertext facilities.
 The widget can be used to add help facilitites to your application. It supports the following
 features:</p>
 
+<p><strong>Formatting:</strong></p>
+
+<p>You can use an essential subset of Markdown syntax:</p>
+
 <ul>
-<li>hyperlinks</li>
-<li>headers</li>
+<li>hyperlinks within the same document supporting link to header sections</li>
+<li>headers formatting</li>
 <li>item lists</li>
-<li>formatting bold and italics</li>
-<li>image embedding</li>
-<li>verbatim text</li>
-<li>searching</li>
+<li>sub item lists</li>
+<li>verbatim text with 4 space indentation</li>
+<li>formatting bold, italics and textwriter within the text</li>
+<li>image embedding
+</li></ul>
+
+<p><strong>Interface:</strong></p>
+
+<ul>
+<li>full text searching</li>
 <li>history navigation</li>
 <li>document reloading</li>
 <li>browser like button bar
@@ -135,16 +145,23 @@ It supports the followingt options the following options:</p>
 <li>sections which are displayed on separate pages are starting with two hash marks <code>## TITLE</code></li>
 <li>subsection within the same page are starting with three hash marks <code>### SUBSECTION</code></li>
 <li>hyperlinks to other pages are embedded within brackets like this <code>[SECTIONNAME]</code></li>
-<li>bold text is emphasized using starts <code>*bold*</code></li>
-<li>italic text is emphasized usng the tilde <code>~italic~</code></li>
-<li>lists are started with stars at the first line</li>
+<li>you can make your document as well Markdown compatible by using <a href="#anchorname">SECTIONAME</a> syntax
+  and placing HTML anchor tags within your document</li>
+<li>bold text is emphasized using stars or two underlines <code>*bold*</code>, <code>__bold__</code></li>
+<li>italic text is emphasized usng the tilde <code>~italic~</code> or using a single underline <code>_italic_</code></li>
+<li>typewriter text is emphasized using the backtick character <code>typewriter</code></li>
+<li>lists are started with stars or minus symbols at the first line</li>
+<li>sub lists are started with 4 spaces at the beginning of a line and thereafter
+  as well a minus or star symbol followed by a space and the item text.</li>
 <li>paragraph breaks created by empty lines</li>
-<li>images are declared like Markdown images, but only one image currently per line
+<li>two empty lines place a empty line between two paragraphs</li>
+<li>images are declared like Markdown images, but without text within the bracket part
 </li></ul>
 
 <p>Here an example for a help file:</p>
 
-<pre class='code'><code>## Section One
+<pre class='code'><code>&lt;a name=&quot;secone&quot;&gt; &lt;/a&gt;
+## Section One
 
 ### Subsection formatted text
 
@@ -155,6 +172,8 @@ Some text written on *bold* and ~italics~.
 Let's follow this by a list:
 
 * item 1
+    - subitem 1.1
+    - subitem 1.2
 * item 2
 * item 3
 
@@ -167,16 +186,25 @@ This starts a new paragraph.
 ### Hyperlinks
 
 Hyperlinks are create by placing a section name into brackets like this
-[Section Two]
+[Section Two]. To make this syntax compatible with standard Markdown links
+you have to add an anchor section after the link name like this:
 
-## Sectin Two
+[Section Two](#sectwo)
 
-Text which is indented with whitespaces will be shown like it is:
+some text in between ...
+&lt;a name=&quot;sectwo&quot;&gt; &lt;/a&gt;
+## Section Two
 
-  This text will be not formatted in any way
-  and this line as well.
+These Markdown syntax is only required if you would like to make your documentation
+fully Markdown compatible. For instance using it as a README within your project.
 
-## Final Section
+Text which is indented with 4 whitespaces will be shown like it is except for sub item lists:
+
+    This text will be not formatted in any way
+    and this line as well.
+
+
+## Final Section 
 
 This is the final section where we can link to [Section One].
 
@@ -184,7 +212,8 @@ Let's add an image example:
 
 &lt;img src=&quot;path/to/image.png&quot;&gt;&lt;/img&gt;
 
-Currently only PNG and GIF images are supported.</code></pre>
+Currently only PNG and GIF images are supported. The path must be relative to
+the documentation file.</code></pre>
 
 <h2><a name='example'></a>EXAMPLE</h2>
 

@@ -2,7 +2,7 @@
 #' ---
 #' title: paul::htext documentation
 #' author: Detlef Groth, University of Potsdam, Germany
-#' Date : <250306.0818>
+#' Date : <250306.1126>
 #' tcl:
 #'   eval: 1
 #' header-includes: 
@@ -68,13 +68,21 @@
 #' The widget can be used to add help facilitites to your application. It supports the following
 #' features:
 #' 
-#' - hyperlinks
-#' - headers
+#' __Formatting:__
+#'
+#' You can use an essential subset of Markdown syntax:
+#'
+#' - hyperlinks within the same document supporting link to header sections
+#' - headers formatting
 #' - item lists
-#' - formatting bold and italics
+#' - sub item lists
+#' - verbatim text with 4 space indentation
+#' - formatting bold, italics and textwriter within the text
 #' - image embedding
-#' - verbatim text
-#' - searching
+#'
+#' __Interface:__
+#'
+#' - full text searching
 #' - history navigation
 #' - document reloading
 #' - browser like button bar
@@ -112,6 +120,7 @@ oowidgets::widget ::paul::Htext {
     variable btnback
     variable sections
     variable sectionheader
+    variable 
     constructor {path args} {
         # Create the text widget; turn off its insert cursor
         set app [paul::basegui new -toplevel false]
@@ -155,13 +164,14 @@ oowidgets::widget ::paul::Htext {
         set search hello
         array set doc [list]
         array set sectionheader [list]
-        $win tag config link -foreground blue -underline 1
-        $win tag config seen -foreground purple4 -underline 1
+        $win tag config link -foreground blue -underline 0
+        $win tag config seen -foreground purple4 -underline 0
+        $win tag config error -foreground red
         $win tag bind link <1> [mymethod Click $win %x %y]
         $win tag bind link <Enter> "$win configure -cursor hand2"
         $win tag bind link <Leave> "$win configure -cursor {}"
-        $win tag config hdr -font {"DejaVu Sans" 18 bold}
-        $win tag config hdr2 -font {"DejaVu Sans" 16 bold}        
+        $win tag config hdr -font {"DejaVu Sans" 18 bold} -underline 1
+        $win tag config hdr2 -font {"DejaVu Sans" 16 bold} -underline 1       
         $win tag config fix -font {"DejaVu Sans Mono" 12}
         $win tag config italic -font {"DejaVu Sans" 14 italic}
         $win tag config bold   -font {"DejaVu Sans" 14 bold}
@@ -230,9 +240,11 @@ oowidgets::widget ::paul::Htext {
     }
     method Click {w x y} {
         set range [$w tag prevrange link [$w index @$x,$y]]
-        set link [eval $w get $range]
-        if {$link ne ""} {
-            my show $link
+        if {$range ne ""} {
+            set link [eval $w get $range]
+            if {$link ne ""} {
+                my show $link
+            }
         }
     }
     #' *pathName* **sections** 
@@ -286,81 +298,6 @@ oowidgets::widget ::paul::Htext {
         }
             
     }
-    method Htext {title} {
-        set var 0
-        set dtx {}
-        set list false
-        foreach i [split $doc($title) \n] {
-            if {[regexp {<a name.+>} $i]} {
-                continue
-            }
-            set i [regsub -all {\(#[A-Za-z0-9]+\)} $i ""]
-            if { ![string compare $dtx {}] } {
-                if {[regexp {^[ \t]{4,}[^-*]} $i] || [regexp {^[ \t]*[+|]} $i]}  {
-                    $w insert end $i\n fix
-                    set var 0
-                    continue
-                }
-
-            }
-            if { [regexp {^    [-*] (.*)} $i -> i] } {
-                if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
-                $w insert end "  - " bullet
-                set dtx dtx
-            }
-            set i [string trim $i]
-            if {[regexp {^### (.+)} $i -> header]} {
-                $w insert end "\n$header" hdr2
-                continue
-            }
-            if {[regexp {^!\[\]\((.+)\)} $i -> imgfile]} {
-                set imgname [image create photo -file $imgfile]
-                set end0 [$w index end]
-                $w insert end "\n"
-                $w image create end -image $imgname
-                $w insert end "\n"
-                $w tag add centered $end0 end-1c
-                continue
-            }
-
-            if { ![string length $i] } {
-                $w insert end "\n" plain
-                #if { $var } { $w insert end "\n" plain }
-                set dtx {}
-                if {$list} {
-                    $w insert end "\n" plain
-                }
-                set list false
-                continue
-            }
-            
-            if { [regexp {^[-*] (.*)} $i -> i] } {
-                if {!$list} {
-                    $w insert end "\n" plain
-                }
-                if { !$var || [string compare $dtx {}] } { $w insert end \n   plain }
-                $w insert end "o " bullet
-                set dtx dtx
-                set list true
-            }
-            set var 1
-            regsub -all {]} $i {[} i
-            regsub -all {__([^_]+?)__} $i {*\1*} i
-            regsub -all {_([^_]+?)_} $i {~\1~} i                        
-            while {[regexp {([^[`~*]*)([`*~[])([^~[`*]+)(\2)(.*)} $i \
-                -> before type marked junked after]} {
-                $w insert end $before "plain $dtx"
-                switch $type {
-                    {~} { $w insert end $marked "italic $dtx" }
-                    {*} { $w insert end $marked "bold   $dtx" }
-                    {`} { $w insert end $marked "fix   $dtx" }                                
-                    {[} { my Showlink $marked "plain  $dtx" }
-                }
-                set i $after
-            }
-            $w insert end "$i " "plain $dtx"
-        }
-    }
     method Md2Text {title} {
         set w $win
         set list false
@@ -402,11 +339,16 @@ oowidgets::widget ::paul::Htext {
                 set i [regsub -all {\(#[A-Za-z0-9]+\)} $i ""]
                 # image(s) - best leave them alone on a line
                 while {[regexp {^(.*?)!\[\]\((.+?)\)(.*)$} $i -> before imgfile after]} {
-                    set imgname [image create photo -file $imgfile]
+                    set imgpath [file join [file dirname [my cget -filename]] $imgfile]
                     $w insert end "$before" plain
-                    set end0 [$w index end]
-                    $w image create end -image $imgname
-                    $w tag add centered $end0 end-1c
+                    if {[file exists $imgpath]} {
+                        set imgname [image create photo -file $imgpath]
+                        set end0 [$w index end]
+                        $w image create end -image $imgname
+                        $w tag add centered $end0 end-1c
+                    } else {
+                        $w insert end "Error: File '$imgpath' does not exists!" "plain error"
+                    }
                     set i $after 
                 }
                 ## formatting
@@ -530,15 +472,22 @@ oowidgets::widget ::paul::Htext {
 #' - sections which are displayed on separate pages are starting with two hash marks `## TITLE`
 #' - subsection within the same page are starting with three hash marks `### SUBSECTION`
 #' - hyperlinks to other pages are embedded within brackets like this `[SECTIONNAME]`
-#' - bold text is emphasized using starts `*bold*`
-#' - italic text is emphasized usng the tilde `~italic~`
-#' - lists are started with stars at the first line
+#' - you can make your document as well Markdown compatible by using [SECTIONAME](#anchorname) syntax
+#'   and placing HTML anchor tags within your document
+#' - bold text is emphasized using stars or two underlines `*bold*`, `__bold__`
+#' - italic text is emphasized usng the tilde `~italic~` or using a single underline `_italic_`
+#' - typewriter text is emphasized using the backtick character ``typewriter``
+#' - lists are started with stars or minus symbols at the first line
+#' - sub lists are started with 4 spaces at the beginning of a line and thereafter
+#'   as well a minus or star symbol followed by a space and the item text.
 #' - paragraph breaks created by empty lines
-#' - images are declared like Markdown images, but only one image currently per line
+#' - two empty lines place a empty line between two paragraphs
+#' - images are declared like Markdown images, but without text within the bracket part
 #' 
 #' Here an example for a help file:
 #'
 #' ```
+#' <a name="secone"> </a>
 #' ## Section One
 #' 
 #' ### Subsection formatted text
@@ -550,6 +499,8 @@ oowidgets::widget ::paul::Htext {
 #' Let's follow this by a list:
 #'
 #' * item 1
+#'     - subitem 1.1
+#'     - subitem 1.2
 #' * item 2
 #' * item 3
 #' 
@@ -562,16 +513,26 @@ oowidgets::widget ::paul::Htext {
 #' ### Hyperlinks
 #'
 #' Hyperlinks are create by placing a section name into brackets like this
-#' [Section Two]
-#' 
-#' ## Sectin Two
-#' 
-#' Text which is indented with whitespaces will be shown like it is:
+#' [Section Two]. To make this syntax compatible with standard Markdown links
+#' you have to add an anchor section after the link name like this:
 #'
-#'   This text will be not formatted in any way
-#'   and this line as well.
+#' [Section Two](#sectwo)
+#' 
+#' some text in between ...
+
+#' <a name="sectwo"> </a>
+#' ## Section Two
+#' 
+#' These Markdown syntax is only required if you would like to make your documentation
+#' fully Markdown compatible. For instance using it as a README within your project.
+#' 
+#' Text which is indented with 4 whitespaces will be shown like it is except for sub item lists:
 #'
-#' ## Final Section
+#'     This text will be not formatted in any way
+#'     and this line as well.
+#' 
+#'
+#' ## Final Section 
 #' 
 #' This is the final section where we can link to [Section One].
 #'
@@ -579,7 +540,8 @@ oowidgets::widget ::paul::Htext {
 #'
 #' ![](path/to/image.png)
 #'
-#' Currently only PNG and GIF images are supported.
+#' Currently only PNG and GIF images are supported. The path must be relative to
+#' the documentation file.
 #' ```
 #' 
 #' ## <a name='example'></a>EXAMPLE
